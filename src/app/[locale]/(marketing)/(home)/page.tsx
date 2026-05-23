@@ -396,7 +396,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section id="features" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <h2 className="mb-8 text-center text-3xl font-bold tracking-tight sm:text-4xl">
           Everything you need for the perfect conversion
         </h2>
@@ -424,7 +424,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section id="docs" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="rounded-3xl border border-[#e5e7eb] bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.06)] sm:p-8">
           <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr]">
             <div>
@@ -463,7 +463,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section id="pricing" className="mx-auto max-w-7xl px-4 pb-20 pt-4 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 pb-20 pt-4 sm:px-6 lg:px-8">
         <div className="rounded-3xl border border-[#ffd9cb] bg-gradient-to-r from-[#fff7f3] to-[#fffaf7] p-6 sm:p-8">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-2xl">
@@ -509,36 +509,6 @@ export default async function HomePage() {
               </span>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section id="faqs" className="mx-auto max-w-5xl px-4 pb-16 sm:px-6 lg:px-8">
-        <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
-          FAQ
-        </h2>
-        <div className="mt-8 space-y-3">
-          {[
-            {
-              q: 'Do you support DRM-protected ebooks?',
-              a: 'No. EPUBFlow only supports DRM-free EPUB files.',
-            },
-            {
-              q: 'Do I need an account to convert files?',
-              a: 'No signup is required for the static v1 flow.',
-            },
-            {
-              q: 'How is my file privacy handled?',
-              a: 'Files are processed with privacy-first defaults and auto-delete policy.',
-            },
-          ].map((item) => (
-            <div
-              key={item.q}
-              className="rounded-2xl border border-[#e5e7eb] bg-white p-5"
-            >
-              <p className="font-semibold text-[#111827]">{item.q}</p>
-              <p className="mt-1.5 text-sm text-[#6b7280]">{item.a}</p>
-            </div>
-          ))}
         </div>
       </section>
 
