@@ -132,3 +132,32 @@
 ### Docs
 - Added deployment guide:
   - `docs/CALIBRE_DEPLOYMENT_GUIDE.md`
+
+## v0.3.1-p0-privacy-and-download-fix (2026-05-23)
+
+### P0-2 Privacy UX (Required)
+- Added mandatory privacy/security notice directly near EPUB upload area:
+  - "Private by default..."
+  - encrypted upload
+  - auto-delete after conversion
+  - no AI training usage
+  - DRM not supported
+- Added both EN + ZH copy for clarity.
+- File:
+  - `src/components/epub/epub-pdf-workbench.tsx`
+
+### Conversion Flow Reliability
+- Fixed remote-mode download URL normalization:
+  - status API now always returns website-side download proxy URL
+  - prevents 404 when remote converter returns relative `/v1/...` paths
+- File:
+  - `src/app/api/conversions/[jobId]/route.ts`
+
+### Converter Runtime Compatibility
+- Fixed Render/root runtime sandbox failure:
+  - set `QTWEBENGINE_DISABLE_SANDBOX=1`
+  - set `QTWEBENGINE_CHROMIUM_FLAGS=--no-sandbox`
+- Added converter diagnostics in health endpoint and failure logs for faster debugging.
+- Files:
+  - `services/calibre-converter/server.mjs`
+  - `src/lib/epub-pdf/job-store.ts`

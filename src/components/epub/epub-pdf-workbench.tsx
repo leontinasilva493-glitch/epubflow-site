@@ -184,6 +184,18 @@ export function EpubPdfWorkbench() {
           </div>
         </div>
 
+        <div className="mt-4 rounded-xl border border-[#e5e7eb] bg-[#fffdfb] p-4">
+          <p className="text-sm font-semibold text-[#111827]">Private by default.</p>
+          <p className="mt-2 text-xs leading-6 text-[#6b7280]">
+            Your EPUB files are encrypted during upload and automatically deleted
+            after conversion. We never read, share, or use your ebooks for AI
+            training. DRM-protected ebooks are not supported.
+          </p>
+          <p className="mt-2 text-xs leading-6 text-[#6b7280]">
+            默认私密。你的 EPUB 文件会加密上传，并在转换完成后自动删除。我们不会查看、分享，也不会用你的电子书训练 AI。不支持受 DRM 保护的电子书。
+          </p>
+        </div>
+
         <h3 className="mt-6 text-sm font-semibold text-[#111827]">2. Convert to PDF</h3>
         <div className="mt-3 rounded-2xl border border-[#e5e7eb] bg-white p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-[#6b7280]">
