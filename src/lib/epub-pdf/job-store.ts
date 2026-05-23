@@ -129,6 +129,11 @@ async function cleanupExpiredJobs() {
 async function runEbookConvert(inputPath: string, outputPath: string) {
   return new Promise<{ ok: boolean; stderr: string; timedOut: boolean }>((resolve) => {
     const child = spawn('ebook-convert', [inputPath, outputPath], {
+      env: {
+        ...process.env,
+        QTWEBENGINE_DISABLE_SANDBOX: '1',
+        QTWEBENGINE_CHROMIUM_FLAGS: '--no-sandbox',
+      },
       stdio: ['ignore', 'pipe', 'pipe'],
     });
     let stderr = '';

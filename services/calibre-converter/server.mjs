@@ -115,6 +115,11 @@ async function setStatus(id, status, error = null) {
 function runConvert(inputPath, outputPath) {
   return new Promise((resolve) => {
     const child = spawn('ebook-convert', [inputPath, outputPath], {
+      env: {
+        ...process.env,
+        QTWEBENGINE_DISABLE_SANDBOX: '1',
+        QTWEBENGINE_CHROMIUM_FLAGS: '--no-sandbox',
+      },
       stdio: ['ignore', 'pipe', 'pipe'],
     });
     let stderr = '';
