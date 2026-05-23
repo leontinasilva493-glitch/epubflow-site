@@ -4,6 +4,7 @@ import { promises as fs } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import Busboy from 'busboy';
 
 const PORT = Number(process.env.PORT || 4000);
@@ -15,6 +16,22 @@ const ROOT = path.join(os.tmpdir(), 'epubflow-converter-jobs');
 const JOBS_FILE = path.join(ROOT, 'jobs.json');
 
 let jobs = null;
+
+function checkConverter() {
+  const result = spawnSync('ebook-convert', ['--version'], { encoding: 'utf-8' });
+  if (result.error || result.status !== 0) {
+    return {
+      available: false,
+      version: null,
+      detail: result.error?.message || result.stderr || 'ebook-convert not available',
+    };
+  }
+  return {
+    available: true,
+    version: (result.stdout || '').trim() || 'unknown',
+    detail: null,
+  };
+}
 
 function json(res, status, data) {
   res.writeHead(status, { 'content-type': 'application/json; charset=utf-8' });
@@ -280,7 +297,8 @@ const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url || '/', `http://${req.headers.host}`);
     if (req.method === 'GET' && url.pathname === '/healthz') {
-      json(res, 200, { ok: true });
+      const converter = checkConverter();
+      json(res, 200, { ok: true, converter });
       return;
     }
 
