@@ -10,6 +10,19 @@ export async function GET(
 
   if (isRemoteConverterEnabled()) {
     const remote = await getRemoteJob(jobId);
+    if (remote.status >= 200 && remote.status < 300) {
+      const normalized = remote.data as Record<string, unknown>;
+      return NextResponse.json(
+        {
+          ...normalized,
+          downloadUrl:
+            normalized.status === 'success'
+              ? `/api/conversions/${jobId}/download`
+              : null,
+        },
+        { status: remote.status }
+      );
+    }
     return NextResponse.json(remote.data, { status: remote.status });
   }
 
