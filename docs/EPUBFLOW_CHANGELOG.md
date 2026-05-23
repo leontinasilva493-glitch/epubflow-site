@@ -44,6 +44,26 @@
 - Static build is successful (`pnpm build` passed during validation).
 - Better Auth warning still appears in logs when default secret is used in local env; not blocking static homepage delivery but should be cleaned for production.
 
+## v0.1.1-static-stability (2026-05-23)
+
+### P0 Stability Fixes
+- Auth API now runs in **static-only safe mode by default**:
+  - `/api/auth/*` returns `404` unless `EPUBFLOW_STATIC_ONLY=false` is explicitly set.
+  - This prevents Vercel deploy failures when database/auth env vars are not configured for static launch.
+  - File: `src/app/api/auth/[...all]/route.ts`
+- Better Auth secret now has explicit fallback to avoid default-secret runtime errors:
+  - Uses `BETTER_AUTH_SECRET` or `AUTH_SECRET` first.
+  - Falls back to a non-default placeholder string for static deployment stability.
+  - File: `src/lib/auth.ts`
+- OAuth providers are now conditionally enabled only when corresponding env vars exist:
+  - GitHub provider requires both `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`.
+  - Google provider requires both `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`.
+  - File: `src/lib/auth.ts`
+
+### Impact
+- Reduces Vercel “latest deployment failed” probability for static homepage phase.
+- Keeps path open for future full SaaS mode by setting `EPUBFLOW_STATIC_ONLY=false` and completing backend env configuration.
+
 ### Review Checklist (Completed)
 - Brand metadata no longer shows MkSaaS default title/description.
 - Template-heavy nav/footer replaced by EPUBFlow-focused IA.
@@ -54,4 +74,3 @@
 - Connect real upload/conversion workflow.
 - Replace placeholder branding assets (`logo`, `og`) with finalized EPUBFlow assets.
 - Optional repository slimming (remove unused template modules/routes) after first stable deploy.
-

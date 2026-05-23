@@ -2,6 +2,7 @@
 
 import Container from '@/components/layout/container';
 import { Logo } from '@/components/layout/logo';
+import { LogoWordmark } from '@/components/layout/logo-wordmark';
 import { ModeSwitcher } from '@/components/layout/mode-switcher';
 import { NavbarMobile } from '@/components/layout/navbar-mobile';
 import { buttonVariants } from '@/components/ui/button';
@@ -10,14 +11,12 @@ import { useScroll } from '@/hooks/use-scroll';
 import { LocaleLink, useLocalePathname } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 import { Upload } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 
 interface NavBarProps {
   scroll?: boolean;
 }
 
 export function Navbar({ scroll }: NavBarProps) {
-  const t = useTranslations();
   const scrolled = useScroll(50);
   const links = useNavbarLinks();
   const localePathname = useLocalePathname();
@@ -36,8 +35,8 @@ export function Navbar({ scroll }: NavBarProps) {
       <Container className="px-4">
         <nav className="hidden lg:flex items-center">
           <LocaleLink href="/" className="flex items-center space-x-2">
-            <Logo />
-            <span className="text-xl font-semibold">{t('Metadata.name')}</span>
+            <Logo className="size-7 rounded-md" />
+            <LogoWordmark className="h-7" />
           </LocaleLink>
 
           <div className="flex-1 flex items-center justify-center gap-7 text-sm font-medium text-muted-foreground">

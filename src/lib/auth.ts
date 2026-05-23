@@ -16,6 +16,19 @@ import type { Locale } from 'next-intl';
 import { getAllPricePlans } from './price-plan';
 import { getBaseUrl, getUrlWithLocaleInCallbackUrl } from './urls/urls';
 
+const authSecret =
+  process.env.BETTER_AUTH_SECRET ||
+  process.env.AUTH_SECRET ||
+  // Non-default fallback prevents BetterAuthError during static-site deployments.
+  'epubflow-static-fallback-secret-change-in-production';
+
+const githubProviderEnabled = Boolean(
+  process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET
+);
+const googleProviderEnabled = Boolean(
+  process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+);
+
 /**
  * Better Auth configuration
  *
@@ -25,6 +38,7 @@ import { getBaseUrl, getUrlWithLocaleInCallbackUrl } from './urls/urls';
  */
 export const auth = betterAuth({
   baseURL: getBaseUrl(),
+  secret: authSecret,
   appName: defaultMessages.Metadata.name,
   database: drizzleAdapter(await getDb(), {
     provider: 'pg', // or "mysql", "sqlite"
@@ -83,16 +97,24 @@ export const auth = betterAuth({
     },
   },
   socialProviders: {
-    // https://www.better-auth.com/docs/authentication/github
-    github: {
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-    },
-    // https://www.better-auth.com/docs/authentication/google
-    google: {
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    },
+    ...(githubProviderEnabled
+      ? {
+          // https://www.better-auth.com/docs/authentication/github
+          github: {
+            clientId: process.env.GITHUB_CLIENT_ID!,
+            clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+          },
+        }
+      : {}),
+    ...(googleProviderEnabled
+      ? {
+          // https://www.better-auth.com/docs/authentication/google
+          google: {
+            clientId: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+          },
+        }
+      : {}),
   },
   account: {
     // https://www.better-auth.com/docs/concepts/users-accounts#account-linking

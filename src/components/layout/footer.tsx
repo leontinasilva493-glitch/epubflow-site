@@ -2,6 +2,7 @@
 
 import Container from '@/components/layout/container';
 import { Logo } from '@/components/layout/logo';
+import { LogoWordmark } from '@/components/layout/logo-wordmark';
 import { ModeSwitcherHorizontal } from '@/components/layout/mode-switcher-horizontal';
 import BuiltWithButton from '@/components/shared/built-with-button';
 import { useFooterLinks } from '@/config/footer-config';
@@ -24,10 +25,8 @@ export function Footer({ className }: React.HTMLAttributes<HTMLElement>) {
             <div className="space-y-4">
               {/* logo and name */}
               <div className="items-center space-x-2 flex">
-                <Logo />
-                <span className="text-xl font-semibold">
-                  {t('Metadata.name')}
-                </span>
+                <Logo className="size-7 rounded-md" />
+                <LogoWordmark className="h-7" />
               </div>
 
               {/* tagline */}

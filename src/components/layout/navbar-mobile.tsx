@@ -2,6 +2,7 @@
 
 import LocaleSelector from '@/components/layout/locale-selector';
 import { Logo } from '@/components/layout/logo';
+import { LogoWordmark } from '@/components/layout/logo-wordmark';
 import { ModeSwitcherHorizontal } from '@/components/layout/mode-switcher-horizontal';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
@@ -84,8 +85,8 @@ export function NavbarMobile({
       >
         {/* navbar left shows logo */}
         <LocaleLink href={Routes.Root} className="flex items-center gap-2">
-          <Logo />
-          <span className="text-xl font-semibold">{t('Metadata.name')}</span>
+          <Logo className="size-7 rounded-md" />
+          <LogoWordmark className="h-7" />
         </LocaleLink>
 
         {/* navbar right shows menu icon and user button */}

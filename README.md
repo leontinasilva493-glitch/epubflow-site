@@ -1,51 +1,35 @@
-# MkSaaS
+# EPUBFlow
 
-Make AI SaaS in a weekend.
+EPUBFlow 官网初版（静态首页优先），基于 Next.js。
 
-The complete Next.js boilerplate for building profitable SaaS, with auth, payments, i18n, newsletter, dashboard, blog, docs, blocks, themes, SEO and more.
+## 当前阶段
 
-## Branches
+- 已上线目标：稳定展示静态营销首页（Hero、核心功能区、Features、FAQ、CTA）。
+- 后端能力（Auth/支付/数据库/API）保留代码，但默认不启用，避免影响静态站部署稳定性。
 
-- [main](https://github.com/MkSaaSHQ/mksaas-template): The `main` branch can be deployed on Vercel or with Docker, and uses Postgres as database by default, you can check out this [deployment guide](https://mksaas.com/zh/docs/deployment/vercel) for more details.
-- [cloudflare](https://github.com/MkSaaSHQ/mksaas-template/tree/cloudflare): The `cloudflare` branch can be deployed on Cloudflare Worker, and uses Postgres as database by default, you can check out this [deployment guide](https://mksaas.com/zh/docs/deployment/cloudflare) for more details.
+## 本地运行
 
-## Author
+```bash
+pnpm install
+pnpm dev
+```
 
-This project is created by [Fox](https://x.com/indie_maker_fox), the founder of [MkSaaS](https://mksaas.com) and [Mkdirs](https://mkdirs.com). The official X account for [MkSaaS](https://mksaas.com) is [@mksaascom](https://x.com/mksaascom), you can follow this account for the updates about MkSaaS.
+打开 `http://localhost:3000`
 
-## Documentation
+## Vercel 稳定部署（静态模式）
 
-The documentation is available on the [website](https://mksaas.com/docs). It includes guides, tutorials, and detailed explanations of the code. I designed it to be as beginner-friendly as possible, so you can start making money from day one.
+当前默认是静态安全模式：
 
-If you found anything that could be improved, please let me know.
+- `EPUBFLOW_STATIC_ONLY` 默认按 `true` 处理（不配置也生效）
+- `/api/auth/*` 默认返回 `404`，避免因为缺失数据库/Auth环境变量导致部署失败
 
-## Links
+如需切换到完整 SaaS 模式，再配置以下变量并设置：
 
-- 🔥 website: [mksaas.com](https://mksaas.com)
-- 🌐 demo: [demo.mksaas.com](https://demo.mksaas.com)
-- 📚 documentation: [mksaas.com/docs](https://mksaas.com/docs)
-- 🗓️ roadmap: [mksaas roadmap](https://mksaas.link/roadmap)
-- 👨‍💻 discord: [mksaas.link/discord](https://mksaas.link/discord)
-- 📹 video: [mksaas.link/youtube](https://mksaas.link/youtube)
+- `EPUBFLOW_STATIC_ONLY=false`
+- `DATABASE_URL`
+- `BETTER_AUTH_SECRET`（或 `AUTH_SECRET`）
+- 第三方登录变量（可选）：`GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET`、`GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`
 
-## Repositories
+## 变更记录
 
-By default, you should have access to all 5 repositories. If you find that you’re unable to access any of them, please don’t hesitate to reach out to me, and I’ll assist you in resolving the issue.
-
-- [mksaas-template (ready)](https://github.com/MkSaaSHQ/mksaas-template): https://demo.mksaas.com
-- [mksaas-blog (ready)](https://github.com/MkSaaSHQ/mksaas-blog): https://mksaas.me
-- [mksaas-haitang (ready)](https://github.com/MkSaaSHQ/mksaas-haitang): https://haitang.app
-- [mksaas-outfit (ready)](https://github.com/MkSaaSHQ/mksaas-outfit)
-- [mksaas-app (WIP)](https://github.com/MkSaaSHQ/mksaas-app): https://mkdollar.com
-
-## Notice
-
-> If you have any questions, please [submit an issue](https://github.com/MkSaaSHQ/mksaas-template/issues/new), or contact me at [support@mksaas.com](mailto:support@mksaas.com), or join our [discord community](https://mksaas.link/discord) and ask for help there.
-
-> If you want to receive notifications whenever code changes, please click `Watch` button in the top right.
-
-> When submitting any content to the  issues of the repository, please use **English** as the main Language, so that everyone can read it and help you, thank you for your supports.
-
-## License
-
-For any details on the license, please refer to the [License](LICENSE) file.
+- 详见：`docs/EPUBFLOW_CHANGELOG.md`
