@@ -1,3 +1,4 @@
+import { EpubPdfWorkbench } from '@/components/epub/epub-pdf-workbench';
 import { constructMetadata } from '@/lib/metadata';
 import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
@@ -6,26 +7,18 @@ import { getTranslations } from 'next-intl/server';
 import {
   BookOpen,
   Check,
-  CircleHelp,
   ChevronRight,
-  ChevronsUpDown,
-  Crown,
   Eye,
   FileCode2,
   FileText,
-  Folder,
-  History,
   Layers3,
   Lock,
   Moon,
-  NotebookTabs,
   Rocket,
-  Settings,
   ShieldCheck,
   Smartphone,
   Upload,
   User,
-  WandSparkles,
 } from 'lucide-react';
 
 export async function generateMetadata({
@@ -178,221 +171,7 @@ export default async function HomePage() {
         </div>
 
         <div className="mt-12 overflow-hidden rounded-3xl border border-[#e5e7eb] bg-white shadow-[0_24px_80px_rgba(15,23,42,0.1)]">
-          <div className="grid xl:grid-cols-[180px_1fr_320px]">
-            <aside className="border-b border-r border-[#eef0f3] bg-[#fcfcfd] px-4 py-5 xl:border-b-0">
-              <div className="mb-5 flex items-center gap-2 font-semibold text-[#111827]">
-                <div className="rounded-md bg-[#ef3f0a] p-1.5 text-white">
-                  <BookOpen className="h-4 w-4" />
-                </div>
-                EPUBFlow
-              </div>
-              <nav className="space-y-1.5 text-sm">
-                {[
-                  { label: 'Convert', icon: WandSparkles },
-                  { label: 'Library', icon: Folder },
-                  { label: 'History', icon: History },
-                  { label: 'Presets', icon: NotebookTabs },
-                  { label: 'Settings', icon: Settings },
-                ].map((item) => (
-                    <div
-                      key={item.label}
-                      className={cn(
-                        'flex items-center gap-2 rounded-lg px-3 py-2 text-[#4b5563]',
-                        item.label === 'Convert' &&
-                          'bg-[#fff1eb] font-medium text-[#ef3f0a]'
-                      )}
-                    >
-                      <item.icon className="h-4 w-4" />
-                      {item.label}
-                    </div>
-                  ))}
-              </nav>
-
-              <div className="mt-8 rounded-xl border border-[#eceff3] bg-white p-3.5">
-                <div className="mb-1.5 flex items-center gap-2 text-sm font-semibold">
-                  <Crown className="h-4 w-4 text-[#ef3f0a]" />
-                  Pro Plan
-                </div>
-                <p className="text-xs leading-5 text-[#6b7280]">
-                  Unlimited conversions
-                  <br />
-                  Batch & advanced options
-                </p>
-                <button
-                  type="button"
-                  className="mt-3 w-full rounded-lg border border-[#ffd8ca] bg-[#fff6f2] px-3 py-2 text-xs font-semibold text-[#ef3f0a] hover:bg-[#ffefe8]"
-                >
-                  Upgrade Plan
-                </button>
-              </div>
-            </aside>
-
-            <div className="border-b border-r border-[#eef0f3] p-6 xl:border-b-0">
-              <h3 className="text-sm font-semibold text-[#111827]">
-                1. Upload your EPUB
-              </h3>
-              <div className="mt-3 flex h-32 flex-col items-center justify-center rounded-2xl border border-dashed border-[#d1d5db] bg-white text-center">
-                <Upload className="mb-2 h-5 w-5 text-[#4b5563]" />
-                <p className="text-sm text-[#4b5563]">Drag & drop your EPUB file here</p>
-                <p className="text-sm text-blue-600">or click to browse</p>
-              </div>
-              <div className="mt-3 flex items-center justify-between rounded-xl border border-[#e5e7eb] bg-[#fbfcfe] px-3 py-2.5">
-                <div className="text-sm font-medium text-[#374151]">
-                  The Time Machine.epub
-                </div>
-                <div className="flex items-center gap-2 text-xs text-[#6b7280]">
-                  1.2 MB
-                  <span className="inline-flex rounded-full bg-green-100 p-1 text-green-600">
-                    <Check className="h-3 w-3" />
-                  </span>
-                </div>
-              </div>
-
-              <h3 className="mt-6 text-sm font-semibold text-[#111827]">
-                2. Choose your reading goal
-              </h3>
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                {[
-                  {
-                    title: 'Kindle',
-                    subtitle: '(best .mobi)',
-                    icon: Smartphone,
-                    active: true,
-                    iconClass: 'text-[#374151]',
-                  },
-                  {
-                    title: 'Print PDF',
-                    subtitle: '(clean layout)',
-                    icon: FileText,
-                    active: false,
-                    iconClass: 'text-[#374151]',
-                  },
-                  {
-                    title: 'Obsidian / Markdown',
-                    subtitle: '(notes & research)',
-                    icon: FileCode2,
-                    active: false,
-                    iconClass: 'text-violet-600',
-                  },
-                  {
-                    title: 'Edit in Word',
-                    subtitle: '(.docx)',
-                    icon: Settings,
-                    active: false,
-                    iconClass: 'text-blue-600',
-                  },
-                ].map((goal) => (
-                  <button
-                    key={goal.title}
-                    type="button"
-                    className={cn(
-                      'rounded-2xl border px-4 py-4 text-left transition',
-                      goal.active
-                        ? 'border-[#ef3f0a] bg-[#fff7f3] shadow-[0_10px_25px_rgba(239,63,10,0.09)]'
-                        : 'border-[#e5e7eb] bg-white hover:bg-[#fcfcfd]'
-                    )}
-                  >
-                    <goal.icon className={cn('mb-3 h-5 w-5', goal.iconClass)} />
-                    <p className="text-sm font-semibold text-[#111827]">{goal.title}</p>
-                    <p className="text-xs text-[#6b7280]">{goal.subtitle}</p>
-                  </button>
-                ))}
-              </div>
-
-              <div className="mt-4 rounded-2xl border border-[#e5e7eb] bg-white p-4">
-                <p className="text-xs font-semibold uppercase tracking-wide text-[#6b7280]">
-                  Recommended output
-                </p>
-                <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <p className="text-sm font-semibold text-[#111827]">Kindle (MOBI)</p>
-                    <p className="text-sm text-[#6b7280]">
-                      Optimized for Kindle devices and apps
-                    </p>
-                  </div>
-                  <span className="rounded-full bg-green-50 px-2.5 py-1 text-xs font-semibold text-green-700">
-                    Best for reading
-                  </span>
-                  <button
-                    type="button"
-                    className="inline-flex h-9 items-center rounded-lg bg-[#ef3f0a] px-4 text-xs font-semibold text-white hover:bg-[#dc3506]"
-                  >
-                    Convert EPUB
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <aside className="p-6">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-[#111827]">Preview</h3>
-                <div className="flex items-center gap-2 text-[#6b7280]">
-                  <CircleHelp className="h-4 w-4" />
-                  <span className="inline-flex items-center gap-1 rounded-full bg-[#f3f4f6] px-2 py-1 text-xs font-semibold text-[#4b5563]">
-                    MA
-                  </span>
-                  <ChevronsUpDown className="h-4 w-4" />
-                </div>
-              </div>
-              <div className="mt-3 flex gap-3">
-                <div className="h-28 w-20 rounded-lg bg-gradient-to-b from-slate-700 to-slate-950 p-2 text-[8px] text-slate-100">
-                  H. G. Wells
-                  <div className="mt-5 text-[10px] font-semibold">The Time Machine</div>
-                </div>
-                <div>
-                  <p className="font-semibold text-[#111827]">The Time Machine</p>
-                  <p className="text-sm text-[#6b7280]">H. G. Wells</p>
-                  <p className="mt-2 text-xs text-[#6b7280]">24 chapters</p>
-                  <p className="text-xs text-[#6b7280]">79,221 words</p>
-                </div>
-              </div>
-
-              <div className="mt-5">
-                <p className="text-xs font-semibold uppercase tracking-wide text-[#6b7280]">
-                  About this book
-                </p>
-                <p className="mt-2 text-sm leading-6 text-[#6b7280]">
-                  A scientist builds a machine to travel through time and
-                  ventures far into the future, where he discovers the fate of
-                  humanity.
-                </p>
-              </div>
-
-              <div className="mt-5">
-                <p className="text-xs font-semibold uppercase tracking-wide text-[#6b7280]">
-                  Progress
-                </p>
-                <p className="mt-2 text-sm font-medium text-[#111827]">Ready to convert</p>
-                <p className="text-sm text-[#6b7280]">
-                  Your file is ready. Click convert to start.
-                </p>
-                <div className="mt-3 h-2 rounded-full bg-[#edf1f4]">
-                  <div className="h-2 w-0 rounded-full bg-[#ef3f0a]" />
-                </div>
-                <p className="mt-2 text-right text-xs text-[#6b7280]">0%</p>
-              </div>
-
-              <div className="mt-5 space-y-2">
-                {[
-                  { title: 'Secure upload', subtitle: 'Encrypted & private' },
-                  { title: 'Auto-delete', subtitle: 'Files deleted after 24h' },
-                ].map((item) => (
-                  <div
-                    key={item.title}
-                    className="flex items-center justify-between rounded-lg border border-[#e5e7eb] bg-white px-3 py-2.5"
-                  >
-                    <div>
-                      <p className="text-sm font-medium text-[#111827]">{item.title}</p>
-                      <p className="text-xs text-[#6b7280]">{item.subtitle}</p>
-                    </div>
-                    <span className="inline-flex rounded-full bg-green-100 p-1 text-green-600">
-                      <Check className="h-3 w-3" />
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </aside>
-          </div>
+          <EpubPdfWorkbench />
         </div>
       </section>
 

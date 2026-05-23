@@ -74,3 +74,61 @@
 - Connect real upload/conversion workflow.
 - Replace placeholder branding assets (`logo`, `og`) with finalized EPUBFlow assets.
 - Optional repository slimming (remove unused template modules/routes) after first stable deploy.
+
+## v0.2.0-pdf-execution-plan (2026-05-23)
+
+### Scope
+- Lock execution path for first real conversion capability: **EPUB -> PDF**.
+- Keep MVP deployment strategy stable while introducing backend runtime incrementally.
+
+### Deliverables
+- New implementation plan doc:
+  - `docs/EPUB_TO_PDF_EXECUTION_PLAN.md`
+- Defined rollout order:
+  - upload pipeline
+  - conversion job lifecycle
+  - downloadable result delivery
+  - observability and failure handling
+
+### Notes
+- `EPUBFLOW_STATIC_ONLY=true` remains default for production stability until conversion worker is ready.
+- Functional rollout should be enabled in staged manner (dev -> preview -> production).
+
+## v0.3.0-epub-pdf-mvp-implementation (2026-05-23)
+
+### Implemented
+- Added real EPUB -> PDF conversion workflow for MVP:
+  - Upload `.epub` (50MB max)
+  - Conversion state lifecycle
+  - Download generated PDF
+- Added conversion APIs:
+  - `POST /api/conversions/epub-to-pdf`
+  - `GET /api/conversions/[jobId]`
+  - `GET /api/conversions/[jobId]/download`
+- Added detailed user-facing state UI in homepage core functional area.
+
+### Conversion engine
+- Local mode:
+  - Uses `ebook-convert` directly when executable is available.
+  - Temporary files are auto-cleaned after 1 hour.
+- Remote mode (production-compatible):
+  - Added remote converter forwarding support with:
+    - `EPUBFLOW_CONVERTER_API_URL`
+    - `EPUBFLOW_CONVERTER_API_KEY`
+  - Website routes proxy requests to external Calibre service.
+
+### New standalone converter service
+- Added `services/calibre-converter` with API-compatible endpoints:
+  - `POST /v1/conversions/epub-to-pdf`
+  - `GET /v1/conversions/:jobId`
+  - `GET /v1/conversions/:jobId/download`
+  - `GET /healthz`
+- Includes:
+  - 50MB validation
+  - 1-hour TTL cleanup
+  - timeout protection
+  - user-friendly error mapping
+
+### Docs
+- Added deployment guide:
+  - `docs/CALIBRE_DEPLOYMENT_GUIDE.md`
