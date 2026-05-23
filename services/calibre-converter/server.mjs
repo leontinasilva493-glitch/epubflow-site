@@ -145,6 +145,11 @@ async function processJob(id) {
   if (!job) return;
   const result = await runConvert(job.inputPath, job.outputPath);
   if (!result.ok) {
+    console.error('[converter] job failed', {
+      jobId: id,
+      timedOut: result.timedOut,
+      stderr: result.stderr?.slice(0, 4000),
+    });
     const error = result.timedOut
       ? { code: 'CONVERSION_TIMEOUT', message: 'Conversion timed out. Please try a smaller EPUB.' }
       : classifyError(result.stderr);
