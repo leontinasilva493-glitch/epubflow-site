@@ -23,9 +23,12 @@ export function useFooterLinks(): NestedMenuItem[] {
     {
       title: 'Legal',
       items: [
+        { title: 'Data Retention', href: Routes.DataRetention, external: false },
+        { title: 'Refund Policy', href: Routes.RefundPolicy, external: false },
         { title: 'Cookie Policy', href: Routes.CookiePolicy, external: false },
         { title: 'Privacy Policy', href: Routes.PrivacyPolicy, external: false },
         { title: 'Terms of Service', href: Routes.TermsOfService, external: false },
+        { title: 'Contact Support', href: Routes.Contact, external: false },
       ],
     },
   ];

@@ -20,6 +20,8 @@ export enum Routes {
   CookiePolicy = '/cookie',
   PrivacyPolicy = '/privacy',
   TermsOfService = '/terms',
+  RefundPolicy = '/refund',
+  DataRetention = '/data-retention',
 
   // auth routes
   Login = '/auth/login',

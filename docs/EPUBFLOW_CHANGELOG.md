@@ -161,3 +161,45 @@
 - Files:
   - `services/calibre-converter/server.mjs`
   - `src/lib/epub-pdf/job-store.ts`
+
+## v0.3.2-trust-privacy-loop-plan-a (2026-05-25)
+
+### Scope
+- Execute Trust & Privacy Plan A for static + MVP conversion experience.
+- Make privacy promises visible, navigable, and policy-backed.
+
+### Implemented
+- Homepage trust chips refreshed in hero and aligned with privacy-first language:
+  - Private by default
+  - Auto-delete in 1 hour
+  - No AI training
+  - DRM not supported
+- Added trust deep links from homepage/upload flow:
+  - Privacy Policy
+  - Data Retention
+- Rebuilt EPUB upload workbench trust copy (EN + ZH) with clear legal anchors.
+
+### Legal & Navigation
+- Added new legal pages:
+  - `src/app/[locale]/(marketing)/(legal)/refund/page.tsx`
+  - `src/app/[locale]/(marketing)/(legal)/data-retention/page.tsx`
+- Added routes:
+  - `RefundPolicy = '/refund'`
+  - `DataRetention = '/data-retention'`
+  - File: `src/routes.ts`
+- Expanded footer legal section with:
+  - Data Retention
+  - Refund Policy
+  - Contact Support
+  - File: `src/config/footer-config.tsx`
+
+### Route Accessibility
+- Unblocked contact page from marketing route middleware blocklist.
+  - File: `src/middleware.ts`
+
+### Verification
+- Production build passed:
+  - `pnpm build`
+- New pages confirmed in build output:
+  - `/[locale]/refund`
+  - `/[locale]/data-retention`

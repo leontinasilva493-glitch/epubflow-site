@@ -69,7 +69,6 @@ export default async function middleware(req: NextRequest) {
     '/blog',
     '/docs',
     '/about',
-    '/contact',
     '/waitlist',
     '/changelog',
     '/roadmap',

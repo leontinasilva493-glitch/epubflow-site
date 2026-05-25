@@ -1,4 +1,5 @@
 import { EpubPdfWorkbench } from '@/components/epub/epub-pdf-workbench';
+import { LocaleLink } from '@/i18n/navigation';
 import { constructMetadata } from '@/lib/metadata';
 import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
@@ -38,6 +39,13 @@ export async function generateMetadata({
 }
 
 const heroChips = [
+  { icon: Smartphone, label: 'Private by default' },
+  { icon: FileText, label: 'Auto-delete in 1 hour' },
+  { icon: Check, label: 'No AI training' },
+  { icon: Lock, label: 'DRM not supported' },
+];
+
+const featureChips = [
   { icon: Smartphone, label: 'Kindle-ready' },
   { icon: FileText, label: 'PDF export' },
   { icon: FileCode2, label: 'Markdown notes' },
@@ -159,6 +167,31 @@ export default async function HomePage() {
 
           <div className="mt-7 flex flex-wrap items-center justify-center gap-2.5">
             {heroChips.map((chip) => (
+              <div
+                key={chip.label}
+                className="inline-flex items-center gap-2 rounded-full border border-[#e5e7eb] bg-white px-3.5 py-2 text-xs font-medium text-[#4b5563] shadow-[0_6px_20px_rgba(15,23,42,0.04)]"
+              >
+                <chip.icon className="h-3.5 w-3.5" />
+                {chip.label}
+              </div>
+            ))}
+          </div>
+          <div className="mt-3 text-sm text-[#6b7280]">
+            Learn more:{' '}
+            <LocaleLink href="/privacy" className="text-[#ef3f0a] hover:underline">
+              Privacy Policy
+            </LocaleLink>{' '}
+            /{' '}
+            <LocaleLink
+              href="/data-retention"
+              className="text-[#ef3f0a] hover:underline"
+            >
+              Data Retention
+            </LocaleLink>
+          </div>
+
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-2.5">
+            {featureChips.map((chip) => (
               <div
                 key={chip.label}
                 className="inline-flex items-center gap-2 rounded-full border border-[#e5e7eb] bg-white px-3.5 py-2 text-xs font-medium text-[#4b5563] shadow-[0_6px_20px_rgba(15,23,42,0.04)]"
