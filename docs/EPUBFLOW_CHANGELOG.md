@@ -203,3 +203,10 @@
 - New pages confirmed in build output:
   - `/[locale]/refund`
   - `/[locale]/data-retention`
+
+### Deployment Notes (Vercel)
+- If Vercel project is connected to GitHub and production branch is `main`, this release requires **no manual code push** after merge.
+- Required operator action:
+  - Open Vercel `Deployments`
+  - Confirm latest `main` deployment is `Ready` (green)
+  - Only click `Redeploy` if latest deployment is failed/stuck.
