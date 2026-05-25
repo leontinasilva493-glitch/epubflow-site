@@ -87,12 +87,17 @@ export function EpubPdfWorkbench() {
 
   const trackEvent = async (event: string, payload: Record<string, unknown> = {}) => {
     try {
-      await fetch('/api/metrics', {
+      const response = await fetch('/api/metrics', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ event, source: 'web', ...payload }),
       });
-    } catch {}
+      if (!response.ok) {
+        console.warn(`[metrics] ${event} failed`, response.status);
+      }
+    } catch (err) {
+      console.warn(`[metrics] ${event} failed`, err);
+    }
   };
 
   const resetFlow = () => {
@@ -183,6 +188,47 @@ export function EpubPdfWorkbench() {
       return;
     }
     setJobId(String(data.jobId));
+  };
+
+  const mapDownloadErrorType = (status: number | null) => {
+    if (status === 404) return 'not_found';
+    if (status === 410) return 'expired';
+    if (status && status >= 500) return 'server_error';
+    return 'network_error';
+  };
+
+  const handleDownload = async () => {
+    if (!downloadUrl) return;
+    try {
+      await trackEvent('download_started', { job_id: jobId });
+      const response = await fetch(downloadUrl, { cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error(`HTTP_${response.status}`);
+      }
+      const blob = await response.blob();
+      const objectUrl = window.URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = objectUrl;
+      anchor.download = file
+        ? `${file.name.replace(/\.[^.]+$/, '')}.pdf`
+        : 'converted.pdf';
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      window.URL.revokeObjectURL(objectUrl);
+    } catch (error) {
+      let status: number | null = null;
+      if (error instanceof Error && error.message.startsWith('HTTP_')) {
+        status = Number(error.message.replace('HTTP_', ''));
+      }
+      await trackEvent('download_failed', {
+        job_id: jobId,
+        status,
+        error_type: mapDownloadErrorType(status),
+      });
+      setErrorCode('DOWNLOAD_FAILED');
+      setError('Download failed. Please retry or contact support.');
+    }
   };
 
   return (
@@ -326,15 +372,13 @@ export function EpubPdfWorkbench() {
             Download
           </div>
           {downloadUrl ? (
-            <a
-              href={downloadUrl}
-              onClick={() => {
-                void trackEvent('download_started', { job_id: jobId });
-              }}
+            <button
+              type="button"
+              onClick={handleDownload}
               className="mt-3 inline-flex h-9 items-center rounded-lg bg-[#ef3f0a] px-4 text-xs font-semibold text-white hover:bg-[#dc3506]"
             >
               Download PDF
-            </a>
+            </button>
           ) : (
             <p className="mt-2 text-xs text-[#6b7280]">
               Your download link appears here after conversion succeeds.

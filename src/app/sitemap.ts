@@ -7,6 +7,8 @@ import { getBaseUrl } from '../lib/urls/urls';
 type Href = Parameters<typeof getLocalePathname>[0]['href'];
 
 const staticRoutes: Href[] = [
+  // Keep only canonical page routes here.
+  // Do not add hash-anchor routes such as "/#faqs" or "/#features".
   '/',
   '/pricing',
   '/contact',

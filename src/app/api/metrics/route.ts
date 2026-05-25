@@ -26,7 +26,13 @@ function buildHeaders() {
 export async function POST(request: Request) {
   const baseUrl = getConverterBaseUrl();
   if (!baseUrl) {
-    return NextResponse.json({ ok: false }, { status: 202 });
+    return NextResponse.json(
+      {
+        errorCode: 'CONVERTER_NOT_CONFIGURED',
+        errorMessage: 'Converter metrics endpoint is not configured.',
+      },
+      { status: 503 }
+    );
   }
 
   let payload: Record<string, unknown> = {};
@@ -47,14 +53,24 @@ export async function POST(request: Request) {
     );
   }
 
-  await fetch(`${baseUrl}/v1/metrics`, {
+  const response = await fetch(`${baseUrl}/v1/metrics`, {
     method: 'POST',
     headers: buildHeaders(),
     body: JSON.stringify(payload),
     cache: 'no-store',
   });
-
-  return NextResponse.json({ ok: true });
+  if (!response.ok) {
+    const fallback = {
+      errorCode: 'METRICS_FORWARD_FAILED',
+      errorMessage: 'Failed to forward metrics event to converter service.',
+    };
+    let data = fallback;
+    try {
+      data = (await response.json()) as typeof fallback;
+    } catch {}
+    return NextResponse.json(data, { status: response.status });
+  }
+  return NextResponse.json({ ok: true }, { status: 200 });
 }
 
 export async function GET(request: Request) {

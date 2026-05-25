@@ -138,14 +138,18 @@ async function readMetricEvents(days = 7) {
 function aggregateMetrics(events) {
   const totals = {
     uploads: 0,
+    rejectedUploads: 0,
     convertStarted: 0,
     success: 0,
     failed: 0,
     timeout: 0,
+    downloadStarted: 0,
+    downloadFailed: 0,
     avgDurationMs: 0,
     successRate: 0,
     failureRate: 0,
     timeoutRate: 0,
+    acceptanceRate: 0,
   };
   const failureByType = {};
 
@@ -154,6 +158,7 @@ function aggregateMetrics(events) {
 
   for (const event of events) {
     if (event.event === 'upload_started') totals.uploads += 1;
+    if (event.event === 'upload_rejected') totals.rejectedUploads += 1;
     if (event.event === 'convert_started') totals.convertStarted += 1;
     if (event.event === 'convert_succeeded') {
       totals.success += 1;
@@ -168,6 +173,8 @@ function aggregateMetrics(events) {
       failureByType[key] = (failureByType[key] || 0) + 1;
       if (key === 'timeout') totals.timeout += 1;
     }
+    if (event.event === 'download_started') totals.downloadStarted += 1;
+    if (event.event === 'download_failed') totals.downloadFailed += 1;
   }
 
   const finished = totals.success + totals.failed;
@@ -175,6 +182,10 @@ function aggregateMetrics(events) {
   totals.successRate = finished > 0 ? Number((totals.success / finished).toFixed(4)) : 0;
   totals.failureRate = finished > 0 ? Number((totals.failed / finished).toFixed(4)) : 0;
   totals.timeoutRate = finished > 0 ? Number((totals.timeout / finished).toFixed(4)) : 0;
+  totals.acceptanceRate =
+    totals.uploads > 0
+      ? Number((totals.convertStarted / totals.uploads).toFixed(4))
+      : 0;
 
   return { totals, failureByType };
 }

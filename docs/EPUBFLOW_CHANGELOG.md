@@ -256,3 +256,27 @@
 ### Docs
 - Added:
   - `docs/P1_OPERATIONS_SEO_SUPPORT_IMPLEMENTATION.md`
+
+## v0.4.1-metrics-accuracy-and-download-fail-tracking (2026-05-25)
+
+### Data Accuracy Fixes
+- Added missing `download_failed` event reporting in workbench download flow.
+- Download action now uses fetch/blob with explicit failure capture to support reliable telemetry.
+- Added converter metrics aggregation fields:
+  - `rejectedUploads`
+  - `acceptanceRate`
+  - `downloadStarted`
+  - `downloadFailed`
+- Updated admin metrics page cards to expose funnel quality and download failure signal.
+
+### Metrics Reliability Fixes
+- `/api/metrics` no longer returns pseudo-success when converter is not configured.
+- Missing converter endpoint now returns `503 CONVERTER_NOT_CONFIGURED`.
+- Forwarding failures from web -> converter now return explicit non-2xx responses.
+- Frontend metrics client now warns on non-2xx and network exceptions instead of fully silent failure.
+
+### UX/Content Correction
+- Fixed upload privacy block Chinese text rendering in workbench.
+
+### SEO Guardrail
+- Kept sitemap route scope unchanged and documented that anchor routes (`/#faqs`, `/#features`, etc.) must not be added to sitemap.

@@ -70,3 +70,16 @@
 ## Validation
 - Build and type checks must pass via:
   - `pnpm build`
+
+## Follow-up Fixes (Data Accuracy + Reliability)
+- Implemented `download_failed` event reporting:
+  - Download now uses fetch + blob flow, and reports `download_failed` on exceptions or non-2xx HTTP.
+- Removed silent event-loss behavior:
+  - `/api/metrics` now returns `503` when converter URL is not configured.
+  - proxy forward failures now return non-2xx with explicit error payload.
+  - frontend `trackEvent` now logs non-2xx / exceptions via console warnings.
+- Improved funnel accuracy:
+  - added `rejectedUploads`, `acceptanceRate`, `downloadStarted`, `downloadFailed` in metrics aggregation.
+  - added matching cards on admin metrics page.
+- SEO guardrail note:
+  - `Routes` contains anchor paths (`/#faqs`, `/#features`, etc.); keep them out of sitemap.

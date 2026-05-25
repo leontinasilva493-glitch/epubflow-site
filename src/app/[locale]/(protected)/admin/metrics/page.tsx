@@ -10,14 +10,18 @@ type MetricsResponse = {
   eventCount: number;
   totals: {
     uploads: number;
+    rejectedUploads: number;
     convertStarted: number;
     success: number;
     failed: number;
     timeout: number;
+    downloadStarted: number;
+    downloadFailed: number;
     avgDurationMs: number;
     successRate: number;
     failureRate: number;
     timeoutRate: number;
+    acceptanceRate: number;
   };
   failureByType: Record<string, number>;
 };
@@ -72,10 +76,13 @@ export default function AdminMetricsPage() {
         <div className="space-y-6">
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
             <MetricCard title="Uploads" value={`${totals.uploads}`} />
+            <MetricCard title="Rejected Uploads" value={`${totals.rejectedUploads}`} />
+            <MetricCard title="Acceptance Rate" value={`${(totals.acceptanceRate * 100).toFixed(1)}%`} />
             <MetricCard title="Success Rate" value={`${(totals.successRate * 100).toFixed(1)}%`} />
             <MetricCard title="Failure Rate" value={`${(totals.failureRate * 100).toFixed(1)}%`} />
             <MetricCard title="Avg Duration" value={`${(totals.avgDurationMs / 1000).toFixed(1)}s`} />
             <MetricCard title="Timeout Rate" value={`${(totals.timeoutRate * 100).toFixed(1)}%`} />
+            <MetricCard title="Download Fails" value={`${totals.downloadFailed}`} />
           </div>
 
           <Card>
