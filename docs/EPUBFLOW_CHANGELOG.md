@@ -280,3 +280,38 @@
 
 ### SEO Guardrail
 - Kept sitemap route scope unchanged and documented that anchor routes (`/#faqs`, `/#features`, etc.) must not be added to sitemap.
+
+## v0.5.0-p0-format-foundation-and-stability-gate (2026-05-25)
+
+### P0-A Infrastructure Generalization
+- Added centralized format config:
+  - `src/lib/epub-converter/format-config.ts`
+  - whitelist + extension + MIME + label
+- Generalized local job creation:
+  - `createConversionJob(file, format)` in job store
+  - kept `createEpubPdfJob` as compatibility wrapper for PDF flow
+- Generalized remote proxy:
+  - `createRemoteJob(file, format)` now targets `/v1/conversions/epub-to-${format}`
+- Parameterized converter create route:
+  - `POST /v1/conversions/epub-to-{format}`
+- Dynamic MIME in local download route:
+  - no longer hard-coded to `application/pdf`
+- Job schema now includes `targetFormat`.
+
+### P0-B Stability Gate Enhancements
+- Added server-side `download_failed` metric emission on failed download responses in API download route.
+- Added `targetFormat` propagation in event payloads.
+- Metrics aggregation now includes:
+  - `byFormat` buckets
+  - per-format upload/rejected/started/success/failed/download_failed
+- Admin metrics page now renders format-level table.
+
+### Workbench Internal Refactor (No UX Behavior Change for PDF)
+- Introduced reusable component:
+  - `src/components/epub/epub-convert-workbench.tsx`
+- Existing PDF workbench became a thin wrapper:
+  - `src/components/epub/epub-pdf-workbench.tsx`
+- Homepage still uses `EpubPdfWorkbench`, preserving current user-facing flow.
+
+### Validation
+- `pnpm build` passed after all changes.

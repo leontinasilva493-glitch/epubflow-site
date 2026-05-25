@@ -17,6 +17,29 @@ const ROOT =
   path.join(os.tmpdir(), 'epubflow-converter-jobs');
 const JOBS_FILE = path.join(ROOT, 'jobs.json');
 const METRICS_RETENTION_DAYS = 30;
+const FORMAT_CONFIG = {
+  pdf: { extension: 'pdf', mime: 'application/pdf', label: 'PDF' },
+  mobi: {
+    extension: 'mobi',
+    mime: 'application/x-mobipocket-ebook',
+    label: 'Kindle (MOBI)',
+  },
+  azw3: {
+    extension: 'azw3',
+    mime: 'application/vnd.amazon.mobi8-ebook',
+    label: 'Kindle (AZW3)',
+  },
+  txt: {
+    extension: 'txt',
+    mime: 'text/plain; charset=utf-8',
+    label: 'Plain Text',
+  },
+  docx: {
+    extension: 'docx',
+    mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    label: 'Word (DOCX)',
+  },
+};
 
 let jobs = null;
 
@@ -152,16 +175,44 @@ function aggregateMetrics(events) {
     acceptanceRate: 0,
   };
   const failureByType = {};
+  const byFormat = {};
+
+  function ensureFormatBucket(format) {
+    const key = format || 'unknown';
+    if (!byFormat[key]) {
+      byFormat[key] = {
+        uploads: 0,
+        rejectedUploads: 0,
+        convertStarted: 0,
+        success: 0,
+        failed: 0,
+        downloadStarted: 0,
+        downloadFailed: 0,
+      };
+    }
+    return byFormat[key];
+  }
 
   let durationTotal = 0;
   let durationCount = 0;
 
   for (const event of events) {
-    if (event.event === 'upload_started') totals.uploads += 1;
-    if (event.event === 'upload_rejected') totals.rejectedUploads += 1;
-    if (event.event === 'convert_started') totals.convertStarted += 1;
+    const bucket = ensureFormatBucket(event.targetFormat || 'unknown');
+    if (event.event === 'upload_started') {
+      totals.uploads += 1;
+      bucket.uploads += 1;
+    }
+    if (event.event === 'upload_rejected') {
+      totals.rejectedUploads += 1;
+      bucket.rejectedUploads += 1;
+    }
+    if (event.event === 'convert_started') {
+      totals.convertStarted += 1;
+      bucket.convertStarted += 1;
+    }
     if (event.event === 'convert_succeeded') {
       totals.success += 1;
+      bucket.success += 1;
       if (typeof event.duration_ms === 'number' && event.duration_ms >= 0) {
         durationTotal += event.duration_ms;
         durationCount += 1;
@@ -169,12 +220,19 @@ function aggregateMetrics(events) {
     }
     if (event.event === 'convert_failed') {
       totals.failed += 1;
+      bucket.failed += 1;
       const key = event.error_type || 'unknown';
       failureByType[key] = (failureByType[key] || 0) + 1;
       if (key === 'timeout') totals.timeout += 1;
     }
-    if (event.event === 'download_started') totals.downloadStarted += 1;
-    if (event.event === 'download_failed') totals.downloadFailed += 1;
+    if (event.event === 'download_started') {
+      totals.downloadStarted += 1;
+      bucket.downloadStarted += 1;
+    }
+    if (event.event === 'download_failed') {
+      totals.downloadFailed += 1;
+      bucket.downloadFailed += 1;
+    }
   }
 
   const finished = totals.success + totals.failed;
@@ -187,7 +245,7 @@ function aggregateMetrics(events) {
       ? Number((totals.convertStarted / totals.uploads).toFixed(4))
       : 0;
 
-  return { totals, failureByType };
+  return { totals, failureByType, byFormat };
 }
 
 function isZipHeader(buffer) {
@@ -297,6 +355,7 @@ async function processJob(id) {
   if (!job) return;
   await appendMetric('convert_started', {
     job_id: id,
+    targetFormat: job.targetFormat,
     file_size_mb: Number((job.inputSize / (1024 * 1024)).toFixed(2)),
   });
   const startedAt = Date.now();
@@ -312,6 +371,7 @@ async function processJob(id) {
       : classifyError(result.stderr);
     await appendMetric('convert_failed', {
       job_id: id,
+      targetFormat: job.targetFormat,
       duration_ms: Date.now() - startedAt,
       error_type: normalizeErrorType(error.code),
     });
@@ -338,6 +398,7 @@ async function processJob(id) {
   await setStatus(id, 'success');
   await appendMetric('convert_succeeded', {
     job_id: id,
+    targetFormat: job.targetFormat,
     duration_ms: Date.now() - startedAt,
   });
 }
@@ -370,18 +431,29 @@ function parseMultipart(req) {
   });
 }
 
-async function handleCreate(req, res) {
+async function handleCreate(req, res, format) {
   if (!verifyApiKey(req, res)) return;
   await cleanupExpired();
+  if (!FORMAT_CONFIG[format]) {
+    json(res, 400, {
+      errorCode: 'INVALID_FORMAT',
+      errorMessage: 'Unsupported conversion format.',
+    });
+    return;
+  }
   const { fileName, buffer, tooLarge } = await parseMultipart(req);
 
   if (!fileName || !fileName.toLowerCase().endsWith('.epub')) {
-    await appendMetric('upload_rejected', { error_type: 'invalid_file' });
+    await appendMetric('upload_rejected', {
+      targetFormat: format,
+      error_type: 'invalid_file',
+    });
     json(res, 400, { errorCode: 'INVALID_FILE', errorMessage: 'Please upload a valid .epub file.' });
     return;
   }
   if (tooLarge || buffer.length > MAX_BYTES) {
     await appendMetric('upload_rejected', {
+      targetFormat: format,
       error_type: 'oversized_file',
       file_size_mb: Number((buffer.length / (1024 * 1024)).toFixed(2)),
     });
@@ -389,7 +461,10 @@ async function handleCreate(req, res) {
     return;
   }
   if (!isZipHeader(buffer)) {
-    await appendMetric('upload_rejected', { error_type: 'corrupted_file' });
+    await appendMetric('upload_rejected', {
+      targetFormat: format,
+      error_type: 'corrupted_file',
+    });
     json(res, 400, { errorCode: 'CORRUPTED_EPUB', errorMessage: 'This EPUB appears corrupted or unreadable.' });
     return;
   }
@@ -400,7 +475,8 @@ async function handleCreate(req, res) {
   const dir = path.join(ROOT, id);
   await fs.mkdir(dir, { recursive: true });
   const inputPath = path.join(dir, 'input.epub');
-  const outputFilename = `${fileName.replace(/\.[^.]+$/, '').replace(/[^\w\-]+/g, '_')}.pdf`;
+  const outputExt = FORMAT_CONFIG[format].extension;
+  const outputFilename = `${fileName.replace(/\.[^.]+$/, '').replace(/[^\w\-]+/g, '_')}.${outputExt}`;
   const outputPath = path.join(dir, outputFilename);
   await fs.writeFile(inputPath, buffer);
   await loadJobs();
@@ -415,6 +491,7 @@ async function handleCreate(req, res) {
     inputPath,
     outputPath,
     outputFilename,
+    targetFormat: format,
     errorCode: null,
     errorMessage: null,
   };
@@ -481,6 +558,7 @@ async function handleGetJob(req, res, jobId) {
     expiresAt: job.expiresAt,
     inputFilename: job.inputFilename,
     inputSize: job.inputSize,
+    targetFormat: job.targetFormat || 'pdf',
     downloadUrl: job.status === 'success' ? `/v1/conversions/${job.id}/download` : null,
     errorCode: job.errorCode || null,
     errorMessage: job.errorMessage || null,
@@ -501,8 +579,9 @@ async function handleDownload(req, res, jobId) {
     return;
   }
   const bytes = await fs.readFile(job.outputPath);
+  const mime = FORMAT_CONFIG[job.targetFormat]?.mime || 'application/octet-stream';
   res.writeHead(200, {
-    'content-type': 'application/pdf',
+    'content-type': mime,
     'content-disposition': `attachment; filename="${job.outputFilename}"`,
     'cache-control': 'no-store',
   });
@@ -518,8 +597,9 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    if (req.method === 'POST' && url.pathname === '/v1/conversions/epub-to-pdf') {
-      await handleCreate(req, res);
+    const matchCreate = url.pathname.match(/^\/v1\/conversions\/epub-to-([a-z0-9]+)$/);
+    if (req.method === 'POST' && matchCreate) {
+      await handleCreate(req, res, matchCreate[1]);
       return;
     }
 

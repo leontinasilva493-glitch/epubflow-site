@@ -1,4 +1,5 @@
 import type { ConversionJobPublic } from './types';
+import { type ConversionFormat, isSupportedFormat } from '@/lib/epub-converter/format-config';
 
 function getConverterBaseUrl() {
   return process.env.EPUBFLOW_CONVERTER_API_URL?.replace(/\/+$/, '') || null;
@@ -15,13 +16,14 @@ export function isRemoteConverterEnabled() {
   return Boolean(getConverterBaseUrl());
 }
 
-export async function createRemoteJob(file: File) {
+export async function createRemoteJob(file: File, format: ConversionFormat = 'pdf') {
   const baseUrl = getConverterBaseUrl();
   if (!baseUrl) throw new Error('Remote converter is not configured');
+  if (!isSupportedFormat(format)) throw new Error('Unsupported conversion format');
   const formData = new FormData();
   formData.append('file', file);
 
-  const response = await fetch(`${baseUrl}/v1/conversions/epub-to-pdf`, {
+  const response = await fetch(`${baseUrl}/v1/conversions/epub-to-${format}`, {
     method: 'POST',
     headers: buildHeaders(),
     body: formData,

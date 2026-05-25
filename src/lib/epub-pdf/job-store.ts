@@ -1,3 +1,8 @@
+import {
+  type ConversionFormat,
+  getFormatConfig,
+  isSupportedFormat,
+} from '@/lib/epub-converter/format-config';
 import { randomUUID } from 'node:crypto';
 import { promises as fs } from 'node:fs';
 import { spawn } from 'node:child_process';
@@ -7,7 +12,7 @@ import type {
   ConversionErrorCode,
   ConversionJobPublic,
   ConversionStatus,
-  EpubPdfJob,
+  ConversionJob,
 } from './types';
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
@@ -16,7 +21,7 @@ const CONVERSION_TIMEOUT_MS = 120 * 1000;
 const JOB_ROOT = path.join(os.tmpdir(), 'epubflow-jobs');
 const JOBS_FILE = path.join(JOB_ROOT, 'jobs.json');
 
-let jobsCache: Record<string, EpubPdfJob> | null = null;
+let jobsCache: Record<string, ConversionJob> | null = null;
 
 async function ensureRoot() {
   await fs.mkdir(JOB_ROOT, { recursive: true });
@@ -27,14 +32,14 @@ async function readJobs() {
   await ensureRoot();
   try {
     const raw = await fs.readFile(JOBS_FILE, 'utf-8');
-    jobsCache = JSON.parse(raw) as Record<string, EpubPdfJob>;
+    jobsCache = JSON.parse(raw) as Record<string, ConversionJob>;
   } catch {
     jobsCache = {};
   }
   return jobsCache;
 }
 
-async function writeJobs(jobs: Record<string, EpubPdfJob>) {
+async function writeJobs(jobs: Record<string, ConversionJob>) {
   jobsCache = jobs;
   await fs.writeFile(JOBS_FILE, JSON.stringify(jobs, null, 2), 'utf-8');
 }
@@ -188,7 +193,18 @@ function sanitizeName(filename: string) {
 }
 
 export async function createEpubPdfJob(file: File) {
+  return createConversionJob(file, 'pdf');
+}
+
+export async function createConversionJob(file: File, format: string) {
   await cleanupExpiredJobs();
+  if (!isSupportedFormat(format)) {
+    return {
+      ok: false as const,
+      errorCode: 'CONVERSION_FAILED' as const,
+      errorMessage: 'Unsupported conversion format.',
+    };
+  }
   if (!isEpubFile(file)) {
     return {
       ok: false as const,
@@ -217,13 +233,13 @@ export async function createEpubPdfJob(file: File) {
   const dir = path.join(JOB_ROOT, id);
   await fs.mkdir(dir, { recursive: true });
   const inputPath = path.join(dir, 'input.epub');
-  const outputFilename = `${sanitizeName(file.name)}.pdf`;
+  const outputFilename = `${sanitizeName(file.name)}.${getFormatConfig(format).extension}`;
   const outputPath = path.join(dir, outputFilename);
   await fs.writeFile(inputPath, bytes);
 
   const now = new Date();
   const expiresAt = new Date(now.getTime() + JOB_TTL_MS);
-  const job: EpubPdfJob = {
+  const job: ConversionJob = {
     id,
     status: 'pending',
     createdAt: now.toISOString(),
@@ -234,6 +250,7 @@ export async function createEpubPdfJob(file: File) {
     inputPath,
     outputPath,
     outputFilename,
+    targetFormat: format,
   };
   const jobs = await readJobs();
   jobs[id] = job;
@@ -253,6 +270,7 @@ export async function getPublicJob(
   if (!job) return null;
   return {
     id: job.id,
+    targetFormat: job.targetFormat,
     status: job.status,
     createdAt: job.createdAt,
     updatedAt: job.updatedAt,
@@ -281,6 +299,7 @@ export async function getJobFilePath(id: string) {
     ok: true as const,
     outputPath: job.outputPath,
     outputFilename: job.outputFilename,
+    targetFormat: job.targetFormat,
   };
 }
 

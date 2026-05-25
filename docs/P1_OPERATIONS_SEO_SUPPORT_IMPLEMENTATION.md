@@ -83,3 +83,13 @@
   - added matching cards on admin metrics page.
 - SEO guardrail note:
   - `Routes` contains anchor paths (`/#faqs`, `/#features`, etc.); keep them out of sitemap.
+
+## P0 Foundation Dependency Update
+- Format infrastructure has been generalized and is now shared for future format pages:
+  - centralized format config
+  - dynamic converter create endpoint (`epub-to-{format}`)
+  - dynamic local download MIME type
+  - job records include `targetFormat`
+- Metrics are now format-aware:
+  - event payloads include `targetFormat`
+  - dashboard includes format-level breakdown

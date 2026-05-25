@@ -1,4 +1,4 @@
-import { createEpubPdfJob } from '@/lib/epub-pdf/job-store';
+import { createConversionJob } from '@/lib/epub-pdf/job-store';
 import {
   createRemoteJob,
   isRemoteConverterEnabled,
@@ -16,11 +16,11 @@ export async function POST(request: Request) {
   }
 
   if (isRemoteConverterEnabled()) {
-    const remote = await createRemoteJob(file);
+    const remote = await createRemoteJob(file, 'pdf');
     return NextResponse.json(remote.data, { status: remote.status });
   }
 
-  const result = await createEpubPdfJob(file);
+  const result = await createConversionJob(file, 'pdf');
   if (!result.ok) {
     return NextResponse.json(
       { errorCode: result.errorCode, errorMessage: result.errorMessage },

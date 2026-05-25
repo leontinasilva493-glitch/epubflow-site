@@ -1,3 +1,5 @@
+import type { ConversionFormat } from '@/lib/epub-converter/format-config';
+
 export type ConversionStatus =
   | 'pending'
   | 'uploading'
@@ -18,7 +20,7 @@ export type ConversionErrorCode =
   | 'NOT_FOUND'
   | 'EXPIRED';
 
-export interface EpubPdfJob {
+export interface ConversionJob {
   id: string;
   status: ConversionStatus;
   createdAt: string;
@@ -29,12 +31,14 @@ export interface EpubPdfJob {
   inputPath: string;
   outputPath: string;
   outputFilename: string;
+  targetFormat: ConversionFormat;
   errorCode?: ConversionErrorCode;
   errorMessage?: string;
 }
 
 export interface ConversionJobPublic {
   id: string;
+  targetFormat: ConversionFormat;
   status: ConversionStatus;
   createdAt: string;
   updatedAt: string;

@@ -1,3 +1,9 @@
+import {
+  formatForMetrics,
+  normalizeDownloadFailure,
+  reportConverterMetric,
+} from '@/lib/epub-converter/metrics';
+import { getFormatConfig } from '@/lib/epub-converter/format-config';
 import { getErrorMessage, getJobFilePath } from '@/lib/epub-pdf/job-store';
 import {
   getRemoteDownload,
@@ -16,6 +22,16 @@ export async function GET(
     const remote = await getRemoteDownload(jobId);
     if (!remote.ok) {
       const data = await remote.json();
+      await reportConverterMetric('download_failed', {
+        job_id: jobId,
+        targetFormat: formatForMetrics(
+          typeof data?.targetFormat === 'string' ? data.targetFormat : null
+        ),
+        error_type: normalizeDownloadFailure(
+          remote.status,
+          typeof data?.errorCode === 'string' ? data.errorCode : null
+        ),
+      });
       return NextResponse.json(data, { status: remote.status });
     }
     return new NextResponse(remote.body, {
@@ -32,6 +48,11 @@ export async function GET(
   const result = await getJobFilePath(jobId);
   if (!result.ok) {
     const status = result.code === 'NOT_FOUND' ? 404 : 400;
+    await reportConverterMetric('download_failed', {
+      job_id: jobId,
+      targetFormat: 'unknown',
+      error_type: normalizeDownloadFailure(status, result.code),
+    });
     return NextResponse.json(
       { errorCode: result.code, errorMessage: getErrorMessage(result.code) },
       { status }
@@ -42,7 +63,7 @@ export async function GET(
   return new NextResponse(fileBuffer, {
     status: 200,
     headers: {
-      'Content-Type': 'application/pdf',
+      'Content-Type': getFormatConfig(result.targetFormat).mime,
       'Content-Disposition': `attachment; filename="${result.outputFilename}"`,
       'Cache-Control': 'no-store',
     },

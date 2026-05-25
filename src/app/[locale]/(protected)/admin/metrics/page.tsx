@@ -24,6 +24,18 @@ type MetricsResponse = {
     acceptanceRate: number;
   };
   failureByType: Record<string, number>;
+  byFormat?: Record<
+    string,
+    {
+      uploads: number;
+      rejectedUploads: number;
+      convertStarted: number;
+      success: number;
+      failed: number;
+      downloadStarted: number;
+      downloadFailed: number;
+    }
+  >;
 };
 
 export default function AdminMetricsPage() {
@@ -49,6 +61,9 @@ export default function AdminMetricsPage() {
   const totals = metrics?.totals;
   const failEntries = Object.entries(metrics?.failureByType || {}).sort(
     (a, b) => b[1] - a[1]
+  );
+  const byFormatEntries = Object.entries(metrics?.byFormat || {}).sort((a, b) =>
+    a[0].localeCompare(b[0])
   );
 
   return (
@@ -103,6 +118,48 @@ export default function AdminMetricsPage() {
                       <span>{count}</span>
                     </div>
                   ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>By Format</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {byFormatEntries.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  No format-level events found.
+                </p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="min-w-full text-sm">
+                    <thead>
+                      <tr className="border-b text-left text-muted-foreground">
+                        <th className="py-2 pr-4">Format</th>
+                        <th className="py-2 pr-4">Uploads</th>
+                        <th className="py-2 pr-4">Rejected</th>
+                        <th className="py-2 pr-4">Started</th>
+                        <th className="py-2 pr-4">Success</th>
+                        <th className="py-2 pr-4">Failed</th>
+                        <th className="py-2 pr-4">DL Failed</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {byFormatEntries.map(([format, row]) => (
+                        <tr key={format} className="border-b">
+                          <td className="py-2 pr-4 font-medium">{format}</td>
+                          <td className="py-2 pr-4">{row.uploads}</td>
+                          <td className="py-2 pr-4">{row.rejectedUploads}</td>
+                          <td className="py-2 pr-4">{row.convertStarted}</td>
+                          <td className="py-2 pr-4">{row.success}</td>
+                          <td className="py-2 pr-4">{row.failed}</td>
+                          <td className="py-2 pr-4">{row.downloadFailed}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               )}
             </CardContent>
