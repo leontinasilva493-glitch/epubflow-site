@@ -17,6 +17,7 @@ interface JobResponse {
   id: string;
   status: UiPhase;
   downloadUrl: string | null;
+  errorCode?: string | null;
   errorMessage: string | null;
 }
 
@@ -68,6 +69,39 @@ export function EpubPdfWorkbench() {
   const [jobId, setJobId] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [errorCode, setErrorCode] = useState<string | null>(null);
+
+  const fileSizeLabel = useMemo(() => {
+    if (!file) return '';
+    return `${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+  }, [file]);
+
+  const supportMailHref = useMemo(() => {
+    const subject = jobId
+      ? `Conversion Issue - ${jobId}`
+      : 'Conversion Issue - EPUBFlow';
+    return `mailto:support@epubflow.com?subject=${encodeURIComponent(subject)}`;
+  }, [jobId]);
+
+  const disabled = phase !== 'idle' && phase !== 'failed' && phase !== 'success';
+
+  const trackEvent = async (event: string, payload: Record<string, unknown> = {}) => {
+    try {
+      await fetch('/api/metrics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ event, source: 'web', ...payload }),
+      });
+    } catch {}
+  };
+
+  const resetFlow = () => {
+    setPhase('idle');
+    setDownloadUrl(null);
+    setJobId(null);
+    setError(null);
+    setErrorCode(null);
+  };
 
   useEffect(() => {
     if (!jobId || phase === 'success' || phase === 'failed') return;
@@ -77,6 +111,7 @@ export function EpubPdfWorkbench() {
       });
       if (!response.ok) {
         setPhase('failed');
+        setErrorCode('STATUS_CHECK_FAILED');
         setError('Failed to check conversion status.');
         clearInterval(timer);
         return;
@@ -85,6 +120,7 @@ export function EpubPdfWorkbench() {
       setPhase(data.status);
       setDownloadUrl(data.downloadUrl);
       if (data.status === 'failed') {
+        setErrorCode(data.errorCode || 'CONVERSION_FAILED');
         setError(data.errorMessage || 'Conversion failed.');
         clearInterval(timer);
       }
@@ -95,21 +131,10 @@ export function EpubPdfWorkbench() {
     return () => clearInterval(timer);
   }, [jobId, phase]);
 
-  const fileSizeLabel = useMemo(() => {
-    if (!file) return '';
-    return `${(file.size / (1024 * 1024)).toFixed(2)} MB`;
-  }, [file]);
-
-  const disabled = phase !== 'idle' && phase !== 'failed' && phase !== 'success';
-
   const onChooseFile = () => fileInputRef.current?.click();
 
   const onFileSelected = (nextFile: File | null) => {
-    setError(null);
-    setDownloadUrl(null);
-    setJobId(null);
-    setPhase('idle');
-
+    resetFlow();
     if (!nextFile) {
       setFile(null);
       return;
@@ -117,11 +142,13 @@ export function EpubPdfWorkbench() {
     if (!nextFile.name.toLowerCase().endsWith('.epub')) {
       setFile(null);
       setError('Only .epub files are allowed.');
+      setErrorCode('INVALID_FILE');
       return;
     }
     if (nextFile.size > MAX_BYTES) {
       setFile(null);
       setError(`File is too large. Limit is ${MAX_MB}MB.`);
+      setErrorCode('FILE_TOO_LARGE');
       return;
     }
     setFile(nextFile);
@@ -130,10 +157,17 @@ export function EpubPdfWorkbench() {
   const onConvert = async () => {
     if (!file) {
       setError('Please upload an EPUB file first.');
+      setErrorCode('INVALID_FILE');
       return;
     }
+
     setError(null);
+    setErrorCode(null);
     setPhase('uploading');
+    void trackEvent('upload_started', {
+      file_size_mb: Number((file.size / (1024 * 1024)).toFixed(2)),
+    });
+
     const formData = new FormData();
     formData.append('file', file);
 
@@ -141,13 +175,14 @@ export function EpubPdfWorkbench() {
       method: 'POST',
       body: formData,
     });
-    const data = await response.json();
+    const data = (await response.json()) as Record<string, unknown>;
     if (!response.ok) {
       setPhase('failed');
-      setError(data.errorMessage || 'Failed to create conversion job.');
+      setErrorCode(String(data.errorCode || 'CONVERSION_FAILED'));
+      setError(String(data.errorMessage || 'Failed to create conversion job.'));
       return;
     }
-    setJobId(data.jobId as string);
+    setJobId(String(data.jobId));
   };
 
   return (
@@ -193,7 +228,8 @@ export function EpubPdfWorkbench() {
             training. DRM-protected ebooks are not supported.
           </p>
           <p className="mt-2 text-xs leading-6 text-[#6b7280]">
-            默认私密。你的 EPUB 文件会加密上传，并在转换完成后自动删除。我们不会查看、分享，也不会用你的电子书训练 AI。不支持受 DRM 保护的电子书。
+            默认私密。你的 EPUB 文件会加密上传，并在转换完成后自动删除。我们不会查看、分享，也不会用你的电子书训练
+            AI。不支持受 DRM 保护的电子书。
           </p>
           <div className="mt-2 text-xs text-[#6b7280]">
             Learn more:{' '}
@@ -207,6 +243,12 @@ export function EpubPdfWorkbench() {
             >
               Data Retention
             </Link>
+          </div>
+          <div className="mt-1 text-xs text-[#6b7280]">
+            Having issues?{' '}
+            <a href={supportMailHref} className="text-[#ef3f0a] hover:underline">
+              Contact support
+            </a>
           </div>
         </div>
 
@@ -232,9 +274,29 @@ export function EpubPdfWorkbench() {
         </div>
 
         {error ? (
-          <div className="mt-4 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-            <XCircle className="mt-0.5 h-4 w-4 shrink-0" />
-            <span>{error}</span>
+          <div className="mt-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+            <div className="flex items-start gap-2">
+              <XCircle className="mt-0.5 h-4 w-4 shrink-0" />
+              <span>{error}</span>
+            </div>
+            {errorCode ? (
+              <p className="mt-2 text-xs text-red-600/90">Error code: {errorCode}</p>
+            ) : null}
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={resetFlow}
+                className="inline-flex h-8 items-center rounded-lg border border-red-200 bg-white px-3 text-xs font-semibold text-red-700 hover:bg-red-100"
+              >
+                Retry
+              </button>
+              <a
+                href={supportMailHref}
+                className="inline-flex h-8 items-center rounded-lg bg-[#ef3f0a] px-3 text-xs font-semibold text-white hover:bg-[#dc3506]"
+              >
+                Contact support
+              </a>
+            </div>
           </div>
         ) : null}
       </div>
@@ -266,6 +328,9 @@ export function EpubPdfWorkbench() {
           {downloadUrl ? (
             <a
               href={downloadUrl}
+              onClick={() => {
+                void trackEvent('download_started', { job_id: jobId });
+              }}
               className="mt-3 inline-flex h-9 items-center rounded-lg bg-[#ef3f0a] px-4 text-xs font-semibold text-white hover:bg-[#dc3506]"
             >
               Download PDF

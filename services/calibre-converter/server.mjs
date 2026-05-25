@@ -12,8 +12,11 @@ const API_KEY = process.env.EPUBFLOW_CONVERTER_API_KEY || '';
 const JOB_TTL_MS = 60 * 60 * 1000;
 const MAX_BYTES = 50 * 1024 * 1024;
 const CONVERSION_TIMEOUT_MS = 120 * 1000;
-const ROOT = path.join(os.tmpdir(), 'epubflow-converter-jobs');
+const ROOT =
+  process.env.EPUBFLOW_CONVERTER_DATA_DIR ||
+  path.join(os.tmpdir(), 'epubflow-converter-jobs');
 const JOBS_FILE = path.join(ROOT, 'jobs.json');
+const METRICS_RETENTION_DAYS = 30;
 
 let jobs = null;
 
@@ -62,6 +65,120 @@ function nowIso() {
   return new Date().toISOString();
 }
 
+function getMetricsFilePath(date = new Date()) {
+  const day = date.toISOString().slice(0, 10);
+  return path.join(ROOT, `metrics-${day}.jsonl`);
+}
+
+async function appendMetric(event, payload = {}) {
+  try {
+    await ensureRoot();
+    const line = JSON.stringify({
+      event,
+      timestamp: nowIso(),
+      ...payload,
+    });
+    await fs.appendFile(getMetricsFilePath(), `${line}\n`, 'utf-8');
+  } catch (error) {
+    console.error('[metrics] append failed', String(error));
+  }
+}
+
+async function pruneMetricFiles() {
+  try {
+    await ensureRoot();
+    const files = await fs.readdir(ROOT);
+    const now = Date.now();
+    await Promise.all(
+      files
+        .filter((name) => /^metrics-\d{4}-\d{2}-\d{2}\.jsonl$/.test(name))
+        .map(async (name) => {
+          const day = name.slice('metrics-'.length, 'metrics-'.length + 10);
+          const ts = Date.parse(`${day}T00:00:00.000Z`);
+          if (Number.isNaN(ts)) return;
+          const ageDays = (now - ts) / (24 * 60 * 60 * 1000);
+          if (ageDays > METRICS_RETENTION_DAYS) {
+            await fs.rm(path.join(ROOT, name), { force: true });
+          }
+        })
+    );
+  } catch (error) {
+    console.error('[metrics] prune failed', String(error));
+  }
+}
+
+async function readMetricEvents(days = 7) {
+  await ensureRoot();
+  const files = await fs.readdir(ROOT);
+  const targetDays = new Set();
+  for (let i = 0; i < days; i += 1) {
+    const d = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
+    targetDays.add(d.toISOString().slice(0, 10));
+  }
+
+  const metricFiles = files.filter((name) => {
+    const matched = name.match(/^metrics-(\d{4}-\d{2}-\d{2})\.jsonl$/);
+    return matched ? targetDays.has(matched[1]) : false;
+  });
+
+  const events = [];
+  for (const fileName of metricFiles) {
+    const filePath = path.join(ROOT, fileName);
+    const raw = await fs.readFile(filePath, 'utf-8');
+    const lines = raw.split('\n').map((line) => line.trim()).filter(Boolean);
+    for (const line of lines) {
+      try {
+        events.push(JSON.parse(line));
+      } catch {}
+    }
+  }
+  return events;
+}
+
+function aggregateMetrics(events) {
+  const totals = {
+    uploads: 0,
+    convertStarted: 0,
+    success: 0,
+    failed: 0,
+    timeout: 0,
+    avgDurationMs: 0,
+    successRate: 0,
+    failureRate: 0,
+    timeoutRate: 0,
+  };
+  const failureByType = {};
+
+  let durationTotal = 0;
+  let durationCount = 0;
+
+  for (const event of events) {
+    if (event.event === 'upload_started') totals.uploads += 1;
+    if (event.event === 'convert_started') totals.convertStarted += 1;
+    if (event.event === 'convert_succeeded') {
+      totals.success += 1;
+      if (typeof event.duration_ms === 'number' && event.duration_ms >= 0) {
+        durationTotal += event.duration_ms;
+        durationCount += 1;
+      }
+    }
+    if (event.event === 'convert_failed') {
+      totals.failed += 1;
+      const key = event.error_type || 'unknown';
+      failureByType[key] = (failureByType[key] || 0) + 1;
+      if (key === 'timeout') totals.timeout += 1;
+    }
+  }
+
+  const finished = totals.success + totals.failed;
+  totals.avgDurationMs = durationCount > 0 ? Math.round(durationTotal / durationCount) : 0;
+  totals.successRate = finished > 0 ? Number((totals.success / finished).toFixed(4)) : 0;
+  totals.failureRate = finished > 0 ? Number((totals.failed / finished).toFixed(4)) : 0;
+  totals.timeoutRate = finished > 0 ? Number((totals.timeout / finished).toFixed(4)) : 0;
+
+  return { totals, failureByType };
+}
+
 function isZipHeader(buffer) {
   if (!buffer || buffer.length < 4) return false;
   return buffer[0] === 0x50 && buffer[1] === 0x4b;
@@ -82,6 +199,25 @@ function classifyError(message) {
     return { code: 'CORRUPTED_EPUB', message: 'This EPUB appears corrupted or unreadable.' };
   }
   return { code: 'CONVERSION_FAILED', message: 'Conversion failed. Please try again.' };
+}
+
+function normalizeErrorType(errorCode) {
+  switch (errorCode) {
+    case 'DRM_PROTECTED':
+      return 'drm_protected';
+    case 'CORRUPTED_EPUB':
+      return 'corrupted_file';
+    case 'CONVERSION_TIMEOUT':
+      return 'timeout';
+    case 'CONVERTER_NOT_AVAILABLE':
+      return 'converter_unavailable';
+    case 'INVALID_FILE':
+      return 'invalid_file';
+    case 'FILE_TOO_LARGE':
+      return 'oversized_file';
+    default:
+      return 'unknown';
+  }
 }
 
 async function cleanupExpired() {
@@ -148,6 +284,11 @@ async function processJob(id) {
   await loadJobs();
   const job = jobs[id];
   if (!job) return;
+  await appendMetric('convert_started', {
+    job_id: id,
+    file_size_mb: Number((job.inputSize / (1024 * 1024)).toFixed(2)),
+  });
+  const startedAt = Date.now();
   const result = await runConvert(job.inputPath, job.outputPath);
   if (!result.ok) {
     console.error('[converter] job failed', {
@@ -158,6 +299,11 @@ async function processJob(id) {
     const error = result.timedOut
       ? { code: 'CONVERSION_TIMEOUT', message: 'Conversion timed out. Please try a smaller EPUB.' }
       : classifyError(result.stderr);
+    await appendMetric('convert_failed', {
+      job_id: id,
+      duration_ms: Date.now() - startedAt,
+      error_type: normalizeErrorType(error.code),
+    });
     await setStatus(id, 'failed', error);
     return;
   }
@@ -179,6 +325,10 @@ async function processJob(id) {
     return;
   }
   await setStatus(id, 'success');
+  await appendMetric('convert_succeeded', {
+    job_id: id,
+    duration_ms: Date.now() - startedAt,
+  });
 }
 
 function verifyApiKey(req, res) {
@@ -215,14 +365,20 @@ async function handleCreate(req, res) {
   const { fileName, buffer, tooLarge } = await parseMultipart(req);
 
   if (!fileName || !fileName.toLowerCase().endsWith('.epub')) {
+    await appendMetric('upload_rejected', { error_type: 'invalid_file' });
     json(res, 400, { errorCode: 'INVALID_FILE', errorMessage: 'Please upload a valid .epub file.' });
     return;
   }
   if (tooLarge || buffer.length > MAX_BYTES) {
+    await appendMetric('upload_rejected', {
+      error_type: 'oversized_file',
+      file_size_mb: Number((buffer.length / (1024 * 1024)).toFixed(2)),
+    });
     json(res, 400, { errorCode: 'FILE_TOO_LARGE', errorMessage: 'File is too large. Free limit is 50MB.' });
     return;
   }
   if (!isZipHeader(buffer)) {
+    await appendMetric('upload_rejected', { error_type: 'corrupted_file' });
     json(res, 400, { errorCode: 'CORRUPTED_EPUB', errorMessage: 'This EPUB appears corrupted or unreadable.' });
     return;
   }
@@ -256,6 +412,45 @@ async function handleCreate(req, res) {
     void processJob(id);
   });
   json(res, 200, { jobId: id, status: 'uploading' });
+}
+
+async function handlePostMetric(req, res) {
+  if (!verifyApiKey(req, res)) return;
+  let payload = {};
+  try {
+    const chunks = [];
+    for await (const chunk of req) chunks.push(chunk);
+    const body = Buffer.concat(chunks).toString('utf-8');
+    payload = body ? JSON.parse(body) : {};
+  } catch {
+    json(res, 400, { errorCode: 'INVALID_JSON', errorMessage: 'Invalid JSON body.' });
+    return;
+  }
+  const { event, ...rest } = payload || {};
+  if (!event || typeof event !== 'string') {
+    json(res, 400, { errorCode: 'INVALID_EVENT', errorMessage: 'event is required.' });
+    return;
+  }
+  await appendMetric(event, rest);
+  await pruneMetricFiles();
+  json(res, 200, { ok: true });
+}
+
+async function handleGetMetrics(req, res) {
+  if (!verifyApiKey(req, res)) return;
+  await pruneMetricFiles();
+  const url = new URL(req.url || '/', `http://${req.headers.host}`);
+  const daysRaw = Number(url.searchParams.get('days') || 7);
+  const days = Number.isFinite(daysRaw) && daysRaw > 0 && daysRaw <= 30 ? daysRaw : 7;
+  const events = await readMetricEvents(days);
+  const aggregated = aggregateMetrics(events);
+  json(res, 200, {
+    ok: true,
+    days,
+    generatedAt: nowIso(),
+    eventCount: events.length,
+    ...aggregated,
+  });
 }
 
 async function handleGetJob(req, res, jobId) {
@@ -314,6 +509,16 @@ const server = http.createServer(async (req, res) => {
 
     if (req.method === 'POST' && url.pathname === '/v1/conversions/epub-to-pdf') {
       await handleCreate(req, res);
+      return;
+    }
+
+    if (req.method === 'POST' && url.pathname === '/v1/metrics') {
+      await handlePostMetric(req, res);
+      return;
+    }
+
+    if (req.method === 'GET' && url.pathname === '/v1/metrics') {
+      await handleGetMetrics(req, res);
       return;
     }
 

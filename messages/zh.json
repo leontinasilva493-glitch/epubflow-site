@@ -1,8 +1,8 @@
 {
   "Metadata": {
     "name": "EPUBFlow",
-    "title": "EPUBFlow - ?? EPUB ? Kindle?PDF ? Markdown",
-    "description": "EPUBFlow ??? EPUB ?? Kindle?PDF?Markdown???????????????"
+    "title": "EPUBFlow - 将 EPUB 转换为 Kindle、PDF 和 Markdown",
+    "description": "EPUBFlow 帮你快速把 EPUB 转换为 Kindle、PDF 与 Markdown，保留排版，上传后自动删除，默认私密。"
   },
   "Common": {
     "premium": "付费文章",

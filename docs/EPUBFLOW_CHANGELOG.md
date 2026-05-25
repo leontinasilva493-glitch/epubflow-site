@@ -210,3 +210,49 @@
   - Open Vercel `Deployments`
   - Confirm latest `main` deployment is `Ready` (green)
   - Only click `Redeploy` if latest deployment is failed/stuck.
+
+## v0.4.0-p1-operations-seo-support (2026-05-25)
+
+### Operability Metrics
+- Added converter-side metrics ingestion and aggregation:
+  - `POST /v1/metrics`
+  - `GET /v1/metrics`
+- Metrics storage uses daily JSONL files with retention cleanup:
+  - `metrics-YYYY-MM-DD.jsonl`
+  - retention window: 30 days
+- Added web proxy endpoint:
+  - `src/app/api/metrics/route.ts`
+- Added admin metrics page:
+  - `src/app/[locale]/(protected)/admin/metrics/page.tsx`
+- Added admin sidebar entry and route:
+  - `Routes.AdminMetrics`
+  - `src/config/sidebar-config.tsx`
+
+### Conversion Funnel Instrumentation
+- Workbench now reports web-side events:
+  - `upload_started`
+  - `download_started`
+- Converter reports server-side conversion events:
+  - `upload_rejected`
+  - `convert_started`
+  - `convert_succeeded`
+  - `convert_failed`
+
+### Support Flow
+- Upload area now includes direct support entry.
+- Conversion error state now includes:
+  - error code display
+  - `Retry` action
+  - `Contact support` mail link with `job_id` in subject
+- Footer now shows direct support email:
+  - `support@epubflow.com`
+
+### SEO Baseline Fixes
+- Simplified `robots` crawl rules and kept sitemap declaration.
+- Replaced sitemap generation with only currently reachable routes:
+  - `/`, `/pricing`, `/contact`, `/privacy`, `/terms`, `/cookie`, `/refund`, `/data-retention`
+- Fixed Chinese metadata title/description in `messages/zh.json` to avoid SERP乱码.
+
+### Docs
+- Added:
+  - `docs/P1_OPERATIONS_SEO_SUPPORT_IMPLEMENTATION.md`

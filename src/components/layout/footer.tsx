@@ -56,6 +56,16 @@ export function Footer({ className }: React.HTMLAttributes<HTMLElement>) {
 
               {/* built with button */}
               <BuiltWithButton />
+
+              <p className="text-sm text-muted-foreground">
+                Support:{" "}
+                <a
+                  href="mailto:support@epubflow.com"
+                  className="text-primary hover:underline"
+                >
+                  support@epubflow.com
+                </a>
+              </p>
             </div>
           </div>
 
