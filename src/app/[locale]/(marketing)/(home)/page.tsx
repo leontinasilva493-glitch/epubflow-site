@@ -32,170 +32,164 @@ export async function generateMetadata({
   });
 }
 
-const trustChips = [
-  { icon: Lock, label: 'Private by default' },
-  { icon: FileText, label: 'Auto-delete in 1 hour' },
-  { icon: Check, label: 'No AI training' },
-  { icon: Smartphone, label: 'DRM not supported' },
-];
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'HomePage' });
 
-const quickFormatEntries = [
-  {
-    title: 'PDF',
-    description: 'Print-ready layout',
-    href: '/epub-to-pdf',
-  },
-  {
-    title: 'Kindle',
-    description: 'AZW3 recommended',
-    href: '/epub-to-kindle',
-  },
-  {
-    title: 'Markdown',
-    description: 'Knowledge workflow',
-    href: '/epub-to-markdown',
-  },
-  {
-    title: 'TXT',
-    description: 'Clean text extraction',
-    href: '/epub-to-txt',
-  },
-  {
-    title: 'Word',
-    description: 'Editable DOCX',
-    href: '/epub-to-docx',
-  },
-];
+  const trustChips = [
+    { icon: Lock, label: t('trust.private') },
+    { icon: FileText, label: t('trust.autoDelete') },
+    { icon: Check, label: t('trust.noAiTraining') },
+  ];
 
-const scenarioCards = [
-  {
-    icon: Smartphone,
-    title: 'Read on Kindle',
-    description: 'Recommended: AZW3 for modern devices',
-    href: '/epub-to-kindle',
-  },
-  {
-    icon: FileText,
-    title: 'Print or share',
-    description: 'Clean PDF with proper headings and layout',
-    href: '/epub-to-pdf',
-  },
-  {
-    icon: FileCode2,
-    title: 'Use with AI notes',
-    description: 'Markdown for Obsidian, Notion, ChatGPT, Claude',
-    href: '/epub-to-markdown',
-    badge: 'Soon',
-  },
-  {
-    icon: FileSpreadsheet,
-    title: 'Edit in Word',
-    description: 'DOCX for editing, annotation, collaboration',
-    href: '/epub-to-docx',
-  },
-];
+  const quickFormatEntries = [
+    {
+      title: t('quickFormats.pdf.title'),
+      description: t('quickFormats.pdf.description'),
+      href: '/epub-to-pdf',
+    },
+    {
+      title: t('quickFormats.kindle.title'),
+      description: t('quickFormats.kindle.description'),
+      href: '/epub-to-kindle',
+    },
+    {
+      title: t('quickFormats.markdown.title'),
+      description: t('quickFormats.markdown.description'),
+      href: '/epub-to-markdown',
+    },
+    {
+      title: t('quickFormats.txt.title'),
+      description: t('quickFormats.txt.description'),
+      href: '/epub-to-txt',
+    },
+    {
+      title: t('quickFormats.word.title'),
+      description: t('quickFormats.word.description'),
+      href: '/epub-to-docx',
+    },
+  ];
 
-const recommendationRows = [
-  {
-    label: 'Kindle reading',
-    value: 'AZW3',
-    detail: 'Best default for modern Kindle devices',
-  },
-  {
-    label: 'Print / share',
-    value: 'PDF',
-    detail: 'Great for layout-preserved reading and exporting',
-  },
-  {
-    label: 'AI notes',
-    value: 'Markdown / TXT',
-    detail: 'Markdown soon, TXT available today',
-  },
-  {
-    label: 'Edit document',
-    value: 'DOCX',
-    detail: 'Best for review, comments, and collaboration',
-  },
-];
+  const scenarioCards = [
+    {
+      icon: Smartphone,
+      title: t('readingGoals.cards.kindle.title'),
+      description: t('readingGoals.cards.kindle.description'),
+      href: '/epub-to-kindle',
+    },
+    {
+      icon: FileText,
+      title: t('readingGoals.cards.pdf.title'),
+      description: t('readingGoals.cards.pdf.description'),
+      href: '/epub-to-pdf',
+    },
+    {
+      icon: FileCode2,
+      title: t('readingGoals.cards.markdown.title'),
+      description: t('readingGoals.cards.markdown.description'),
+      href: '/epub-to-markdown',
+      badge: t('readingGoals.cards.markdown.badge'),
+    },
+    {
+      icon: FileSpreadsheet,
+      title: t('readingGoals.cards.docx.title'),
+      description: t('readingGoals.cards.docx.description'),
+      href: '/epub-to-docx',
+    },
+  ];
 
-const compareRows = [
-  {
-    label: 'Reading-optimized presets',
-    ours: true,
-    generic: 'Often missing',
-  },
-  {
-    label: 'Preserve headings, TOC & metadata',
-    ours: true,
-    generic: 'Sometimes lost',
-  },
-  {
-    label: 'Images & typography preserved',
-    ours: true,
-    generic: 'Often broken',
-  },
-  {
-    label: 'Privacy & auto-delete',
-    ours: true,
-    generic: 'Rarely guaranteed',
-  },
-];
+  const recommendationRows = [
+    {
+      label: t('formatGuide.rows.kindle.label'),
+      value: t('formatGuide.rows.kindle.value'),
+      detail: t('formatGuide.rows.kindle.detail'),
+    },
+    {
+      label: t('formatGuide.rows.pdf.label'),
+      value: t('formatGuide.rows.pdf.value'),
+      detail: t('formatGuide.rows.pdf.detail'),
+    },
+    {
+      label: t('formatGuide.rows.notes.label'),
+      value: t('formatGuide.rows.notes.value'),
+      detail: t('formatGuide.rows.notes.detail'),
+    },
+    {
+      label: t('formatGuide.rows.docx.label'),
+      value: t('formatGuide.rows.docx.value'),
+      detail: t('formatGuide.rows.docx.detail'),
+    },
+  ];
 
-const faqItems = [
-  {
-    question: 'How long are files stored?',
-    answer:
-      'Uploaded and converted files are automatically deleted after 1 hour.',
-  },
-  {
-    question: 'Do you use my ebooks for AI training?',
-    answer:
-      'No. EPUBFlow does not use uploaded ebook content for AI training.',
-  },
-  {
-    question: 'Which Kindle format should I choose?',
-    answer:
-      'Use AZW3 for most modern Kindle devices. Use MOBI only for older compatibility needs.',
-  },
-  {
-    question: 'Can I convert DRM-protected ebooks?',
-    answer: 'No. DRM-protected ebooks are not supported.',
-  },
-  {
-    question: 'Which formats work today?',
-    answer:
-      'PDF, Kindle (AZW3/MOBI), TXT, and DOCX are available now. Markdown is the next rollout.',
-  },
-];
+  const compareRows = [
+    {
+      label: t('comparison.rows.presets.label'),
+      generic: t('comparison.rows.presets.generic'),
+    },
+    {
+      label: t('comparison.rows.structure.label'),
+      generic: t('comparison.rows.structure.generic'),
+    },
+    {
+      label: t('comparison.rows.images.label'),
+      generic: t('comparison.rows.images.generic'),
+    },
+    {
+      label: t('comparison.rows.privacy.label'),
+      generic: t('comparison.rows.privacy.generic'),
+    },
+  ];
 
-export default async function HomePage() {
+  const faqItems = [
+    {
+      question: t('faq.items.storage.question'),
+      answer: t('faq.items.storage.answer'),
+    },
+    {
+      question: t('faq.items.training.question'),
+      answer: t('faq.items.training.answer'),
+    },
+    {
+      question: t('faq.items.kindle.question'),
+      answer: t('faq.items.kindle.answer'),
+    },
+    {
+      question: t('faq.items.drm.question'),
+      answer: t('faq.items.drm.answer'),
+    },
+    {
+      question: t('faq.items.formats.question'),
+      answer: t('faq.items.formats.answer'),
+    },
+  ];
+
   return (
     <div className="bg-[radial-gradient(circle_at_top,#fff8f2_0%,#faf8f6_48%,#f6f5f4_100%)] text-[#111827]">
-      <section className="mx-auto max-w-7xl px-4 pb-10 pt-8 sm:px-6 lg:px-8">
-        <div className="mx-auto mb-8 w-fit rounded-full border border-[#f1d7ca] bg-white/90 px-4 py-2 text-sm shadow-[0_10px_30px_rgba(17,24,39,0.06)]">
-          <span className="font-semibold text-[#ef3f0a]">Now live</span>{' '}
-          <span className="text-[#4b5563]">
-            EPUB to PDF, Kindle, TXT, and DOCX conversions
-          </span>
+      <section className="mx-auto max-w-7xl px-4 pb-6 pt-5 sm:px-6 lg:px-8">
+        <div className="mx-auto mb-4 w-fit rounded-full border border-[#f1d7ca] bg-white/90 px-4 py-1.5 text-xs shadow-[0_10px_30px_rgba(17,24,39,0.06)] sm:text-sm">
+          <span className="font-semibold text-[#ef3f0a]">{t('liveBadgePrefix')}</span>{' '}
+          <span className="text-[#4b5563]">{t('liveBadgeText')}</span>
         </div>
 
-        <div className="grid items-start gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:gap-10">
-          <div className="pt-2">
+        <div className="grid items-start gap-5 lg:grid-cols-[0.92fr_1.08fr] lg:gap-6">
+          <div className="max-w-[30rem] pt-0 lg:pt-3">
             <div className="inline-flex items-center gap-2 rounded-full border border-[#ece5df] bg-white px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-[#6b7280]">
               <Flame className="h-3.5 w-3.5 text-[#ef3f0a]" />
-              Reader-first EPUB conversion
+              {t('eyebrow')}
             </div>
-            <h1 className="mt-5 text-balance text-4xl font-extrabold leading-[1.03] tracking-[-0.05em] text-[#111827] sm:text-6xl">
-              Convert <span className="text-[#ef3f0a]">EPUB</span> for Kindle,
-              PDF & Markdown
+            <h1 className="mt-3 max-w-[10ch] text-balance text-[2.4rem] font-extrabold leading-[1.02] tracking-[-0.045em] text-[#111827] sm:text-[2.8rem] lg:text-[3.55rem]">
+              {t('titlePrefix')} <span className="text-[#ef3f0a]">{t('titleAccent')}</span>{' '}
+              {t('titleSuffix')}
             </h1>
-            <p className="mt-5 max-w-xl text-base leading-7 text-[#6b7280] sm:text-lg">
-              Choose your reading goal and get the best format automatically.
-              Start from the converter on the right, then jump into the exact
-              format page if you need a deeper workflow.
+            <p className="mt-3 max-w-[28rem] text-[15px] leading-[1.55] text-[#6b7280]">
+              {t('description')}
             </p>
 
-            <div className="mt-6 flex flex-wrap gap-2.5">
+            <div className="mt-4 flex flex-wrap gap-2">
               {trustChips.map((chip) => (
                 <span
                   key={chip.label}
@@ -207,27 +201,27 @@ export default async function HomePage() {
               ))}
             </div>
 
-            <div className="mt-5 text-sm text-[#6b7280]">
-              Learn more:{' '}
+            <div className="mt-3 text-xs text-[#6b7280]">
+              {t('learnMore')}{' '}
               <LocaleLink href="/privacy" className="text-[#ef3f0a] hover:underline">
-                Privacy Policy
+                {t('privacyPolicy')}
               </LocaleLink>{' '}
               /{' '}
               <LocaleLink
                 href="/data-retention"
                 className="text-[#ef3f0a] hover:underline"
               >
-                Data Retention
+                {t('dataRetention')}
               </LocaleLink>
             </div>
           </div>
 
-          <div id="converter">
+          <div id="converter" className="lg:pt-0.5">
             <EpubHomeWorkbench />
           </div>
         </div>
 
-        <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {quickFormatEntries.map((entry) => (
             <LocaleLink
               key={entry.href}
@@ -239,7 +233,7 @@ export default async function HomePage() {
                 {entry.description}
               </p>
               <p className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-[#ef3f0a]">
-                Open format page
+                {t('quickFormats.cta')}
                 <ArrowUpRight className="h-3.5 w-3.5" />
               </p>
             </LocaleLink>
@@ -250,14 +244,13 @@ export default async function HomePage() {
       <section id="features" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-8 max-w-2xl">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#ef3f0a]">
-            Reading goal presets
+            {t('readingGoals.eyebrow')}
           </p>
           <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
-            Pick the outcome you actually want
+            {t('readingGoals.title')}
           </h2>
           <p className="mt-3 text-base leading-7 text-[#6b7280]">
-            EPUBFlow is easiest to use when you think in outcomes, not file
-            formats. Start from your reading goal and we will guide the output.
+            {t('readingGoals.description')}
           </p>
         </div>
 
@@ -285,7 +278,7 @@ export default async function HomePage() {
                 {card.description}
               </p>
               <p className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-[#111827] transition group-hover:text-[#ef3f0a]">
-                Explore this workflow
+                {t('readingGoals.cta')}
                 <ArrowUpRight className="h-4 w-4" />
               </p>
             </LocaleLink>
@@ -298,14 +291,13 @@ export default async function HomePage() {
           <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#ef3f0a]">
-                Format guide
+                {t('formatGuide.eyebrow')}
               </p>
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#111827] sm:text-4xl">
-                Not sure which format to choose?
+                {t('formatGuide.title')}
               </h2>
               <p className="mt-4 max-w-xl text-base leading-7 text-[#6b7280]">
-                Start from your reading goal. EPUBFlow is designed to make the
-                format decision obvious instead of forcing users to guess.
+                {t('formatGuide.description')}
               </p>
             </div>
 
@@ -337,24 +329,23 @@ export default async function HomePage() {
           <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#ef3f0a]">
-                Why EPUBFlow
+                {t('comparison.eyebrow')}
               </p>
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#111827] sm:text-4xl">
-                Better for reading,
+                {t('comparison.titleLine1')}
                 <br />
-                not just conversion
+                {t('comparison.titleLine2')}
               </h2>
               <p className="mt-4 max-w-xl text-base leading-7 text-[#6b7280]">
-                We optimize for readable output, cleaner structure, and stronger
-                privacy defaults instead of raw file generation.
+                {t('comparison.description')}
               </p>
             </div>
 
             <div className="overflow-hidden rounded-2xl border border-[#eceff3]">
               <div className="grid grid-cols-[1.5fr_1fr_1fr] bg-[#fcfcfd] px-4 py-3 text-xs font-semibold uppercase tracking-wide text-[#6b7280]">
-                <span>Feature</span>
-                <span className="text-[#ef3f0a]">EPUBFlow</span>
-                <span>Generic converters</span>
+                <span>{t('comparison.headerFeature')}</span>
+                <span className="text-[#ef3f0a]">{t('comparison.headerOurs')}</span>
+                <span>{t('comparison.headerGeneric')}</span>
               </div>
               {compareRows.map((row) => (
                 <div
@@ -376,10 +367,10 @@ export default async function HomePage() {
       <section id="faqs" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-7 max-w-2xl">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#ef3f0a]">
-            FAQ
+            {t('faq.eyebrow')}
           </p>
           <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#111827] sm:text-4xl">
-            Common questions before you convert
+            {t('faq.title')}
           </h2>
         </div>
 
@@ -406,11 +397,10 @@ export default async function HomePage() {
                 <Sparkles className="h-5 w-5" />
               </div>
               <h2 className="text-3xl font-bold tracking-tight text-[#111827]">
-                Convert your EPUB in seconds
+                {t('bottomCta.title')}
               </h2>
               <p className="mt-3 text-base leading-7 text-[#6b7280]">
-                Start from the upload area at the top and choose the output that
-                matches your reading goal.
+                {t('bottomCta.description')}
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
@@ -418,7 +408,7 @@ export default async function HomePage() {
                 href="#converter"
                 className="inline-flex h-12 items-center rounded-xl bg-[#ef3f0a] px-6 text-sm font-semibold text-white transition hover:bg-[#dc3506]"
               >
-                Choose EPUB File
+                {t('bottomCta.button')}
               </a>
             </div>
           </div>

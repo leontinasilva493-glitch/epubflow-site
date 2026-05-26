@@ -1,5 +1,174 @@
 # EPUBFlow Website Changelog
 
+## v0.7.5-hero-lite-workbench-layout (2026-05-26)
+
+### Scope
+- Implemented homepage layout direction #2: a dedicated Hero-only lightweight converter component.
+- Kept full workbench behavior on format pages unchanged.
+
+### Homepage Hero Changes
+- Replaced homepage usage of the full two-column workbench with `EpubHeroLiteWorkbench`.
+- New Hero converter flow is top-down and compact:
+  - format tabs stay at the top
+  - upload area
+  - selected file row
+  - conversion status + action button row
+  - single-line privacy/legal links
+  - inline error block when needed
+- Removed heavy right sidebar density from Hero while preserving core conversion loop.
+
+### Functional Behavior
+- Preserved main conversion flow in Hero:
+  - `.epub` and file-size validation
+  - create conversion job
+  - poll status
+  - download output
+  - error display
+- Preserved key metrics events:
+  - `upload_started`
+  - `download_started`
+  - `download_failed`
+
+### Files
+- `src/components/epub/epub-hero-lite-workbench.tsx` (new)
+- `src/components/epub/epub-home-workbench.tsx`
+
+## v0.7.4-hero-compact-pass-and-english-copy-cleanup (2026-05-26)
+
+### Scope
+- Reduced homepage Hero visual height again with a compact-first conversion workspace.
+- Removed leftover non-English text from English locale copy to keep public language fully English.
+
+### Hero Height Optimization
+- Added a compact mode to the shared converter workbench and enabled it on homepage Hero only.
+- Reduced upload panel vertical space:
+  - upload dropzone height reduced in compact mode
+  - left panel and status panel paddings reduced in compact mode
+  - privacy block compressed into a one-line trust/legal strip in compact mode
+- Tightened Hero spacing and typography:
+  - reduced Hero top/bottom padding and headline scale
+  - reduced left-right column gap and lowered converter top offset
+  - reduced spacing before quick format cards
+
+### Language Cleanup
+- Removed the stray `descriptionZh` field from `messages/en.json` so English locale content no longer contains mixed-language fallback text.
+
+### Files
+- `src/components/epub/epub-convert-workbench.tsx`
+- `src/components/epub/epub-home-workbench.tsx`
+- `src/app/[locale]/(marketing)/(home)/page.tsx`
+- `messages/en.json`
+- `docs/EPUBFLOW_CHANGELOG.md`
+
+## v0.7.3-english-only-entry-and-hero-height-fix (2026-05-26)
+
+### Scope
+- Restored English-only public entry behavior.
+- Fixed the remaining Hero height issue by removing layout constraints that still kept the first screen too tall.
+
+### Language Routing
+- Locked public locale configuration to English only.
+- Added legacy `/zh` -> English redirect handling in middleware so old Chinese links no longer surface mixed-language homepage content.
+
+### Hero Height Fix
+- Removed the forced desktop Hero minimum height that was still stretching the first screen.
+- Tightened left/right column proportions again so the converter sits higher and the text block stops over-expanding.
+- Removed the duplicate trust footer from the homepage workbench to reduce vertical bloat inside Hero.
+- Slightly reduced desktop headline sizing and max width to avoid unnecessary extra wrapping height.
+
+### Files
+- `src/config/website.tsx`
+- `src/middleware.ts`
+- `src/app/[locale]/(marketing)/(home)/page.tsx`
+- `src/components/epub/epub-home-workbench.tsx`
+
+## v0.7.2-hero-balance-and-density-polish (2026-05-26)
+
+### Scope
+- Rebalanced homepage Hero height and density without changing the approved conversion-first layout.
+- Reduced the amount of copy competing with the converter in the first screen.
+
+### Hero Adjustments
+- Tightened Hero vertical spacing and reduced top/bottom padding.
+- Balanced the two-column layout so the left copy block and right workbench sit closer in height.
+- Reduced headline width and adjusted desktop title sizing to avoid over-tall wrapping.
+- Shortened the main supporting sentence in Hero to a more direct one-line value statement.
+
+### Trust & Privacy Density
+- Reduced Hero trust chips to the 3 highest-priority items:
+  - Private by default
+  - Auto-delete in 1 hour
+  - No AI training
+- Moved `DRM not supported` emphasis out of the Hero chips and kept it in the converter-side helper copy.
+- Compressed the upload privacy panel into a shorter note:
+  - encrypted in transit
+  - auto-delete after conversion
+  - DRM not supported
+- Tightened legal/support helper text sizing inside the workbench.
+
+### UX Polish
+- Pulled the quick format cards closer to Hero to reduce the visual dead zone below the fold.
+- Shortened the download helper footnote in the workbench.
+
+### Localization
+- Updated the new shorter Hero/support copy in:
+  - `messages/en.json`
+  - `messages/zh.json`
+
+### Files
+- `src/app/[locale]/(marketing)/(home)/page.tsx`
+- `src/components/epub/epub-convert-workbench.tsx`
+- `messages/en.json`
+- `messages/zh.json`
+
+## v0.7.1-homepage-i18n-and-workbench-fixes (2026-05-26)
+
+### Scope
+- Fixed the post-homepage-redesign regressions and polish issues found in review.
+- Kept the conversion-first homepage structure unchanged while making it locale-safe, more honest, and easier to use.
+
+### P1 Fixes
+- Fixed workbench legal links to stay locale-aware:
+  - `Privacy Policy`
+  - `Data Retention`
+  - now use locale routing instead of raw links
+- Implemented real drag-and-drop support in the EPUB upload area:
+  - drag over
+  - drag leave
+  - file drop
+- Upload zone now explicitly surfaces file size guidance:
+  - `Max 50MB`
+
+### P2 Fixes
+- Migrated homepage conversion-first copy into `next-intl` messages:
+  - Hero
+  - trust chips
+  - quick format cards
+  - reading-goal cards
+  - format recommendation table
+  - comparison table
+  - FAQ
+  - bottom CTA
+- Added EN + ZH message namespaces for:
+  - `HomePage`
+  - `HomeWorkbench`
+  - `ConvertWorkbench`
+- Replaced unsafe Tailwind utility:
+  - `bg-white/18` -> `bg-white/20`
+- Removed the lingering year reference from Kindle guide body copy to avoid future staleness.
+
+### P3 Polish
+- Added smooth scrolling for anchor navigation back to the main homepage converter.
+
+### Files
+- `src/components/epub/epub-convert-workbench.tsx`
+- `src/components/epub/epub-home-workbench.tsx`
+- `src/app/[locale]/(marketing)/(home)/page.tsx`
+- `src/app/[locale]/(marketing)/guides/best-ebook-format-for-kindle/page.tsx`
+- `src/styles/globals.css`
+- `messages/en.json`
+- `messages/zh.json`
+
 ## v0.7.0-conversion-first-homepage (2026-05-26)
 
 ### Scope
