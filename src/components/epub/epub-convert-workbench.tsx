@@ -101,7 +101,10 @@ export function EpubConvertWorkbench({
 
   const disabled = phase !== 'idle' && phase !== 'failed' && phase !== 'success';
 
-  const trackEvent = async (event: string, payload: Record<string, unknown> = {}) => {
+  const trackEvent = async (
+    event: string,
+    payload: Record<string, unknown> = {}
+  ) => {
     try {
       const response = await fetch('/api/metrics', {
         method: 'POST',
@@ -295,8 +298,7 @@ export function EpubConvertWorkbench({
             training. DRM-protected ebooks are not supported.
           </p>
           <p className="mt-2 text-xs leading-6 text-[#6b7280]">
-            默认私密。你的 EPUB 文件会加密上传，并在转换完成后自动删除。我们不会查看、分享，也不会用你的电子书训练
-            AI。不支持受 DRM 保护的电子书。
+            默认私密。你的 EPUB 文件会加密上传，并在转换完成后自动删除。我们不会查看、分享，也不会用你的电子书训练 AI。不支持受 DRM 保护的电子书。
           </p>
           <div className="mt-2 text-xs text-[#6b7280]">
             Learn more:{' '}
@@ -387,7 +389,9 @@ export function EpubConvertWorkbench({
 
         <div className="mt-4 rounded-xl border border-[#e5e7eb] bg-white p-4">
           <div className="flex items-center gap-2 text-sm font-semibold text-[#111827]">
-            {phase === 'converting' || phase === 'reading_epub' || phase === 'uploading' ? (
+            {phase === 'converting' ||
+            phase === 'reading_epub' ||
+            phase === 'uploading' ? (
               <Loader2 className="h-4 w-4 animate-spin text-[#ef3f0a]" />
             ) : (
               <FileText className="h-4 w-4 text-[#4b5563]" />

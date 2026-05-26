@@ -1,4 +1,5 @@
 import { EpubKindleWorkbench } from '@/components/epub/epub-kindle-workbench';
+import { getOtherFormatLinks } from '@/components/epub/epub-convert-page';
 import { LocaleLink } from '@/i18n/navigation';
 import { constructMetadata } from '@/lib/metadata';
 import type { Metadata } from 'next';
@@ -19,14 +20,8 @@ export async function generateMetadata({
   });
 }
 
-const otherFormatLinks = [
-  { href: '/epub-to-pdf', label: 'EPUB to PDF' },
-  { href: '/epub-to-markdown', label: 'EPUB to Markdown' },
-  { href: '/epub-to-txt', label: 'EPUB to TXT' },
-  { href: '/epub-to-docx', label: 'EPUB to DOCX' },
-];
-
 export default function EpubToKindlePage() {
+  const otherFormatLinks = getOtherFormatLinks('/epub-to-kindle');
   return (
     <div className="bg-gradient-to-b from-[#f9f8f7] via-[#fafafa] to-[#f7f7f7] text-[#111827]">
       <section className="mx-auto max-w-7xl px-4 pb-8 pt-10 sm:px-6 lg:px-8">

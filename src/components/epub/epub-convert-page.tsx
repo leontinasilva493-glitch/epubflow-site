@@ -11,13 +11,17 @@ interface EpubConvertPageProps {
   formatDescription: string;
 }
 
-const otherFormatLinks = [
+export const OTHER_FORMAT_LINKS = [
   { href: '/epub-to-pdf', label: 'EPUB to PDF' },
   { href: '/epub-to-kindle', label: 'EPUB to Kindle' },
   { href: '/epub-to-markdown', label: 'EPUB to Markdown' },
   { href: '/epub-to-txt', label: 'EPUB to TXT' },
   { href: '/epub-to-docx', label: 'EPUB to DOCX' },
 ];
+
+export function getOtherFormatLinks(currentHref: string) {
+  return OTHER_FORMAT_LINKS.filter((item) => item.href !== currentHref);
+}
 
 export function EpubConvertPage({
   title,
@@ -56,9 +60,7 @@ export function EpubConvertPage({
             Need a different output? Choose another EPUBFlow converter below.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
-            {otherFormatLinks
-              .filter((item) => item.href !== `/${`epub-to-${format}`}`)
-              .map((item) => (
+            {getOtherFormatLinks(`/${`epub-to-${format}`}`).map((item) => (
                 <LocaleLink
                   key={item.href}
                   href={item.href}

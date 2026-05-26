@@ -1,5 +1,70 @@
 # EPUBFlow Website Changelog
 
+## v0.7.0-conversion-first-homepage (2026-05-26)
+
+### Scope
+- Reworked homepage from a static marketing-heavy layout into a conversion-first tool homepage.
+- Incorporated the latest product review decisions:
+  - converter inside Hero
+  - single-select format tabs
+  - scenario-driven cards
+  - format recommendation guide
+  - shorter comparison table
+  - bottom CTA that returns users to the main upload zone
+
+### Homepage Redesign
+- Moved the functional conversion workbench into Hero instead of keeping it as a lower-page block.
+- Replaced non-functional hero buttons with a real interactive upload-first workbench.
+- Added a dedicated home-only format selector with single-select tabs:
+  - PDF
+  - Kindle
+  - Markdown
+  - TXT
+  - Word
+- Markdown is now clearly represented as an upcoming workflow instead of pretending to be fully available.
+
+### New Homepage Sections
+- Kept format entry cards directly below Hero for fast routing into dedicated format pages.
+- Replaced generic SaaS feature cards with action-oriented reading-goal cards:
+  - Read on Kindle
+  - Print or share
+  - Use with AI notes
+  - Edit in Word
+- Added a new “Not sure which format to choose?” recommendation module.
+- Kept and simplified the EPUBFlow vs Generic converters comparison table to the 4 strongest points.
+- Expanded FAQ into a clearer multi-card support section.
+- Bottom CTA now uses a single upload-focused action instead of duplicating a second workbench.
+
+### UX & Consistency Fixes
+- Navbar CTA now points to the homepage converter anchor.
+- Fixed lingering Chinese privacy-copy rendering issue inside the workbench.
+- Unified Kindle page “Other formats” logic with shared link generation.
+- Removed stale year from Kindle guide metadata title.
+
+### Files
+- `src/app/[locale]/(marketing)/(home)/page.tsx`
+- `src/components/epub/epub-home-workbench.tsx`
+- `src/components/epub/epub-convert-workbench.tsx`
+- `src/components/layout/navbar.tsx`
+- `src/components/epub/epub-convert-page.tsx`
+- `src/app/[locale]/(marketing)/epub-to-kindle/page.tsx`
+- `src/app/[locale]/(marketing)/guides/best-ebook-format-for-kindle/page.tsx`
+
+## v0.6.1-seo-polish-consistency (2026-05-26)
+
+### Fixes
+- Unified "Other formats" link generation logic between generic format pages and Kindle page:
+  - Kindle page now uses the same source logic (`getOtherFormatLinks`) instead of a standalone hardcoded list.
+  - Reduces future drift risk when adding/removing formats.
+- Removed year from guide metadata title to avoid stale SEO snippets:
+  - `Best eBook Format for Kindle in 2026 | EPUBFlow`
+  - changed to `Best eBook Format for Kindle | EPUBFlow`
+
+### Files
+- `src/components/epub/epub-convert-page.tsx`
+- `src/app/[locale]/(marketing)/epub-to-kindle/page.tsx`
+- `src/app/[locale]/(marketing)/guides/best-ebook-format-for-kindle/page.tsx`
+
 ## v0.6.0-seo-ia-format-pages (2026-05-26)
 
 ### Scope

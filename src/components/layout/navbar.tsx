@@ -85,7 +85,7 @@ export function Navbar({ scroll }: NavBarProps) {
           <div className="flex items-center gap-3">
             <ModeSwitcher />
             <LocaleLink
-              href="/"
+              href="/#converter"
               className={cn(buttonVariants({ size: 'sm' }), 'gap-2')}
             >
               <Upload className="size-4" />

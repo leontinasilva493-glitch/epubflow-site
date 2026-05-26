@@ -10,7 +10,7 @@ export async function generateMetadata({
 }): Promise<Metadata | undefined> {
   const { locale } = await params;
   return constructMetadata({
-    title: 'Best eBook Format for Kindle in 2026 | EPUBFlow',
+    title: 'Best eBook Format for Kindle | EPUBFlow',
     description:
       'Find the best eBook format for Kindle and when to choose AZW3, MOBI, PDF, or EPUB source files.',
     locale,
