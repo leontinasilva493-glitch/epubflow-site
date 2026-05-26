@@ -106,9 +106,6 @@ export function EpubHomeWorkbench() {
             );
           })}
         </div>
-        <p className="mt-3 text-sm leading-6 text-[#6b7280]">
-          {selected.description}
-        </p>
       </div>
 
       {selected.comingSoon ? (

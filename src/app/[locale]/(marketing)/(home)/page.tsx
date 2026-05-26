@@ -185,7 +185,7 @@ export default async function HomePage({
               {t('titlePrefix')} <span className="text-[#ef3f0a]">{t('titleAccent')}</span>{' '}
               {t('titleSuffix')}
             </h1>
-            <p className="mt-3 max-w-[28rem] text-[15px] leading-[1.55] text-[#6b7280]">
+            <p className="mt-3 max-w-[24rem] text-sm leading-6 text-[#6b7280]">
               {t('description')}
             </p>
 
@@ -201,19 +201,6 @@ export default async function HomePage({
               ))}
             </div>
 
-            <div className="mt-3 text-xs text-[#6b7280]">
-              {t('learnMore')}{' '}
-              <LocaleLink href="/privacy" className="text-[#ef3f0a] hover:underline">
-                {t('privacyPolicy')}
-              </LocaleLink>{' '}
-              /{' '}
-              <LocaleLink
-                href="/data-retention"
-                className="text-[#ef3f0a] hover:underline"
-              >
-                {t('dataRetention')}
-              </LocaleLink>
-            </div>
           </div>
 
           <div id="converter" className="lg:pt-0.5">

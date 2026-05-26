@@ -243,7 +243,7 @@ export function EpubHeroLiteWorkbench({
   };
 
   return (
-    <div className="space-y-3 p-4 sm:p-5">
+    <div className="space-y-2.5 p-4 sm:p-5">
       <input
         ref={fileInputRef}
         type="file"
@@ -293,7 +293,7 @@ export function EpubHeroLiteWorkbench({
       </div>
 
       <div className="flex items-center justify-between rounded-xl border border-[#e5e7eb] bg-[#fbfcfe] px-3 py-2.5">
-        <div className="text-sm font-medium text-[#374151]">
+        <div className="truncate pr-2 text-sm font-medium text-[#374151]">
           {file ? file.name : t('file.none')}
         </div>
         <div className="flex items-center gap-2 text-xs text-[#6b7280]">
@@ -343,7 +343,7 @@ export function EpubHeroLiteWorkbench({
       </div>
 
       <div className="text-[11px] text-[#6b7280] sm:text-xs">
-        {t('privacy.title')}{' '}
+        <span className="font-medium">{t('privacy.title')}</span>{' '}
         <LocaleLink href="/privacy" className="text-[#ef3f0a] hover:underline">
           {t('privacy.privacyPolicy')}
         </LocaleLink>{' '}

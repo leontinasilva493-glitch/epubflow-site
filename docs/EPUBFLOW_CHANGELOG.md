@@ -1,5 +1,29 @@
 # EPUBFlow Website Changelog
 
+## v0.7.6-home-hero-p0-density-pass (2026-05-26)
+
+### Scope
+- Completed P0 homepage Hero density optimization for the new vertical converter layout.
+- Reduced non-critical content footprint in first screen while preserving conversion flow.
+
+### P0 Visual/UX Changes
+- Removed extra top description line below format tabs in homepage workbench header.
+- Tightened Hero converter vertical rhythm:
+  - reduced internal section spacing
+  - preserved fixed compact upload dropzone
+  - ensured filename row does not expand height with long names (`truncate`)
+- Simplified privacy helper into a single compact legal entry line:
+  - `Private by default. Privacy Policy / Data Retention`
+- Reduced left copy block height:
+  - narrower supporting paragraph width
+  - removed duplicated legal helper line from left column (kept in workbench)
+
+### Files
+- `src/components/epub/epub-home-workbench.tsx`
+- `src/components/epub/epub-hero-lite-workbench.tsx`
+- `src/app/[locale]/(marketing)/(home)/page.tsx`
+- `docs/EPUBFLOW_CHANGELOG.md`
+
 ## v0.7.5-hero-lite-workbench-layout (2026-05-26)
 
 ### Scope
