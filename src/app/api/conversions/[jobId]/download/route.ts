@@ -50,7 +50,7 @@ export async function GET(
     const status = result.code === 'NOT_FOUND' ? 404 : 400;
     await reportConverterMetric('download_failed', {
       job_id: jobId,
-      targetFormat: 'unknown',
+      targetFormat: formatForMetrics(result.targetFormat || null),
       error_type: normalizeDownloadFailure(status, result.code),
     });
     return NextResponse.json(

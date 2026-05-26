@@ -9,9 +9,18 @@ import type { NestedMenuItem } from '@/types';
 export function useNavbarLinks(): NestedMenuItem[] {
   return [
     {
-      title: 'Features',
-      href: Routes.Features,
-      external: false,
+      title: 'Convert',
+      items: [
+        { title: 'EPUB to PDF', href: Routes.EpubToPdf, external: false },
+        { title: 'EPUB to Kindle', href: Routes.EpubToKindle, external: false },
+        {
+          title: 'EPUB to Markdown',
+          href: Routes.EpubToMarkdown,
+          external: false,
+        },
+        { title: 'EPUB to TXT', href: Routes.EpubToTxt, external: false },
+        { title: 'EPUB to Word', href: Routes.EpubToDocx, external: false },
+      ],
     },
     {
       title: 'Pricing',
@@ -21,11 +30,6 @@ export function useNavbarLinks(): NestedMenuItem[] {
     {
       title: 'FAQ',
       href: Routes.FAQ,
-      external: false,
-    },
-    {
-      title: 'Docs',
-      href: Routes.Docs,
       external: false,
     },
   ];

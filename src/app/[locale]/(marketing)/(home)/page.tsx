@@ -104,6 +104,34 @@ const featureCards = [
   },
 ];
 
+const quickFormatEntries = [
+  {
+    title: 'PDF',
+    description: 'Print-ready layout',
+    href: '/epub-to-pdf',
+  },
+  {
+    title: 'Kindle',
+    description: 'AZW3 & MOBI',
+    href: '/epub-to-kindle',
+  },
+  {
+    title: 'Markdown',
+    description: 'For Obsidian & Notion',
+    href: '/epub-to-markdown',
+  },
+  {
+    title: 'TXT',
+    description: 'Clean text extraction',
+    href: '/epub-to-txt',
+  },
+  {
+    title: 'Word',
+    description: 'Editable DOCX',
+    href: '/epub-to-docx',
+  },
+];
+
 const compareRows = [
   {
     label: 'Reading-optimized presets',
@@ -203,12 +231,26 @@ export default async function HomePage() {
           </div>
         </div>
 
-        <div className="mt-12 overflow-hidden rounded-3xl border border-[#e5e7eb] bg-white shadow-[0_24px_80px_rgba(15,23,42,0.1)]">
+        <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          {quickFormatEntries.map((entry) => (
+            <LocaleLink
+              key={entry.href}
+              href={entry.href}
+              className="rounded-2xl border border-[#e5e7eb] bg-white p-4 text-left shadow-[0_8px_24px_rgba(15,23,42,0.04)] transition hover:-translate-y-0.5 hover:border-[#ef3f0a]/40"
+            >
+              <p className="text-base font-semibold text-[#111827]">{entry.title}</p>
+              <p className="mt-1 text-xs text-[#6b7280]">{entry.description}</p>
+              <p className="mt-3 text-xs font-semibold text-[#ef3f0a]">Convert →</p>
+            </LocaleLink>
+          ))}
+        </div>
+
+        <div className="mt-8 overflow-hidden rounded-3xl border border-[#e5e7eb] bg-white shadow-[0_24px_80px_rgba(15,23,42,0.1)]">
           <EpubPdfWorkbench />
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <section id="features" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <h2 className="mb-8 text-center text-3xl font-bold tracking-tight sm:text-4xl">
           Everything you need for the perfect conversion
         </h2>
@@ -236,7 +278,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <section id="docs" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="rounded-3xl border border-[#e5e7eb] bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.06)] sm:p-8">
           <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr]">
             <div>
@@ -275,7 +317,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 pb-20 pt-4 sm:px-6 lg:px-8">
+      <section id="pricing" className="mx-auto max-w-7xl px-4 pb-20 pt-4 sm:px-6 lg:px-8">
         <div className="rounded-3xl border border-[#ffd9cb] bg-gradient-to-r from-[#fff7f3] to-[#fffaf7] p-6 sm:p-8">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-2xl">
@@ -320,6 +362,26 @@ export default async function HomePage() {
                 {chip}
               </span>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="faqs" className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 lg:px-8">
+        <div className="rounded-2xl border border-[#e5e7eb] bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.04)]">
+          <h2 className="text-2xl font-bold text-[#111827]">FAQ</h2>
+          <div className="mt-4 space-y-4 text-sm text-[#374151]">
+            <p>
+              <strong>How long are files stored?</strong> Uploaded and converted
+              files are automatically deleted after 1 hour.
+            </p>
+            <p>
+              <strong>Do you use my files for AI training?</strong> No. EPUBFlow
+              never uses uploaded ebook content for AI training.
+            </p>
+            <p>
+              <strong>Can I convert DRM-protected files?</strong> No. DRM-protected
+              ebooks are not supported.
+            </p>
           </div>
         </div>
       </section>

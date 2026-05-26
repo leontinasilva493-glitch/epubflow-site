@@ -10,7 +10,7 @@ import { useNavbarLinks } from '@/config/navbar-config';
 import { useScroll } from '@/hooks/use-scroll';
 import { LocaleLink, useLocalePathname } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
-import { Upload } from 'lucide-react';
+import { ChevronDown, Upload } from 'lucide-react';
 
 interface NavBarProps {
   scroll?: boolean;
@@ -40,18 +40,46 @@ export function Navbar({ scroll }: NavBarProps) {
           </LocaleLink>
 
           <div className="flex-1 flex items-center justify-center gap-7 text-sm font-medium text-muted-foreground">
-            {links.map((item) => (
-              <LocaleLink
-                key={`${item.title}-${item.href}`}
-                href={item.href || '#'}
-                className={cn(
-                  'transition-colors hover:text-foreground',
-                  item.href && localePathname === item.href && 'text-foreground'
-                )}
-              >
-                {item.title}
-              </LocaleLink>
-            ))}
+            {links.map((item) =>
+              item.items?.length ? (
+                <div key={item.title} className="group relative">
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
+                  >
+                    {item.title}
+                    <ChevronDown className="size-4" />
+                  </button>
+                  <div className="invisible absolute left-0 top-full z-50 mt-2 w-56 rounded-xl border border-border bg-background p-2 opacity-0 shadow-lg transition group-hover:visible group-hover:opacity-100">
+                    {item.items.map((subItem) => (
+                      <LocaleLink
+                        key={`${item.title}-${subItem.title}-${subItem.href}`}
+                        href={subItem.href || '#'}
+                        className={cn(
+                          'block rounded-md px-3 py-2 text-sm transition hover:bg-muted hover:text-foreground',
+                          subItem.href &&
+                            localePathname.startsWith(subItem.href) &&
+                            'bg-muted text-foreground'
+                        )}
+                      >
+                        {subItem.title}
+                      </LocaleLink>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <LocaleLink
+                  key={`${item.title}-${item.href}`}
+                  href={item.href || '#'}
+                  className={cn(
+                    'transition-colors hover:text-foreground',
+                    item.href && localePathname === item.href && 'text-foreground'
+                  )}
+                >
+                  {item.title}
+                </LocaleLink>
+              )
+            )}
           </div>
 
           <div className="flex items-center gap-3">

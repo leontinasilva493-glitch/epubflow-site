@@ -17,6 +17,13 @@ const staticRoutes: Href[] = [
   '/cookie',
   '/refund',
   '/data-retention',
+  '/epub-to-pdf',
+  '/epub-to-kindle',
+  '/epub-to-markdown',
+  '/epub-to-txt',
+  '/epub-to-docx',
+  '/guides/mobi-vs-azw3-vs-epub',
+  '/guides/best-ebook-format-for-kindle',
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

@@ -17,8 +17,33 @@ export function useFooterLinks(): NestedMenuItem[] {
       ],
     },
     {
+      title: 'Convert',
+      items: [
+        { title: 'EPUB to PDF', href: Routes.EpubToPdf, external: false },
+        { title: 'EPUB to Kindle', href: Routes.EpubToKindle, external: false },
+        {
+          title: 'EPUB to Markdown',
+          href: Routes.EpubToMarkdown,
+          external: false,
+        },
+        { title: 'EPUB to TXT', href: Routes.EpubToTxt, external: false },
+        { title: 'EPUB to DOCX', href: Routes.EpubToDocx, external: false },
+      ],
+    },
+    {
       title: 'Resources',
-      items: [{ title: 'Docs', href: Routes.Docs, external: false }],
+      items: [
+        {
+          title: 'MOBI vs AZW3 vs EPUB',
+          href: Routes.GuideMobiVsAzw3VsEpub,
+          external: false,
+        },
+        {
+          title: 'Best eBook Format for Kindle',
+          href: Routes.GuideBestEbookFormatForKindle,
+          external: false,
+        },
+      ],
     },
     {
       title: 'Legal',

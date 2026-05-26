@@ -1,5 +1,74 @@
 # EPUBFlow Website Changelog
 
+## v0.6.0-seo-ia-format-pages (2026-05-26)
+
+### Scope
+- Execute the approved SEO-focused information architecture rollout:
+  - functional format landing pages
+  - guide content pages
+  - global convert navigation and footer discoverability
+  - sitemap expansion
+
+### Site Architecture & Routing
+- Added new canonical routes:
+  - `/epub-to-pdf`
+  - `/epub-to-kindle`
+  - `/epub-to-markdown`
+  - `/epub-to-txt`
+  - `/epub-to-docx`
+  - `/guides/mobi-vs-azw3-vs-epub`
+  - `/guides/best-ebook-format-for-kindle`
+- Updated route enum:
+  - `src/routes.ts`
+
+### Navigation & Discoverability
+- Navbar upgraded to include a **Convert** dropdown on desktop:
+  - EPUB to PDF / Kindle / Markdown / TXT / Word
+  - `src/config/navbar-config.tsx`
+  - `src/components/layout/navbar.tsx`
+- Footer expanded with dedicated **Convert** and **Resources** columns:
+  - format-page links and guide links available site-wide
+  - `src/config/footer-config.tsx`
+
+### New Pages
+- Added conversion landing pages:
+  - `src/app/[locale]/(marketing)/epub-to-pdf/page.tsx`
+  - `src/app/[locale]/(marketing)/epub-to-kindle/page.tsx`
+  - `src/app/[locale]/(marketing)/epub-to-markdown/page.tsx`
+  - `src/app/[locale]/(marketing)/epub-to-txt/page.tsx`
+  - `src/app/[locale]/(marketing)/epub-to-docx/page.tsx`
+- Added guide content pages:
+  - `src/app/[locale]/(marketing)/guides/mobi-vs-azw3-vs-epub/page.tsx`
+  - `src/app/[locale]/(marketing)/guides/best-ebook-format-for-kindle/page.tsx`
+
+### Conversion Capability Expansion (Web API)
+- Added new conversion API routes:
+  - `POST /api/conversions/epub-to-mobi`
+  - `POST /api/conversions/epub-to-azw3`
+  - `POST /api/conversions/epub-to-txt`
+  - `POST /api/conversions/epub-to-docx`
+- Files:
+  - `src/app/api/conversions/epub-to-mobi/route.ts`
+  - `src/app/api/conversions/epub-to-azw3/route.ts`
+  - `src/app/api/conversions/epub-to-txt/route.ts`
+  - `src/app/api/conversions/epub-to-docx/route.ts`
+
+### Reusable UI Building Blocks
+- Added reusable generic landing workbench wrapper:
+  - `src/components/epub/epub-convert-page.tsx`
+- Added Kindle-specific dual-format switcher workbench (AZW3/MOBI):
+  - `src/components/epub/epub-kindle-workbench.tsx`
+- Homepage now includes clickable quick-entry format cards:
+  - `src/app/[locale]/(marketing)/(home)/page.tsx`
+
+### Sitemap
+- Added all new format and guide URLs into sitemap generation:
+  - `src/app/sitemap.ts`
+
+### Validation
+- Build verification passed:
+  - `pnpm build`
+
 ## v0.1.0-static-launch (2026-05-23)
 
 ### Scope
