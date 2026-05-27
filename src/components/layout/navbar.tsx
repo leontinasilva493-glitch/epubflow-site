@@ -40,23 +40,41 @@ export function Navbar({ scroll }: NavBarProps) {
           </LocaleLink>
 
           <div className="flex-1 flex items-center justify-center gap-7 text-sm font-medium text-muted-foreground">
-            {links.map((item) =>
-              item.items?.length ? (
+            {links.map((item) => {
+              const hasActiveChild = item.items?.some(
+                (subItem) =>
+                  subItem.href && localePathname.startsWith(subItem.href)
+              );
+
+              return item.items?.length ? (
                 <div key={item.title} className="group relative">
                   <button
                     type="button"
-                    className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
+                    aria-haspopup="menu"
+                    aria-expanded={hasActiveChild ? true : undefined}
+                    className={cn(
+                      'inline-flex items-center gap-1 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none',
+                      hasActiveChild && 'text-foreground'
+                    )}
                   >
                     {item.title}
-                    <ChevronDown className="size-4" />
+                    <ChevronDown className="size-4 transition-transform group-hover:rotate-180 group-focus-within:rotate-180" />
                   </button>
-                  <div className="invisible absolute left-0 top-full z-50 mt-2 w-56 rounded-xl border border-border bg-background p-2 opacity-0 shadow-lg transition group-hover:visible group-hover:opacity-100">
+                  <span
+                    aria-hidden="true"
+                    className="absolute left-0 top-full h-3 w-56"
+                  />
+                  <div
+                    role="menu"
+                    className="invisible absolute left-0 top-full z-50 mt-2 w-56 rounded-xl border border-border bg-background p-2 opacity-0 shadow-lg transition duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100"
+                  >
                     {item.items.map((subItem) => (
                       <LocaleLink
                         key={`${item.title}-${subItem.title}-${subItem.href}`}
                         href={subItem.href || '#'}
+                        role="menuitem"
                         className={cn(
-                          'block rounded-md px-3 py-2 text-sm transition hover:bg-muted hover:text-foreground',
+                          'block rounded-md px-3 py-2 text-sm transition hover:bg-muted hover:text-foreground focus-visible:bg-muted focus-visible:text-foreground focus-visible:outline-none',
                           subItem.href &&
                             localePathname.startsWith(subItem.href) &&
                             'bg-muted text-foreground'
@@ -78,8 +96,8 @@ export function Navbar({ scroll }: NavBarProps) {
                 >
                   {item.title}
                 </LocaleLink>
-              )
-            )}
+              );
+            })}
           </div>
 
           <div className="flex items-center gap-3">
