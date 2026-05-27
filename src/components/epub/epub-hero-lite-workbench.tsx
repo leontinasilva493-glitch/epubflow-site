@@ -5,7 +5,7 @@ import {
   type ConversionFormat,
   getFormatConfig,
 } from '@/lib/epub-converter/format-config';
-import { Check, Loader2, Upload, XCircle } from 'lucide-react';
+import { Check, Upload, XCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -34,6 +34,8 @@ interface EpubHeroLiteWorkbenchProps {
 
 const MAX_MB = 50;
 const MAX_BYTES = MAX_MB * 1024 * 1024;
+const POLL_INTERVAL_MS = 1500;
+const MAX_POLL_ATTEMPTS = Math.ceil((5 * 60 * 1000) / POLL_INTERVAL_MS);
 
 export function EpubHeroLiteWorkbench({
   format,
@@ -49,6 +51,7 @@ export function EpubHeroLiteWorkbench({
   const [error, setError] = useState<string | null>(null);
   const [errorCode, setErrorCode] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const pollAttemptsRef = useRef(0);
 
   const fileSizeLabel = useMemo(() => {
     if (!file) return '';
@@ -117,11 +120,21 @@ export function EpubHeroLiteWorkbench({
     setJobId(null);
     setError(null);
     setErrorCode(null);
+    pollAttemptsRef.current = 0;
   };
 
   useEffect(() => {
     if (!jobId || phase === 'success' || phase === 'failed') return;
+    pollAttemptsRef.current = 0;
     const timer = setInterval(async () => {
+      pollAttemptsRef.current += 1;
+      if (pollAttemptsRef.current > MAX_POLL_ATTEMPTS) {
+        setPhase('failed');
+        setErrorCode('CONVERSION_TIMEOUT');
+        setError(t('errors.timeout'));
+        clearInterval(timer);
+        return;
+      }
       const response = await fetch(`/api/conversions/${jobId}`, {
         cache: 'no-store',
       });
@@ -143,7 +156,7 @@ export function EpubHeroLiteWorkbench({
       if (data.status === 'success') {
         clearInterval(timer);
       }
-    }, 1500);
+    }, POLL_INTERVAL_MS);
     return () => clearInterval(timer);
   }, [jobId, phase, t]);
 
@@ -367,6 +380,21 @@ export function EpubHeroLiteWorkbench({
               {t('errors.errorCode', { code: errorCode })}
             </p>
           ) : null}
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={resetFlow}
+              className="inline-flex h-8 items-center rounded-lg border border-red-200 bg-white px-3 text-xs font-semibold text-red-700 hover:bg-red-100"
+            >
+              {t('errors.retry')}
+            </button>
+            <a
+              href="mailto:support@epubflow.com?subject=Conversion%20Issue%20-%20EPUBFlow"
+              className="inline-flex h-8 items-center rounded-lg bg-[#ef3f0a] px-3 text-xs font-semibold text-white hover:bg-[#dc3506]"
+            >
+              {t('privacy.contactSupport')}
+            </a>
+          </div>
         </div>
       ) : null}
     </div>

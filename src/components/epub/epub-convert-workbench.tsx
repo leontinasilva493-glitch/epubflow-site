@@ -36,6 +36,8 @@ interface EpubConvertWorkbenchProps {
 
 const MAX_MB = 50;
 const MAX_BYTES = MAX_MB * 1024 * 1024;
+const POLL_INTERVAL_MS = 1500;
+const MAX_POLL_ATTEMPTS = Math.ceil((5 * 60 * 1000) / POLL_INTERVAL_MS);
 
 export function EpubConvertWorkbench({
   format,
@@ -53,6 +55,7 @@ export function EpubConvertWorkbench({
   const [error, setError] = useState<string | null>(null);
   const [errorCode, setErrorCode] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const pollAttemptsRef = useRef(0);
 
   const fileSizeLabel = useMemo(() => {
     if (!file) return '';
@@ -135,11 +138,21 @@ export function EpubConvertWorkbench({
     setJobId(null);
     setError(null);
     setErrorCode(null);
+    pollAttemptsRef.current = 0;
   };
 
   useEffect(() => {
     if (!jobId || phase === 'success' || phase === 'failed') return;
+    pollAttemptsRef.current = 0;
     const timer = setInterval(async () => {
+      pollAttemptsRef.current += 1;
+      if (pollAttemptsRef.current > MAX_POLL_ATTEMPTS) {
+        setPhase('failed');
+        setErrorCode('CONVERSION_TIMEOUT');
+        setError(t('errors.timeout'));
+        clearInterval(timer);
+        return;
+      }
       const response = await fetch(`/api/conversions/${jobId}`, {
         cache: 'no-store',
       });
@@ -161,7 +174,7 @@ export function EpubConvertWorkbench({
       if (data.status === 'success') {
         clearInterval(timer);
       }
-    }, 1500);
+    }, POLL_INTERVAL_MS);
     return () => clearInterval(timer);
   }, [jobId, phase, t]);
 

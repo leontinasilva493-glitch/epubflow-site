@@ -1345,6 +1345,7 @@
       "createJob": "Failed to create conversion job.",
       "statusCheck": "Failed to check conversion status.",
       "conversionFailed": "Conversion failed.",
+      "timeout": "Conversion timed out. Please retry or contact support.",
       "downloadFailed": "Download failed. Please retry or contact support.",
       "errorCode": "Error code: {code}",
       "retry": "Retry"

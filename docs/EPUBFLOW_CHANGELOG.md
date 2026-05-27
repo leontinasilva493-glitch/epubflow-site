@@ -1,5 +1,30 @@
 # EPUBFlow Website Changelog
 
+## v0.7.7-p0-workbench-stability-fixes (2026-05-27)
+
+### Scope
+- Fixed P0 issues found in the current MVP conversion workflow and locale files.
+
+### Fixes
+- Replaced corrupted EPUBFlow-related `zh.json` namespaces with stable English fallback copy:
+  - `HomePage`
+  - `HomeWorkbench`
+  - `ConvertWorkbench`
+- Added missing Lite Workbench failure actions:
+  - Retry
+  - Contact support
+- Added a 5-minute polling cap to both homepage Lite Workbench and full format-page Workbench to prevent infinite status polling.
+- Added a conversion timeout message to `ConvertWorkbench.errors`.
+- Removed production `console.log` calls from middleware.
+
+### Files
+- `messages/en.json`
+- `messages/zh.json`
+- `src/components/epub/epub-hero-lite-workbench.tsx`
+- `src/components/epub/epub-convert-workbench.tsx`
+- `src/middleware.ts`
+- `docs/EPUBFLOW_CHANGELOG.md`
+
 ## v0.7.6-home-hero-p0-density-pass (2026-05-26)
 
 ### Scope

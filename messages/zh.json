@@ -1100,254 +1100,255 @@
     "description": "MkSaaS 让您在几天内轻松构建您的 AI SaaS，简单且毫不费力"
   },
   "HomePage": {
-    "liveBadgePrefix": "现已上线",
-    "liveBadgeText": "支持 EPUB 转 PDF、Kindle、TXT 和 DOCX",
-    "eyebrow": "以阅读体验为先的 EPUB 转换",
-    "titlePrefix": "将",
+    "liveBadgePrefix": "Now live",
+    "liveBadgeText": "EPUB to PDF, Kindle, TXT, and DOCX conversions",
+    "eyebrow": "Reader-first EPUB conversion",
+    "titlePrefix": "Convert",
     "titleAccent": "EPUB",
-    "titleSuffix": "转换为 Kindle、PDF 与 Markdown",
-    "description": "??????????? EPUB ?????????",
+    "titleSuffix": "for Kindle, PDF & Markdown",
+    "description": "Choose your reading goal and convert EPUB into the best format in seconds.",
     "trust": {
-      "private": "默认私密",
-      "autoDelete": "1 小时后自动删除",
-      "noAiTraining": "不会用于 AI 训练",
-      "drm": "不支持 DRM"
+      "private": "Private by default",
+      "autoDelete": "Auto-delete in 1 hour",
+      "noAiTraining": "No AI training",
+      "drm": "DRM not supported"
     },
-    "learnMore": "了解更多：",
-    "privacyPolicy": "隐私政策",
-    "dataRetention": "数据保留说明",
+    "learnMore": "Learn more:",
+    "privacyPolicy": "Privacy Policy",
+    "dataRetention": "Data Retention",
     "quickFormats": {
       "pdf": {
         "title": "PDF",
-        "description": "适合打印与分享"
+        "description": "Print-ready layout"
       },
       "kindle": {
         "title": "Kindle",
-        "description": "推荐 AZW3"
+        "description": "AZW3 recommended"
       },
       "markdown": {
         "title": "Markdown",
-        "description": "知识库工作流"
+        "description": "Knowledge workflow"
       },
       "txt": {
         "title": "TXT",
-        "description": "纯文本提取"
+        "description": "Clean text extraction"
       },
       "word": {
         "title": "Word",
-        "description": "可编辑 DOCX"
+        "description": "Editable DOCX"
       },
-      "cta": "打开格式页"
+      "cta": "Open format page"
     },
     "readingGoals": {
-      "eyebrow": "阅读目标预设",
-      "title": "先想清楚结果，再开始转换",
-      "description": "EPUBFlow 更适合从使用目标出发，而不是先纠结文件格式。按你的阅读场景来选，我们来帮你处理输出。",
-      "cta": "查看这个用法",
+      "eyebrow": "Reading goal presets",
+      "title": "Pick the outcome you actually want",
+      "description": "EPUBFlow is easiest to use when you think in outcomes, not file formats. Start from your reading goal and we will guide the output.",
+      "cta": "Explore this workflow",
       "cards": {
         "kindle": {
-          "title": "在 Kindle 上阅读",
-          "description": "推荐现代设备使用 AZW3"
+          "title": "Read on Kindle",
+          "description": "Recommended: AZW3 for modern devices"
         },
         "pdf": {
-          "title": "打印或分享",
-          "description": "更干净的 PDF 排版与标题结构"
+          "title": "Print or share",
+          "description": "Clean PDF with proper headings and layout"
         },
         "markdown": {
-          "title": "用于 AI 笔记",
-          "description": "适合 Obsidian、Notion、ChatGPT、Claude",
-          "badge": "即将上线"
+          "title": "Use with AI notes",
+          "description": "Markdown for Obsidian, Notion, ChatGPT, Claude",
+          "badge": "Soon"
         },
         "docx": {
-          "title": "在 Word 中编辑",
-          "description": "适合批注、协作与修订"
+          "title": "Edit in Word",
+          "description": "DOCX for editing, annotation, collaboration"
         }
       }
     },
     "formatGuide": {
-      "eyebrow": "格式推荐",
-      "title": "不确定该选哪种格式？",
-      "description": "从阅读目标出发会更容易。EPUBFlow 的设计目标，就是让格式选择更直观，而不是让用户自己猜。",
+      "eyebrow": "Format guide",
+      "title": "Not sure which format to choose?",
+      "description": "Start from your reading goal. EPUBFlow is designed to make the format decision obvious instead of forcing users to guess.",
       "rows": {
         "kindle": {
-          "label": "Kindle 阅读",
+          "label": "Kindle reading",
           "value": "AZW3",
-          "detail": "现代 Kindle 设备的默认优选"
+          "detail": "Best default for modern Kindle devices"
         },
         "pdf": {
-          "label": "打印 / 分享",
+          "label": "Print / share",
           "value": "PDF",
-          "detail": "更适合保留排版的阅读与导出"
+          "detail": "Great for layout-preserved reading and exporting"
         },
         "notes": {
-          "label": "AI 笔记",
+          "label": "AI notes",
           "value": "Markdown / TXT",
-          "detail": "Markdown 即将上线，TXT 今天可用"
+          "detail": "Markdown soon, TXT available today"
         },
         "docx": {
-          "label": "编辑文档",
+          "label": "Edit document",
           "value": "DOCX",
-          "detail": "更适合修订、评论与协作"
+          "detail": "Best for review, comments, and collaboration"
         }
       }
     },
     "comparison": {
-      "eyebrow": "为什么选 EPUBFlow",
-      "titleLine1": "它更适合真正阅读，",
-      "titleLine2": "而不只是生成文件",
-      "description": "我们更关注输出是否好读、结构是否干净、隐私默认是否可靠，而不只是“转出来一个文件”。",
-      "headerFeature": "对比项",
+      "eyebrow": "Why EPUBFlow",
+      "titleLine1": "Better for reading,",
+      "titleLine2": "not just conversion",
+      "description": "We optimize for readable output, cleaner structure, and stronger privacy defaults instead of raw file generation.",
+      "headerFeature": "Feature",
       "headerOurs": "EPUBFlow",
-      "headerGeneric": "普通转换器",
+      "headerGeneric": "Generic converters",
       "rows": {
         "presets": {
-          "label": "阅读优化预设",
-          "generic": "通常没有"
+          "label": "Reading-optimized presets",
+          "generic": "Often missing"
         },
         "structure": {
-          "label": "保留标题、目录与元数据",
-          "generic": "有时会丢失"
+          "label": "Preserve headings, TOC & metadata",
+          "generic": "Sometimes lost"
         },
         "images": {
-          "label": "保留图片与排版",
-          "generic": "经常出错"
+          "label": "Images & typography preserved",
+          "generic": "Often broken"
         },
         "privacy": {
-          "label": "隐私与自动删除",
-          "generic": "通常没有保证"
+          "label": "Privacy & auto-delete",
+          "generic": "Rarely guaranteed"
         }
       }
     },
     "faq": {
-      "eyebrow": "常见问题",
-      "title": "开始转换前，用户最常问这些",
+      "eyebrow": "FAQ",
+      "title": "Common questions before you convert",
       "items": {
         "storage": {
-          "question": "文件会保存多久？",
-          "answer": "上传文件和转换结果会在 1 小时后自动删除。"
+          "question": "How long are files stored?",
+          "answer": "Uploaded and converted files are automatically deleted after 1 hour."
         },
         "training": {
-          "question": "你们会拿我的电子书训练 AI 吗？",
-          "answer": "不会。EPUBFlow 不会使用用户上传的电子书内容来训练 AI。"
+          "question": "Do you use my ebooks for AI training?",
+          "answer": "No. EPUBFlow does not use uploaded ebook content for AI training."
         },
         "kindle": {
-          "question": "Kindle 格式该怎么选？",
-          "answer": "大多数现代 Kindle 设备建议选 AZW3。只有兼容旧设备时再考虑 MOBI。"
+          "question": "Which Kindle format should I choose?",
+          "answer": "Use AZW3 for most modern Kindle devices. Use MOBI only for older compatibility needs."
         },
         "drm": {
-          "question": "支持 DRM 保护的电子书吗？",
-          "answer": "不支持。受 DRM 保护的电子书无法转换。"
+          "question": "Can I convert DRM-protected ebooks?",
+          "answer": "No. DRM-protected ebooks are not supported."
         },
         "formats": {
-          "question": "现在已经支持哪些格式？",
-          "answer": "目前已支持 PDF、Kindle（AZW3/MOBI）、TXT 和 DOCX。Markdown 是下一步重点上线功能。"
+          "question": "Which formats work today?",
+          "answer": "PDF, Kindle (AZW3/MOBI), TXT, and DOCX are available now. Markdown is the next rollout."
         }
       }
     },
     "bottomCta": {
-      "title": "几秒钟内开始转换 EPUB",
-      "description": "回到顶部上传区，按你的阅读目标选择合适的输出格式。",
-      "button": "选择 EPUB 文件"
+      "title": "Convert your EPUB in seconds",
+      "description": "Start from the upload area at the top and choose the output that matches your reading goal.",
+      "button": "Choose EPUB File"
     }
   },
   "HomeWorkbench": {
     "formats": {
       "pdf": {
         "label": "PDF",
-        "description": "适合打印、分享和更干净的阅读排版。",
+        "description": "Best for print, sharing, and clean reading layouts.",
         "outputLabel": "PDF"
       },
       "kindle": {
         "label": "Kindle",
-        "description": "现代 Kindle 设备推荐输出格式。",
+        "description": "Recommended output for modern Kindle devices.",
         "outputLabel": "Kindle (AZW3)"
       },
       "markdown": {
         "label": "Markdown",
-        "description": "适合 Obsidian、Notion 与 AI 工作流的结构化笔记。",
-        "badge": "即将上线"
+        "description": "Structured notes for Obsidian, Notion, and AI workflows.",
+        "badge": "Soon"
       },
       "txt": {
         "label": "TXT",
-        "description": "轻量、快速的纯文本提取。",
+        "description": "Fast plain-text extraction for lightweight use cases.",
         "outputLabel": "TXT"
       },
       "docx": {
         "label": "Word",
-        "description": "适合审阅、批注和协作的可编辑 DOCX。",
+        "description": "Editable DOCX for reviews, comments, and collaboration.",
         "outputLabel": "Word (DOCX)"
       }
     },
     "comingSoon": {
-      "title": "EPUB to Markdown 即将上线",
-      "description": "我们正在打磨标题层级、清理质量和笔记可用性，确保 Markdown 真正适合 Obsidian、Notion 和 AI 工作流。",
-      "viewPage": "查看 Markdown 页面",
-      "useTxt": "先使用 TXT",
-      "whyTitle": "为什么暂时不急着上线",
+      "title": "EPUB to Markdown is launching next",
+      "description": "We are polishing heading structure, cleanup quality, and note-ready output so Markdown feels genuinely useful for Obsidian, Notion, and AI workflows.",
+      "viewPage": "View Markdown page",
+      "useTxt": "Use TXT today",
+      "whyTitle": "Why we are waiting",
       "reasons": {
-        "r1": "要尽量保留长篇电子书的标题层级。",
-        "r2": "要保证输出真的适合笔记、研究和 AI 提示词场景。",
-        "r3": "不为了凑功能而上线低质量的 Markdown。"
+        "r1": "Preserve heading hierarchy for long ebooks.",
+        "r2": "Keep output usable for notes, research, and AI prompts.",
+        "r3": "Avoid shipping low-quality Markdown just for checkbox coverage."
       },
-      "alternativeEyebrow": "当前最佳替代方案",
+      "alternativeEyebrow": "Best current alternative",
       "alternativeTitle": "EPUB to TXT",
-      "alternativeDescription": "TXT 提取已经可用，适合快速准备 AI 笔记和纯文本内容。"
+      "alternativeDescription": "Clean text extraction is already live and works well for quick AI note preparation."
     },
     "trust": {
-      "private": "默认私密",
-      "autoDelete": "1 小时后自动删除",
-      "noAiTraining": "不会用于 AI 训练",
-      "drm": "不支持 DRM"
+      "private": "Private by default",
+      "autoDelete": "Auto-delete in 1 hour",
+      "noAiTraining": "No AI training",
+      "drm": "DRM not supported"
     }
   },
   "ConvertWorkbench": {
-    "step1": "1. 上传 EPUB 文件",
+    "step1": "1. Upload your EPUB",
     "dropzone": {
-      "title": "拖拽 EPUB 文件到这里",
-      "browse": "或点击浏览文件",
-      "maxSize": "最大 50MB"
+      "title": "Drag & drop your EPUB file here",
+      "browse": "or click to browse",
+      "maxSize": "Max 50MB"
     },
     "file": {
-      "none": "尚未选择文件"
+      "none": "No file selected"
     },
     "privacy": {
-      "title": "默认私密。",
-      "description": "????????????????????????? DRM ???????",
-      "learnMore": "了解更多：",
-      "privacyPolicy": "隐私政策",
-      "dataRetention": "数据保留说明",
-      "issues": "遇到问题？",
-      "contactSupport": "联系支持"
+      "title": "Private by default.",
+      "description": "Files are encrypted in transit and auto-deleted after conversion. DRM-protected ebooks are not supported.",
+      "learnMore": "Learn more:",
+      "privacyPolicy": "Privacy Policy",
+      "dataRetention": "Data Retention",
+      "issues": "Having issues?",
+      "contactSupport": "Contact support"
     },
-    "step2Prefix": "2. 转换为",
-    "outputFormat": "输出格式",
-    "convertButton": "开始转换 EPUB",
+    "step2Prefix": "2. Convert to",
+    "outputFormat": "Output format",
+    "convertButton": "Convert EPUB",
     "status": {
-      "title": "转换状态",
-      "ready": "准备开始转换",
-      "uploading": "正在上传文件",
-      "reading": "正在读取 EPUB",
-      "converting": "正在转换文件",
-      "preparing": "正在准备下载",
-      "success": "转换完成",
-      "failed": "转换失败"
+      "title": "Conversion status",
+      "ready": "Ready to convert",
+      "uploading": "Uploading file",
+      "reading": "Reading EPUB",
+      "converting": "Converting file",
+      "preparing": "Preparing download",
+      "success": "Conversion complete",
+      "failed": "Conversion failed"
     },
     "download": {
-      "title": "下载",
-      "buttonPrefix": "下载",
-      "placeholder": "转换成功后，下载链接会显示在这里。",
-      "footnote": "???? 1 ????????????????? DRM?"
+      "title": "Download",
+      "buttonPrefix": "Download",
+      "placeholder": "Your download link appears here after conversion succeeds.",
+      "footnote": "Files auto-delete after 1 hour. Download promptly. DRM not supported."
     },
     "errors": {
-      "invalidType": "只支持上传 .epub 文件。",
-      "tooLarge": "文件过大，限制为 {max}MB。",
-      "missingFile": "请先上传一个 EPUB 文件。",
-      "createJob": "创建转换任务失败。",
-      "statusCheck": "获取转换状态失败。",
-      "conversionFailed": "转换失败。",
-      "downloadFailed": "下载失败，请重试或联系支持。",
-      "errorCode": "错误代码：{code}",
-      "retry": "重试"
+      "invalidType": "Only .epub files are allowed.",
+      "tooLarge": "File is too large. Limit is {max}MB.",
+      "missingFile": "Please upload an EPUB file first.",
+      "createJob": "Failed to create conversion job.",
+      "statusCheck": "Failed to check conversion status.",
+      "conversionFailed": "Conversion failed.",
+      "timeout": "Conversion timed out. Please retry or contact support.",
+      "downloadFailed": "Download failed. Please retry or contact support.",
+      "errorCode": "Error code: {code}",
+      "retry": "Retry"
     }
   }
 }
