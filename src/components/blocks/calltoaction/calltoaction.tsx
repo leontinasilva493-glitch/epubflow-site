@@ -3,7 +3,7 @@ import { LocaleLink } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 
 export default function CallToActionSection() {
-  const t = useTranslations('HomePage.calltoaction');
+  const t = useTranslations('LegacyHomePage.calltoaction');
 
   return (
     <section id="call-to-action" className="px-4 py-24 bg-muted/50">

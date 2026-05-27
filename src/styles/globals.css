@@ -322,6 +322,10 @@ body {
   @apply overscroll-none bg-transparent;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 .text-gradient_indigo-purple {
   background: linear-gradient(90deg, #6366f1 0%, rgb(168 85 247 / 0.8) 100%);
   -webkit-background-clip: text;

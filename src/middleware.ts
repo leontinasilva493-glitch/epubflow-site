@@ -29,6 +29,13 @@ export default async function middleware(req: NextRequest) {
   const { nextUrl } = req;
   console.log('>> middleware start, pathname', nextUrl.pathname);
 
+  // Legacy redirect: this site now uses English-only public routing.
+  if (nextUrl.pathname === '/zh' || nextUrl.pathname.startsWith('/zh/')) {
+    const englishPath = nextUrl.pathname.replace(/^\/zh(?=\/|$)/, '') || '/';
+    const target = `${englishPath}${nextUrl.search}`;
+    return NextResponse.redirect(new URL(target, nextUrl));
+  }
+
   // Handle internal docs link redirection for internationalization
   // Check if this is a docs page without locale prefix
   if (nextUrl.pathname.startsWith('/docs/') || nextUrl.pathname === '/docs') {

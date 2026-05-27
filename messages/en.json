@@ -788,7 +788,7 @@
       "subject": "Contact Message from Website"
     }
   },
-  "HomePage": {
+  "LegacyHomePage": {
     "title": "MkSaaS",
     "description": "Make AI SaaS in days, simply and effortlessly",
     "hero": {
@@ -1098,5 +1098,256 @@
   "AIAudioPage": {
     "title": "AI Audio",
     "description": "MkSaaS lets you make AI SaaS in days, simply and effortlessly"
+  },
+  "HomePage": {
+    "liveBadgePrefix": "Now live",
+    "liveBadgeText": "EPUB to PDF, Kindle, TXT, and DOCX conversions",
+    "eyebrow": "Reader-first EPUB conversion",
+    "titlePrefix": "Convert",
+    "titleAccent": "EPUB",
+    "titleSuffix": "for Kindle, PDF & Markdown",
+    "description": "Choose your reading goal and convert EPUB into the best format in seconds.",
+    "trust": {
+      "private": "Private by default",
+      "autoDelete": "Auto-delete in 1 hour",
+      "noAiTraining": "No AI training",
+      "drm": "DRM not supported"
+    },
+    "learnMore": "Learn more:",
+    "privacyPolicy": "Privacy Policy",
+    "dataRetention": "Data Retention",
+    "quickFormats": {
+      "pdf": {
+        "title": "PDF",
+        "description": "Print-ready layout"
+      },
+      "kindle": {
+        "title": "Kindle",
+        "description": "AZW3 recommended"
+      },
+      "markdown": {
+        "title": "Markdown",
+        "description": "Knowledge workflow"
+      },
+      "txt": {
+        "title": "TXT",
+        "description": "Clean text extraction"
+      },
+      "word": {
+        "title": "Word",
+        "description": "Editable DOCX"
+      },
+      "cta": "Open format page"
+    },
+    "readingGoals": {
+      "eyebrow": "Reading goal presets",
+      "title": "Pick the outcome you actually want",
+      "description": "EPUBFlow is easiest to use when you think in outcomes, not file formats. Start from your reading goal and we will guide the output.",
+      "cta": "Explore this workflow",
+      "cards": {
+        "kindle": {
+          "title": "Read on Kindle",
+          "description": "Recommended: AZW3 for modern devices"
+        },
+        "pdf": {
+          "title": "Print or share",
+          "description": "Clean PDF with proper headings and layout"
+        },
+        "markdown": {
+          "title": "Use with AI notes",
+          "description": "Markdown for Obsidian, Notion, ChatGPT, Claude",
+          "badge": "Soon"
+        },
+        "docx": {
+          "title": "Edit in Word",
+          "description": "DOCX for editing, annotation, collaboration"
+        }
+      }
+    },
+    "formatGuide": {
+      "eyebrow": "Format guide",
+      "title": "Not sure which format to choose?",
+      "description": "Start from your reading goal. EPUBFlow is designed to make the format decision obvious instead of forcing users to guess.",
+      "rows": {
+        "kindle": {
+          "label": "Kindle reading",
+          "value": "AZW3",
+          "detail": "Best default for modern Kindle devices"
+        },
+        "pdf": {
+          "label": "Print / share",
+          "value": "PDF",
+          "detail": "Great for layout-preserved reading and exporting"
+        },
+        "notes": {
+          "label": "AI notes",
+          "value": "Markdown / TXT",
+          "detail": "Markdown soon, TXT available today"
+        },
+        "docx": {
+          "label": "Edit document",
+          "value": "DOCX",
+          "detail": "Best for review, comments, and collaboration"
+        }
+      }
+    },
+    "comparison": {
+      "eyebrow": "Why EPUBFlow",
+      "titleLine1": "Better for reading,",
+      "titleLine2": "not just conversion",
+      "description": "We optimize for readable output, cleaner structure, and stronger privacy defaults instead of raw file generation.",
+      "headerFeature": "Feature",
+      "headerOurs": "EPUBFlow",
+      "headerGeneric": "Generic converters",
+      "rows": {
+        "presets": {
+          "label": "Reading-optimized presets",
+          "generic": "Often missing"
+        },
+        "structure": {
+          "label": "Preserve headings, TOC & metadata",
+          "generic": "Sometimes lost"
+        },
+        "images": {
+          "label": "Images & typography preserved",
+          "generic": "Often broken"
+        },
+        "privacy": {
+          "label": "Privacy & auto-delete",
+          "generic": "Rarely guaranteed"
+        }
+      }
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Common questions before you convert",
+      "items": {
+        "storage": {
+          "question": "How long are files stored?",
+          "answer": "Uploaded and converted files are automatically deleted after 1 hour."
+        },
+        "training": {
+          "question": "Do you use my ebooks for AI training?",
+          "answer": "No. EPUBFlow does not use uploaded ebook content for AI training."
+        },
+        "kindle": {
+          "question": "Which Kindle format should I choose?",
+          "answer": "Use AZW3 for most modern Kindle devices. Use MOBI only for older compatibility needs."
+        },
+        "drm": {
+          "question": "Can I convert DRM-protected ebooks?",
+          "answer": "No. DRM-protected ebooks are not supported."
+        },
+        "formats": {
+          "question": "Which formats work today?",
+          "answer": "PDF, Kindle (AZW3/MOBI), TXT, and DOCX are available now. Markdown is the next rollout."
+        }
+      }
+    },
+    "bottomCta": {
+      "title": "Convert your EPUB in seconds",
+      "description": "Start from the upload area at the top and choose the output that matches your reading goal.",
+      "button": "Choose EPUB File"
+    }
+  },
+  "HomeWorkbench": {
+    "formats": {
+      "pdf": {
+        "label": "PDF",
+        "description": "Best for print, sharing, and clean reading layouts.",
+        "outputLabel": "PDF"
+      },
+      "kindle": {
+        "label": "Kindle",
+        "description": "Recommended output for modern Kindle devices.",
+        "outputLabel": "Kindle (AZW3)"
+      },
+      "markdown": {
+        "label": "Markdown",
+        "description": "Structured notes for Obsidian, Notion, and AI workflows.",
+        "badge": "Soon"
+      },
+      "txt": {
+        "label": "TXT",
+        "description": "Fast plain-text extraction for lightweight use cases.",
+        "outputLabel": "TXT"
+      },
+      "docx": {
+        "label": "Word",
+        "description": "Editable DOCX for reviews, comments, and collaboration.",
+        "outputLabel": "Word (DOCX)"
+      }
+    },
+    "comingSoon": {
+      "title": "EPUB to Markdown is launching next",
+      "description": "We are polishing heading structure, cleanup quality, and note-ready output so Markdown feels genuinely useful for Obsidian, Notion, and AI workflows.",
+      "viewPage": "View Markdown page",
+      "useTxt": "Use TXT today",
+      "whyTitle": "Why we are waiting",
+      "reasons": {
+        "r1": "Preserve heading hierarchy for long ebooks.",
+        "r2": "Keep output usable for notes, research, and AI prompts.",
+        "r3": "Avoid shipping low-quality Markdown just for checkbox coverage."
+      },
+      "alternativeEyebrow": "Best current alternative",
+      "alternativeTitle": "EPUB to TXT",
+      "alternativeDescription": "Clean text extraction is already live and works well for quick AI note preparation."
+    },
+    "trust": {
+      "private": "Private by default",
+      "autoDelete": "Auto-delete in 1 hour",
+      "noAiTraining": "No AI training",
+      "drm": "DRM not supported"
+    }
+  },
+  "ConvertWorkbench": {
+    "step1": "1. Upload your EPUB",
+    "dropzone": {
+      "title": "Drag & drop your EPUB file here",
+      "browse": "or click to browse",
+      "maxSize": "Max 50MB"
+    },
+    "file": {
+      "none": "No file selected"
+    },
+    "privacy": {
+      "title": "Private by default.",
+      "description": "Files are encrypted in transit and auto-deleted after conversion. DRM-protected ebooks are not supported.",
+      "learnMore": "Learn more:",
+      "privacyPolicy": "Privacy Policy",
+      "dataRetention": "Data Retention",
+      "issues": "Having issues?",
+      "contactSupport": "Contact support"
+    },
+    "step2Prefix": "2. Convert to",
+    "outputFormat": "Output format",
+    "convertButton": "Convert EPUB",
+    "status": {
+      "title": "Conversion status",
+      "ready": "Ready to convert",
+      "uploading": "Uploading file",
+      "reading": "Reading EPUB",
+      "converting": "Converting file",
+      "preparing": "Preparing download",
+      "success": "Conversion complete",
+      "failed": "Conversion failed"
+    },
+    "download": {
+      "title": "Download",
+      "buttonPrefix": "Download",
+      "placeholder": "Your download link appears here after conversion succeeds.",
+      "footnote": "Files auto-delete after 1 hour. Download promptly. DRM not supported."
+    },
+    "errors": {
+      "invalidType": "Only .epub files are allowed.",
+      "tooLarge": "File is too large. Limit is {max}MB.",
+      "missingFile": "Please upload an EPUB file first.",
+      "createJob": "Failed to create conversion job.",
+      "statusCheck": "Failed to check conversion status.",
+      "conversionFailed": "Conversion failed.",
+      "downloadFailed": "Download failed. Please retry or contact support.",
+      "errorCode": "Error code: {code}",
+      "retry": "Retry"
+    }
   }
 }

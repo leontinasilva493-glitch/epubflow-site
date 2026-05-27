@@ -22,7 +22,7 @@ const chunkArray = (
 };
 
 export default function TestimonialsSection() {
-  const t = useTranslations('HomePage.testimonials');
+  const t = useTranslations('LegacyHomePage.testimonials');
 
   const testimonials: Testimonial[] = [
     {

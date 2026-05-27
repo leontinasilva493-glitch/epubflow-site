@@ -1,12 +1,13 @@
 'use client';
 
-import { Check, FileText, Loader2, Upload, XCircle } from 'lucide-react';
-import Link from 'next/link';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { LocaleLink } from '@/i18n/navigation';
 import {
   type ConversionFormat,
   getFormatConfig,
 } from '@/lib/epub-converter/format-config';
+import { Check, FileText, Loader2, Upload, XCircle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 type UiPhase =
   | 'idle'
@@ -30,55 +31,20 @@ interface EpubConvertWorkbenchProps {
   apiEndpoint: string;
   formatLabel: string;
   formatDescription: string;
+  compact?: boolean;
 }
 
 const MAX_MB = 50;
 const MAX_BYTES = MAX_MB * 1024 * 1024;
-
-function phaseLabel(phase: UiPhase) {
-  switch (phase) {
-    case 'uploading':
-      return 'Uploading file';
-    case 'reading_epub':
-      return 'Reading EPUB';
-    case 'converting':
-      return 'Converting file';
-    case 'preparing_download':
-      return 'Preparing download';
-    case 'success':
-      return 'Conversion complete';
-    case 'failed':
-      return 'Conversion failed';
-    default:
-      return 'Ready to convert';
-  }
-}
-
-function phaseProgress(phase: UiPhase) {
-  switch (phase) {
-    case 'uploading':
-      return 15;
-    case 'reading_epub':
-      return 35;
-    case 'converting':
-      return 70;
-    case 'preparing_download':
-      return 90;
-    case 'success':
-      return 100;
-    case 'failed':
-      return 0;
-    default:
-      return 0;
-  }
-}
 
 export function EpubConvertWorkbench({
   format,
   apiEndpoint,
   formatLabel,
   formatDescription,
+  compact = false,
 }: EpubConvertWorkbenchProps) {
+  const t = useTranslations('ConvertWorkbench');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [phase, setPhase] = useState<UiPhase>('idle');
@@ -86,6 +52,7 @@ export function EpubConvertWorkbench({
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [errorCode, setErrorCode] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const fileSizeLabel = useMemo(() => {
     if (!file) return '';
@@ -100,6 +67,44 @@ export function EpubConvertWorkbench({
   }, [jobId]);
 
   const disabled = phase !== 'idle' && phase !== 'failed' && phase !== 'success';
+
+  const getPhaseLabel = (currentPhase: UiPhase) => {
+    switch (currentPhase) {
+      case 'uploading':
+        return t('status.uploading');
+      case 'reading_epub':
+        return t('status.reading');
+      case 'converting':
+        return t('status.converting');
+      case 'preparing_download':
+        return t('status.preparing');
+      case 'success':
+        return t('status.success');
+      case 'failed':
+        return t('status.failed');
+      default:
+        return t('status.ready');
+    }
+  };
+
+  const getPhaseProgress = (currentPhase: UiPhase) => {
+    switch (currentPhase) {
+      case 'uploading':
+        return 15;
+      case 'reading_epub':
+        return 35;
+      case 'converting':
+        return 70;
+      case 'preparing_download':
+        return 90;
+      case 'success':
+        return 100;
+      case 'failed':
+        return 0;
+      default:
+        return 0;
+    }
+  };
 
   const trackEvent = async (
     event: string,
@@ -141,7 +146,7 @@ export function EpubConvertWorkbench({
       if (!response.ok) {
         setPhase('failed');
         setErrorCode('STATUS_CHECK_FAILED');
-        setError('Failed to check conversion status.');
+        setError(t('errors.statusCheck'));
         clearInterval(timer);
         return;
       }
@@ -150,7 +155,7 @@ export function EpubConvertWorkbench({
       setDownloadUrl(data.downloadUrl);
       if (data.status === 'failed') {
         setErrorCode(data.errorCode || 'CONVERSION_FAILED');
-        setError(data.errorMessage || 'Conversion failed.');
+        setError(data.errorMessage || t('errors.conversionFailed'));
         clearInterval(timer);
       }
       if (data.status === 'success') {
@@ -158,7 +163,7 @@ export function EpubConvertWorkbench({
       }
     }, 1500);
     return () => clearInterval(timer);
-  }, [jobId, phase]);
+  }, [jobId, phase, t]);
 
   const onChooseFile = () => fileInputRef.current?.click();
 
@@ -170,13 +175,13 @@ export function EpubConvertWorkbench({
     }
     if (!nextFile.name.toLowerCase().endsWith('.epub')) {
       setFile(null);
-      setError('Only .epub files are allowed.');
+      setError(t('errors.invalidType'));
       setErrorCode('INVALID_FILE');
       return;
     }
     if (nextFile.size > MAX_BYTES) {
       setFile(null);
-      setError(`File is too large. Limit is ${MAX_MB}MB.`);
+      setError(t('errors.tooLarge', { max: MAX_MB }));
       setErrorCode('FILE_TOO_LARGE');
       return;
     }
@@ -185,7 +190,7 @@ export function EpubConvertWorkbench({
 
   const onConvert = async () => {
     if (!file) {
-      setError('Please upload an EPUB file first.');
+      setError(t('errors.missingFile'));
       setErrorCode('INVALID_FILE');
       return;
     }
@@ -208,7 +213,7 @@ export function EpubConvertWorkbench({
     if (!response.ok) {
       setPhase('failed');
       setErrorCode(String(data.errorCode || 'CONVERSION_FAILED'));
-      setError(String(data.errorMessage || 'Failed to create conversion job.'));
+      setError(String(data.errorMessage || t('errors.createJob')));
       return;
     }
     setJobId(String(data.jobId));
@@ -251,14 +256,27 @@ export function EpubConvertWorkbench({
         error_type: mapDownloadErrorType(status),
       });
       setErrorCode('DOWNLOAD_FAILED');
-      setError('Download failed. Please retry or contact support.');
+      setError(t('errors.downloadFailed'));
     }
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(false);
+    const droppedFile = event.dataTransfer.files?.[0] ?? null;
+    onFileSelected(droppedFile);
   };
 
   return (
     <div className="grid xl:grid-cols-[1fr_320px]">
-      <div className="border-b border-r border-[#eef0f3] p-6 xl:border-b-0">
-        <h3 className="text-sm font-semibold text-[#111827]">1. Upload your EPUB</h3>
+      <div
+        className={[
+          'border-b border-r border-[#eef0f3] xl:border-b-0',
+          compact ? 'p-4' : 'p-5',
+        ].join(' ')}
+      >
+        <h3 className="text-sm font-semibold text-[#111827]">{t('step1')}</h3>
         <input
           ref={fileInputRef}
           type="file"
@@ -266,19 +284,44 @@ export function EpubConvertWorkbench({
           className="hidden"
           onChange={(e) => onFileSelected(e.target.files?.[0] ?? null)}
         />
-        <button
-          type="button"
+        <div
+          role="button"
+          tabIndex={0}
           onClick={onChooseFile}
-          className="mt-3 flex h-32 w-full flex-col items-center justify-center rounded-2xl border border-dashed border-[#d1d5db] bg-white text-center transition hover:bg-[#fafafa]"
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              onChooseFile();
+            }
+          }}
+          onDragOver={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            setIsDragging(true);
+          }}
+          onDragLeave={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            setIsDragging(false);
+          }}
+          onDrop={handleDrop}
+          className={[
+            'mt-3 flex w-full cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed text-center transition',
+            compact ? 'h-24' : 'h-32',
+            isDragging
+              ? 'border-[#ef3f0a] bg-[#fff4ef]'
+              : 'border-[#d1d5db] bg-white hover:bg-[#fafafa]',
+          ].join(' ')}
         >
           <Upload className="mb-2 h-5 w-5 text-[#4b5563]" />
-          <p className="text-sm text-[#4b5563]">Drag & drop your EPUB file here</p>
-          <p className="text-sm text-blue-600">or click to browse</p>
-        </button>
+          <p className="text-sm text-[#4b5563]">{t('dropzone.title')}</p>
+          <p className="text-sm text-blue-600">{t('dropzone.browse')}</p>
+          <p className="mt-1 text-xs text-[#9ca3af]">{t('dropzone.maxSize')}</p>
+        </div>
 
         <div className="mt-3 flex items-center justify-between rounded-xl border border-[#e5e7eb] bg-[#fbfcfe] px-3 py-2.5">
           <div className="text-sm font-medium text-[#374151]">
-            {file ? file.name : 'No file selected'}
+            {file ? file.name : t('file.none')}
           </div>
           <div className="flex items-center gap-2 text-xs text-[#6b7280]">
             {file ? fileSizeLabel : '--'}
@@ -290,43 +333,57 @@ export function EpubConvertWorkbench({
           </div>
         </div>
 
-        <div className="mt-4 rounded-xl border border-[#e5e7eb] bg-[#fffdfb] p-4">
-          <p className="text-sm font-semibold text-[#111827]">Private by default.</p>
-          <p className="mt-2 text-xs leading-6 text-[#6b7280]">
-            Your EPUB files are encrypted during upload and automatically deleted
-            after conversion. We never read, share, or use your ebooks for AI
-            training. DRM-protected ebooks are not supported.
-          </p>
-          <p className="mt-2 text-xs leading-6 text-[#6b7280]">
-            默认私密。你的 EPUB 文件会加密上传，并在转换完成后自动删除。我们不会查看、分享，也不会用你的电子书训练 AI。不支持受 DRM 保护的电子书。
-          </p>
-          <div className="mt-2 text-xs text-[#6b7280]">
-            Learn more:{' '}
-            <Link href="/privacy" className="text-[#ef3f0a] hover:underline">
-              Privacy Policy
-            </Link>{' '}
+        {compact ? (
+          <div className="mt-3 rounded-xl border border-[#e5e7eb] bg-[#fffdfb] px-3 py-2.5 text-[11px] text-[#6b7280] sm:text-xs">
+            <span className="font-semibold text-[#111827]">{t('privacy.title')}</span>{' '}
+            {t('privacy.description')}{' '}
+            <LocaleLink href="/privacy" className="text-[#ef3f0a] hover:underline">
+              {t('privacy.privacyPolicy')}
+            </LocaleLink>{' '}
             /{' '}
-            <Link
+            <LocaleLink
               href="/data-retention"
               className="text-[#ef3f0a] hover:underline"
             >
-              Data Retention
-            </Link>
+              {t('privacy.dataRetention')}
+            </LocaleLink>
           </div>
-          <div className="mt-1 text-xs text-[#6b7280]">
-            Having issues?{' '}
-            <a href={supportMailHref} className="text-[#ef3f0a] hover:underline">
-              Contact support
-            </a>
+        ) : (
+          <div className="mt-4 rounded-xl border border-[#e5e7eb] bg-[#fffdfb] p-3.5">
+            <p className="text-sm font-semibold text-[#111827]">
+              {t('privacy.title')}
+            </p>
+            <p className="mt-1.5 text-[11px] leading-5 text-[#6b7280] sm:text-xs">
+              {t('privacy.description')}
+            </p>
+            <div className="mt-2 flex flex-wrap gap-x-1 text-[11px] text-[#6b7280] sm:text-xs">
+              {t('privacy.learnMore')}{' '}
+              <LocaleLink href="/privacy" className="text-[#ef3f0a] hover:underline">
+                {t('privacy.privacyPolicy')}
+              </LocaleLink>{' '}
+              /{' '}
+              <LocaleLink
+                href="/data-retention"
+                className="text-[#ef3f0a] hover:underline"
+              >
+                {t('privacy.dataRetention')}
+              </LocaleLink>
+            </div>
+            <div className="mt-1 text-[11px] text-[#6b7280] sm:text-xs">
+              {t('privacy.issues')}{' '}
+              <a href={supportMailHref} className="text-[#ef3f0a] hover:underline">
+                {t('privacy.contactSupport')}
+              </a>
+            </div>
           </div>
-        </div>
+        )}
 
         <h3 className="mt-6 text-sm font-semibold text-[#111827]">
-          2. Convert to {formatLabel}
+          {t('step2Prefix')} {formatLabel}
         </h3>
         <div className="mt-3 rounded-2xl border border-[#e5e7eb] bg-white p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-[#6b7280]">
-            Output format
+            {t('outputFormat')}
           </p>
           <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
             <div>
@@ -339,7 +396,7 @@ export function EpubConvertWorkbench({
               onClick={onConvert}
               className="inline-flex h-9 items-center rounded-lg bg-[#ef3f0a] px-4 text-xs font-semibold text-white hover:bg-[#dc3506] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Convert EPUB
+              {t('convertButton')}
             </button>
           </div>
         </div>
@@ -351,7 +408,9 @@ export function EpubConvertWorkbench({
               <span>{error}</span>
             </div>
             {errorCode ? (
-              <p className="mt-2 text-xs text-red-600/90">Error code: {errorCode}</p>
+              <p className="mt-2 text-xs text-red-600/90">
+                {t('errors.errorCode', { code: errorCode })}
+              </p>
             ) : null}
             <div className="mt-3 flex flex-wrap items-center gap-2">
               <button
@@ -359,31 +418,35 @@ export function EpubConvertWorkbench({
                 onClick={resetFlow}
                 className="inline-flex h-8 items-center rounded-lg border border-red-200 bg-white px-3 text-xs font-semibold text-red-700 hover:bg-red-100"
               >
-                Retry
+                {t('errors.retry')}
               </button>
               <a
                 href={supportMailHref}
                 className="inline-flex h-8 items-center rounded-lg bg-[#ef3f0a] px-3 text-xs font-semibold text-white hover:bg-[#dc3506]"
               >
-                Contact support
+                {t('privacy.contactSupport')}
               </a>
             </div>
           </div>
         ) : null}
       </div>
 
-      <aside className="p-6">
-        <h3 className="text-sm font-semibold text-[#111827]">Conversion status</h3>
+      <aside className={compact ? 'p-4' : 'p-6'}>
+        <h3 className="text-sm font-semibold text-[#111827]">
+          {t('status.title')}
+        </h3>
         <div className="mt-4 rounded-xl border border-[#e5e7eb] bg-white p-4">
-          <p className="text-sm font-medium text-[#111827]">{phaseLabel(phase)}</p>
+          <p className="text-sm font-medium text-[#111827]">
+            {getPhaseLabel(phase)}
+          </p>
           <div className="mt-3 h-2 rounded-full bg-[#edf1f4]">
             <div
               className="h-2 rounded-full bg-[#ef3f0a] transition-all"
-              style={{ width: `${phaseProgress(phase)}%` }}
+              style={{ width: `${getPhaseProgress(phase)}%` }}
             />
           </div>
           <p className="mt-2 text-right text-xs text-[#6b7280]">
-            {phaseProgress(phase)}%
+            {getPhaseProgress(phase)}%
           </p>
         </div>
 
@@ -396,7 +459,7 @@ export function EpubConvertWorkbench({
             ) : (
               <FileText className="h-4 w-4 text-[#4b5563]" />
             )}
-            Download
+            {t('download.title')}
           </div>
           {downloadUrl ? (
             <button
@@ -404,18 +467,17 @@ export function EpubConvertWorkbench({
               onClick={handleDownload}
               className="mt-3 inline-flex h-9 items-center rounded-lg bg-[#ef3f0a] px-4 text-xs font-semibold text-white hover:bg-[#dc3506]"
             >
-              Download {formatLabel}
+              {t('download.buttonPrefix')} {formatLabel}
             </button>
           ) : (
             <p className="mt-2 text-xs text-[#6b7280]">
-              Your download link appears here after conversion succeeds.
+              {t('download.placeholder')}
             </p>
           )}
         </div>
 
-        <p className="mt-4 text-xs text-[#6b7280]">
-          Files auto-delete after 1 hour. Download promptly. DRM decryption is
-          not supported.
+        <p className="mt-3 text-[11px] leading-5 text-[#6b7280] sm:text-xs">
+          {t('download.footnote')}
         </p>
       </aside>
     </div>

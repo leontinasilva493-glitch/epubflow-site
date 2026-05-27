@@ -14,7 +14,7 @@ import { useTranslations } from 'next-intl';
  * pnpm dlx shadcn@canary add https://nsui.irung.me/r/features-4.json
  */
 export default function Features3Section() {
-  const t = useTranslations('HomePage.features3');
+  const t = useTranslations('LegacyHomePage.features3');
 
   return (
     <section id="features3" className="px-4 py-16">

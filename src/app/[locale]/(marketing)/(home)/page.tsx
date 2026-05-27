@@ -175,21 +175,21 @@ export default async function HomePage({
           <span className="text-[#4b5563]">{t('liveBadgeText')}</span>
         </div>
 
-        <div className="grid items-start gap-5 lg:grid-cols-[0.92fr_1.08fr] lg:gap-6">
-          <div className="max-w-[30rem] pt-0 lg:pt-3">
+        <div className="mx-auto max-w-3xl space-y-5 text-center">
+          <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-[#ece5df] bg-white px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-[#6b7280]">
               <Flame className="h-3.5 w-3.5 text-[#ef3f0a]" />
               {t('eyebrow')}
             </div>
-            <h1 className="mt-3 max-w-[10ch] text-balance text-[2.4rem] font-extrabold leading-[1.02] tracking-[-0.045em] text-[#111827] sm:text-[2.8rem] lg:text-[3.55rem]">
+            <h1 className="mt-3 text-balance text-[2.4rem] font-extrabold leading-[1.02] tracking-[-0.045em] text-[#111827] sm:text-[2.8rem] lg:text-[3.55rem]">
               {t('titlePrefix')} <span className="text-[#ef3f0a]">{t('titleAccent')}</span>{' '}
               {t('titleSuffix')}
             </h1>
-            <p className="mt-3 max-w-[24rem] text-sm leading-6 text-[#6b7280]">
+            <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-[#6b7280]">
               {t('description')}
             </p>
 
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="mt-4 flex flex-wrap justify-center gap-2">
               {trustChips.map((chip) => (
                 <span
                   key={chip.label}
@@ -200,10 +200,9 @@ export default async function HomePage({
                 </span>
               ))}
             </div>
-
           </div>
 
-          <div id="converter" className="lg:pt-0.5">
+          <div id="converter">
             <EpubHomeWorkbench />
           </div>
         </div>

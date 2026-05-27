@@ -25,8 +25,8 @@ export default function GuideBestEbookFormatForKindlePage() {
         Best eBook Format for Kindle
       </h1>
       <p className="mt-4 text-base leading-7 text-[#6b7280]">
-        For most users in 2026, AZW3 is the best balance of layout support and
-        Kindle compatibility. Keep EPUB as source, convert to AZW3 for reading,
+        For most users, AZW3 is the best balance of layout support and Kindle
+        compatibility. Keep EPUB as your source, convert to AZW3 for reading,
         and use PDF only when fixed print layout is required.
       </p>
 
