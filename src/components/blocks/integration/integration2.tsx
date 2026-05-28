@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
 
 export default function Integration2Section() {
-  const t = useTranslations('LegacyHomePage.integration2');
+  const t = useTranslations('HomePage.integration2');
 
   return (
     <section>

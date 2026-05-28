@@ -788,250 +788,363 @@
       "subject": "Contact Message from Website"
     }
   },
-  "LegacyHomePage": {
-    "title": "MkSaaS",
-    "description": "Make AI SaaS in days, simply and effortlessly",
+  "HomePage": {
+    "liveBadgePrefix": "Live converter",
+    "liveBadgeText": "EPUB to PDF, Kindle, TXT, and Word",
+    "eyebrow": "Private ebook conversion",
+    "titlePrefix": "Convert",
+    "titleAccent": "EPUB",
+    "titleSuffix": "without the mess",
+    "description": "Upload an EPUB, choose the reading format, and get a private conversion flow built for books.",
+    "trust": {
+      "private": "Private by default",
+      "autoDelete": "Auto-delete in 1 hour",
+      "noAiTraining": "No AI training"
+    },
+    "quickFormats": {
+      "cta": "Open converter",
+      "pdf": {
+        "title": "EPUB to PDF",
+        "description": "Create printable PDFs with book structure intact."
+      },
+      "kindle": {
+        "title": "EPUB to Kindle",
+        "description": "Convert to AZW3 for Kindle-friendly reading."
+      },
+      "markdown": {
+        "title": "EPUB to Markdown",
+        "description": "Prepare clean text for notes and AI workflows."
+      },
+      "txt": {
+        "title": "EPUB to TXT",
+        "description": "Extract simple plain text from ebooks."
+      },
+      "word": {
+        "title": "EPUB to Word",
+        "description": "Turn ebooks into editable DOCX documents."
+      }
+    },
+    "readingGoals": {
+      "eyebrow": "Choose by reading goal",
+      "title": "Start from what you want to do with the book.",
+      "description": "Each route keeps the same private upload flow, then uses the output format that best fits your next step.",
+      "cta": "Use this route",
+      "cards": {
+        "kindle": {
+          "title": "Read on Kindle",
+          "description": "Use AZW3 when you want better Kindle compatibility than a generic PDF export."
+        },
+        "pdf": {
+          "title": "Print or share",
+          "description": "Use PDF when the layout needs to stay predictable across devices."
+        },
+        "markdown": {
+          "title": "Use with AI notes",
+          "description": "Markdown is planned for structured study notes, summaries, and downstream AI workflows.",
+          "badge": "Planned"
+        },
+        "docx": {
+          "title": "Edit in Word",
+          "description": "Use DOCX when you need to revise, comment, or repurpose ebook content."
+        }
+      }
+    },
+    "formatGuide": {
+      "eyebrow": "Format guide",
+      "title": "Not sure which format to choose?",
+      "description": "Pick the output based on the device, workflow, and how much editing you need after conversion.",
+      "rows": {
+        "kindle": {
+          "label": "Kindle reading",
+          "value": "AZW3",
+          "detail": "Best first choice for modern Kindle devices."
+        },
+        "pdf": {
+          "label": "Printing and sharing",
+          "value": "PDF",
+          "detail": "Stable layout when page appearance matters."
+        },
+        "notes": {
+          "label": "Notes and AI workflows",
+          "value": "Markdown",
+          "detail": "Best for structured text once the workflow is ready."
+        },
+        "docx": {
+          "label": "Editing",
+          "value": "DOCX",
+          "detail": "Use when you need a document you can revise."
+        }
+      }
+    },
+    "comparison": {
+      "eyebrow": "Why EPUBFlow",
+      "titleLine1": "Built for ebooks,",
+      "titleLine2": "not random files.",
+      "description": "Generic converters often hide format tradeoffs. EPUBFlow keeps the reading goal, privacy promise, and download state visible.",
+      "headerFeature": "Feature",
+      "headerOurs": "EPUBFlow",
+      "headerGeneric": "Generic",
+      "rows": {
+        "presets": {
+          "label": "Reader-first presets",
+          "generic": "Often file-type only"
+        },
+        "structure": {
+          "label": "Book structure awareness",
+          "generic": "Inconsistent"
+        },
+        "images": {
+          "label": "Clear output guidance",
+          "generic": "Usually unclear"
+        },
+        "privacy": {
+          "label": "Private by default",
+          "generic": "Hard to verify"
+        }
+      }
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "What readers usually ask",
+      "items": {
+        "storage": {
+          "question": "How long are files stored?",
+          "answer": "Uploaded and converted files are automatically deleted after 1 hour."
+        },
+        "training": {
+          "question": "Do you use my ebooks for AI training?",
+          "answer": "No. EPUBFlow does not use uploaded ebooks for AI training."
+        },
+        "kindle": {
+          "question": "Which Kindle format should I choose?",
+          "answer": "AZW3 is the best default for modern Kindle devices; MOBI is mostly for older workflows."
+        },
+        "drm": {
+          "question": "Can EPUBFlow remove DRM?",
+          "answer": "No. DRM-protected ebooks are not supported."
+        },
+        "formats": {
+          "question": "Which formats are live?",
+          "answer": "PDF, Kindle AZW3, TXT, and DOCX are wired into the conversion flow. Markdown is presented as a planned workflow."
+        }
+      }
+    },
+    "bottomCta": {
+      "title": "Ready to convert your EPUB?",
+      "description": "Return to the main upload area, choose a format, and start the private conversion flow.",
+      "button": "Upload EPUB"
+    },
     "hero": {
-      "title": "Make AI SaaS in days, simply and effortlessly",
-      "description": "The is a demo website built with MkSaaS, a Next.js SaaS boilerplate to help you build your AI SaaS faster and better.",
-      "introduction": "Introducing MkSaaS Boilerplate",
-      "primary": "Get Started",
-      "secondary": "See Demo"
+      "title": "Convert EPUB files for better reading",
+      "description": "A private ebook conversion workflow for Kindle, PDF, TXT, and Word.",
+      "introduction": "Introducing EPUBFlow",
+      "primary": "Start converting",
+      "secondary": "See formats"
     },
     "logocloud": {
-      "title": "Your favorite companies are our partners"
+      "title": "Built with a modern web stack"
     },
     "integration": {
       "title": "Integrations",
-      "subtitle": "Integrate with your favorite tools",
-      "description": "Connect seamlessly with popular platforms and services to enhance your workflow.",
-      "learnMore": "Learn More",
+      "subtitle": "Works with your reading workflow",
+      "description": "Export ebooks into formats that fit devices, documents, and notes.",
+      "learnMore": "Learn more",
       "items": {
-        "item-1": {
-          "title": "Google Gemini",
-          "description": "Amet praesentium deserunt ex commodi tempore fuga voluptatem."
-        },
-        "item-2": {
-          "title": "Replit",
-          "description": "Amet praesentium deserunt ex commodi tempore fuga voluptatem."
-        },
-        "item-3": {
-          "title": "MagicUI",
-          "description": "Amet praesentium deserunt ex commodi tempore fuga voluptatem."
-        },
-        "item-4": {
-          "title": "VSCodium",
-          "description": "Amet praesentium deserunt ex commodi tempore fuga voluptatem."
-        },
-        "item-5": {
-          "title": "MediaWiki",
-          "description": "Amet praesentium deserunt ex commodi tempore fuga voluptatem."
-        },
-        "item-6": {
-          "title": "Google PaLM",
-          "description": "Amet praesentium deserunt ex commodi tempore fuga voluptatem."
-        }
+        "item-1": { "title": "PDF", "description": "Share and print stable documents." },
+        "item-2": { "title": "Kindle", "description": "Prepare EPUB files for Kindle reading." },
+        "item-3": { "title": "Markdown", "description": "Plan structured notes and AI workflows." },
+        "item-4": { "title": "TXT", "description": "Extract lightweight plain text." },
+        "item-5": { "title": "DOCX", "description": "Create editable Word documents." },
+        "item-6": { "title": "Privacy", "description": "Keep uploads private by default." }
       }
     },
     "integration2": {
-      "title": "Integrate with your favorite tools",
-      "description": "Connect seamlessly with popular platforms and services to enhance your workflow.",
-      "primaryButton": "Get Started",
-      "secondaryButton": "See Demo"
+      "title": "Convert once, use anywhere",
+      "description": "Choose the ebook output that fits your device or editing flow.",
+      "primaryButton": "Start converting",
+      "secondaryButton": "View formats"
     },
     "features": {
       "title": "Features",
-      "subtitle": "The features of your product",
-      "description": "Write the description of your product here",
+      "subtitle": "Reader-first conversion",
+      "description": "EPUBFlow keeps format choice, privacy, and download status clear.",
       "items": {
-        "item-1": {
-          "title": "Product Feature One",
-          "description": "Please write the detailed description of feature one here, make it as detailed as possible, make it more attractive to users"
-        },
-        "item-2": {
-          "title": "Product Feature Two",
-          "description": "Please write the detailed description of feature two here, make it as detailed as possible, make it more attractive to users"
-        },
-        "item-3": {
-          "title": "Product Feature Three",
-          "description": "Please write the detailed description of feature three here, make it as detailed as possible, make it more attractive to users"
-        },
-        "item-4": {
-          "title": "Product Feature Four",
-          "description": "Please write the detailed description of feature four here, make it as detailed as possible, make it more attractive to users"
-        }
+        "item-1": { "title": "Private uploads", "description": "Files are handled privately and deleted automatically." },
+        "item-2": { "title": "Format presets", "description": "Choose PDF, Kindle, TXT, or Word based on your goal." },
+        "item-3": { "title": "Clear status", "description": "Follow upload, conversion, and download states." },
+        "item-4": { "title": "Support path", "description": "Failed jobs include retry and support actions." }
       }
     },
     "features2": {
-      "title": "Features2",
-      "subtitle": "The features of your product",
-      "description": "Write the description of your product here",
-      "feature-1": "Product Feature One",
-      "feature-2": "Product Feature Two",
-      "feature-3": "Product Feature Three",
-      "feature-4": "Product Feature Four"
+      "title": "Features",
+      "subtitle": "Built for ebook work",
+      "description": "A focused conversion flow for readers and researchers.",
+      "feature-1": "Private by default",
+      "feature-2": "Multiple output formats",
+      "feature-3": "Download failure tracking",
+      "feature-4": "Reader-friendly guidance"
     },
     "features3": {
-      "title": "Features3",
-      "subtitle": "The features of your product",
-      "description": "Write the description of your product here",
+      "title": "More details",
+      "subtitle": "Conversion foundations",
+      "description": "The service is structured so new formats can share one stable workflow.",
       "items": {
-        "item-1": {
-          "title": "Product Feature One",
-          "description": "Please write the detailed description of feature one here"
-        },
-        "item-2": {
-          "title": "Product Feature Two",
-          "description": "Please write the detailed description of feature two here"
-        },
-        "item-3": {
-          "title": "Product Feature Three",
-          "description": "Please write the detailed description of feature three here"
-        },
-        "item-4": {
-          "title": "Product Feature Four",
-          "description": "Please write the detailed description of feature four here"
-        },
-        "item-5": {
-          "title": "Product Feature Five",
-          "description": "Please write the detailed description of feature five here"
-        },
-        "item-6": {
-          "title": "Product Feature Six",
-          "description": "Please write the detailed description of feature six here"
-        }
+        "item-1": { "title": "Upload validation", "description": "Rejects invalid or oversized EPUB files early." },
+        "item-2": { "title": "Async jobs", "description": "Conversion jobs expose stable status polling." },
+        "item-3": { "title": "Download proxy", "description": "Downloads use the website API for consistent behavior." },
+        "item-4": { "title": "Metrics", "description": "Core funnel events are tracked by format." },
+        "item-5": { "title": "Legal links", "description": "Privacy and retention policies stay visible." },
+        "item-6": { "title": "Format config", "description": "Output labels, extensions, and MIME types are centralized." }
       }
     },
     "pricing": {
       "title": "Pricing",
-      "subtitle": "Pricing",
-      "description": "Choose the plan that works best for you"
+      "subtitle": "Simple pricing",
+      "description": "Start with the available converter flow."
     },
     "faqs": {
       "title": "FAQ",
-      "subtitle": "Frequently Asked Questions",
+      "subtitle": "Common questions",
       "items": {
-        "item-1": {
-          "question": "Do you offer a free trial?",
-          "answer": "Yes, we offer a 7-day free trial."
-        },
-        "item-2": {
-          "question": "How do I cancel my subscription?",
-          "answer": "You can cancel your subscription by visiting the billing page."
-        },
-        "item-3": {
-          "question": "Can I change my plan?",
-          "answer": "Yes, you can change your plan at any time by visiting the billing page."
-        },
-        "item-4": {
-          "question": "What is the refund policy?",
-          "answer": "We offer a 30-day money-back guarantee if you are not happy with our product."
-        },
-        "item-5": {
-          "question": "Can't find what you're looking for?",
-          "answer": "Please contact our customer support team at support@mksaas.com"
-        }
+        "item-1": { "question": "How long are files stored?", "answer": "Files auto-delete after 1 hour." },
+        "item-2": { "question": "Is DRM supported?", "answer": "No. DRM-protected ebooks are not supported." },
+        "item-3": { "question": "Can I retry a failed job?", "answer": "Yes. The converter shows retry and support actions." },
+        "item-4": { "question": "What is the refund policy?", "answer": "See the refund policy page for details." },
+        "item-5": { "question": "How do I contact support?", "answer": "Email support@epubflow.com." }
       }
     },
     "testimonials": {
-      "title": "Testimonials",
-      "subtitle": "What our customers are saying",
+      "title": "Reader notes",
+      "subtitle": "Example use cases",
       "items": {
-        "item-1": {
-          "name": "Jonathan Yombo",
-          "role": "Software Engineer",
-          "image": "https://randomuser.me/api/portraits/men/1.jpg",
-          "quote": "MkSaaS is really extraordinary and very practical, no need to break your head. A real gold mine."
-        },
-        "item-2": {
-          "name": "Yves Kalume",
-          "role": "GDE - Android",
-          "image": "https://randomuser.me/api/portraits/men/6.jpg",
-          "quote": "With no experience in webdesign I just redesigned my entire website in a few minutes with tailwindcss thanks to MkSaaS."
-        },
-        "item-3": {
-          "name": "Yucel Faruksahan",
-          "role": "Tailkits Creator",
-          "image": "https://randomuser.me/api/portraits/men/7.jpg",
-          "quote": "Great work on MkSaaS template. This is one of the best personal website that I have seen so far :)"
-        },
-        "item-4": {
-          "name": "Anonymous author",
-          "role": "Product Manager",
-          "image": "https://randomuser.me/api/portraits/men/8.jpg",
-          "quote": "I downloaded the one of MkSaaS template which is very clear to understand at the start and you could modify the codes/blocks to fit perfectly on your purpose of the page."
-        },
-        "item-5": {
-          "name": "Shekinah Tshiokufila",
-          "role": "Senior Software Engineer",
-          "image": "https://randomuser.me/api/portraits/men/4.jpg",
-          "quote": "MkSaaS is redefining the standard of web design, with these blocks it provides an easy and efficient way for those who love beauty but may lack the time to implement it."
-        },
-        "item-6": {
-          "name": "Oketa Fred",
-          "role": "Fullstack Developer",
-          "image": "https://randomuser.me/api/portraits/men/2.jpg",
-          "quote": "I absolutely love MkSaaS! The component blocks are beautifully designed and easy to use, which makes creating a great-looking website a breeze."
-        },
-        "item-7": {
-          "name": "Zeki",
-          "role": "Founder of ChatExtend",
-          "image": "https://randomuser.me/api/portraits/men/5.jpg",
-          "quote": "MkSaaS is the perfect fusion of simplicity and versatility, enabling us to create UIs that are as stunning as they are user-friendly."
-        },
-        "item-8": {
-          "name": "Joseph Kitheka",
-          "role": "Fullstack Developer",
-          "image": "https://randomuser.me/api/portraits/men/9.jpg",
-          "quote": "MkSaaS has transformed the way I develop web applications. Their extensive collection of UI components, blocks, and templates has significantly accelerated my workflow."
-        },
-        "item-9": {
-          "name": "Khatab Wedaa",
-          "role": "MerakiUI Creator",
-          "image": "https://randomuser.me/api/portraits/men/10.jpg",
-          "quote": "MkSaaS is an elegant, clean, and responsive tailwind css components it's very helpful to start fast with your project."
-        },
-        "item-10": {
-          "name": "Rodrigo Aguilar",
-          "role": "TailwindAwesome Creator",
-          "image": "https://randomuser.me/api/portraits/men/11.jpg",
-          "quote": "I love MkSaaS ❤️. The component blocks are well-structured, simple to use, and beautifully designed. It makes it really easy to have a good-looking website in no time."
-        },
-        "item-11": {
-          "name": "Eric Ampire",
-          "role": "@GoogleDevExpert for Android",
-          "image": "https://randomuser.me/api/portraits/men/12.jpg",
-          "quote": "MkSaaS templates are the perfect solution for anyone who wants to create a beautiful and functional website without any web design experience."
-        },
-        "item-12": {
-          "name": "Roland Tubonge",
-          "role": "Software Engineer",
-          "image": "https://randomuser.me/api/portraits/men/13.jpg",
-          "quote": "MkSaaS is so well designed that even with a very poor knowledge of web design you can do miracles. Let yourself be seduced!"
-        }
+        "item-1": { "name": "Reader", "role": "Kindle user", "image": "https://randomuser.me/api/portraits/men/1.jpg", "quote": "I can choose the output by reading goal." },
+        "item-2": { "name": "Researcher", "role": "Notes workflow", "image": "https://randomuser.me/api/portraits/men/2.jpg", "quote": "Plain text export helps with quick review." },
+        "item-3": { "name": "Editor", "role": "Document workflow", "image": "https://randomuser.me/api/portraits/men/3.jpg", "quote": "DOCX output is useful for editing." },
+        "item-4": { "name": "Student", "role": "Study workflow", "image": "https://randomuser.me/api/portraits/men/4.jpg", "quote": "The format guidance makes the choice easier." },
+        "item-5": { "name": "Author", "role": "Book draft", "image": "https://randomuser.me/api/portraits/men/5.jpg", "quote": "The conversion status is easy to follow." },
+        "item-6": { "name": "Archivist", "role": "File cleanup", "image": "https://randomuser.me/api/portraits/men/6.jpg", "quote": "Auto-delete is a clear privacy promise." },
+        "item-7": { "name": "Teacher", "role": "Class materials", "image": "https://randomuser.me/api/portraits/men/7.jpg", "quote": "PDF export works for sharing." },
+        "item-8": { "name": "Reviewer", "role": "Book notes", "image": "https://randomuser.me/api/portraits/men/8.jpg", "quote": "TXT is a useful lightweight fallback." },
+        "item-9": { "name": "Operator", "role": "Metrics", "image": "https://randomuser.me/api/portraits/men/9.jpg", "quote": "Format-level metrics help spot failures." },
+        "item-10": { "name": "Support", "role": "Troubleshooting", "image": "https://randomuser.me/api/portraits/men/10.jpg", "quote": "Job IDs make support easier." },
+        "item-11": { "name": "Designer", "role": "UX", "image": "https://randomuser.me/api/portraits/men/11.jpg", "quote": "The hero keeps the converter visible." },
+        "item-12": { "name": "Developer", "role": "Implementation", "image": "https://randomuser.me/api/portraits/men/12.jpg", "quote": "Shared format config reduces drift." }
       }
     },
     "stats": {
       "title": "Stats",
-      "subtitle": "MkSaaS in numbers",
-      "description": "MkSaaS lets you make AI SaaS in days, simply and effortlessly",
+      "subtitle": "Conversion signals",
+      "description": "Operational signals help keep the converter stable.",
       "items": {
-        "item-1": {
-          "title": "Stars on GitHub"
-        },
-        "item-2": {
-          "title": "Active Users"
-        },
-        "item-3": {
-          "title": "Powered Apps"
-        }
+        "item-1": { "title": "Supported routes" },
+        "item-2": { "title": "Tracked events" },
+        "item-3": { "title": "Format buckets" }
       }
     },
     "calltoaction": {
-      "title": "Start Building",
-      "description": "MkSaaS lets you make AI SaaS in days, simply and effortlessly",
-      "primaryButton": "Get Started",
-      "secondaryButton": "See Demo"
+      "title": "Start converting",
+      "description": "Upload an EPUB and choose the output format that fits your reading workflow.",
+      "primaryButton": "Upload EPUB",
+      "secondaryButton": "View formats"
+    }
+  },
+  "HomeWorkbench": {
+    "formats": {
+      "pdf": {
+        "label": "PDF",
+        "description": "Printable document",
+        "outputLabel": "PDF"
+      },
+      "kindle": {
+        "label": "Kindle",
+        "description": "AZW3 ebook",
+        "outputLabel": "AZW3"
+      },
+      "markdown": {
+        "label": "Markdown",
+        "description": "Structured notes workflow",
+        "badge": "Soon"
+      },
+      "txt": {
+        "label": "TXT",
+        "description": "Plain text extract",
+        "outputLabel": "TXT"
+      },
+      "docx": {
+        "label": "Word",
+        "description": "Editable document",
+        "outputLabel": "DOCX"
+      }
+    },
+    "comingSoon": {
+      "title": "Markdown conversion is being shaped carefully.",
+      "description": "Markdown needs cleaner chapter structure, heading detection, and image handling than a raw text dump. Until that is ready, TXT is the best lightweight export.",
+      "viewPage": "View Markdown plan",
+      "useTxt": "Use TXT instead",
+      "whyTitle": "Why not rush it?",
+      "reasons": {
+        "r1": "Chapter boundaries should survive the conversion.",
+        "r2": "Images and captions need predictable handling.",
+        "r3": "The output should work well in note apps and AI tools."
+      },
+      "alternativeEyebrow": "Available now",
+      "alternativeTitle": "EPUB to TXT",
+      "alternativeDescription": "Extract readable plain text today while Markdown support is completed."
+    },
+    "selector": {
+      "title": "Choose output format",
+      "description": "Pick the format after your EPUB is attached, then start conversion."
+    }
+  },
+  "ConvertWorkbench": {
+    "step1": "1. Upload your EPUB",
+    "dropzone": {
+      "title": "Drag & drop your EPUB file here",
+      "browse": "or click to browse",
+      "maxSize": "Max 50MB"
+    },
+    "file": {
+      "none": "No file selected"
+    },
+    "status": {
+      "title": "Conversion status",
+      "ready": "Ready to convert",
+      "uploading": "Uploading file",
+      "reading": "Reading EPUB",
+      "converting": "Converting file",
+      "preparing": "Preparing download",
+      "success": "Conversion complete",
+      "failed": "Conversion failed"
+    },
+    "step2Prefix": "2. Convert to",
+    "outputFormat": "Output format",
+    "convertButton": "Convert EPUB",
+    "download": {
+      "title": "Download",
+      "buttonPrefix": "Download",
+      "placeholder": "Your download link appears here after conversion succeeds.",
+      "footnote": "Files auto-delete after 1 hour. Download promptly. DRM not supported."
+    },
+    "privacy": {
+      "title": "Private by default.",
+      "description": "Files are encrypted in transit and auto-deleted after conversion. DRM-protected ebooks are not supported.",
+      "learnMore": "Learn more:",
+      "privacyPolicy": "Privacy Policy",
+      "dataRetention": "Data Retention",
+      "issues": "Having issues?",
+      "contactSupport": "Contact support"
+    },
+    "errors": {
+      "invalidType": "Only .epub files are allowed.",
+      "tooLarge": "File is too large. Limit is {max}MB.",
+      "missingFile": "Please upload an EPUB file first.",
+      "statusCheck": "Failed to check conversion status.",
+      "conversionFailed": "Conversion failed.",
+      "createJob": "Failed to create conversion job.",
+      "timeout": "Conversion timed out. Please retry or contact support.",
+      "downloadFailed": "Download failed. Please retry or contact support.",
+      "errorCode": "Error code: {code}",
+      "retry": "Retry"
     }
   },
   "AITextPage": {
@@ -1098,257 +1211,5 @@
   "AIAudioPage": {
     "title": "AI Audio",
     "description": "MkSaaS lets you make AI SaaS in days, simply and effortlessly"
-  },
-  "HomePage": {
-    "liveBadgePrefix": "Now live",
-    "liveBadgeText": "EPUB to PDF, Kindle, TXT, and DOCX conversions",
-    "eyebrow": "Reader-first EPUB conversion",
-    "titlePrefix": "Convert",
-    "titleAccent": "EPUB",
-    "titleSuffix": "for Kindle, PDF & Markdown",
-    "description": "Choose your reading goal and convert EPUB into the best format in seconds.",
-    "trust": {
-      "private": "Private by default",
-      "autoDelete": "Auto-delete in 1 hour",
-      "noAiTraining": "No AI training",
-      "drm": "DRM not supported"
-    },
-    "learnMore": "Learn more:",
-    "privacyPolicy": "Privacy Policy",
-    "dataRetention": "Data Retention",
-    "quickFormats": {
-      "pdf": {
-        "title": "PDF",
-        "description": "Print-ready layout"
-      },
-      "kindle": {
-        "title": "Kindle",
-        "description": "AZW3 recommended"
-      },
-      "markdown": {
-        "title": "Markdown",
-        "description": "Knowledge workflow"
-      },
-      "txt": {
-        "title": "TXT",
-        "description": "Clean text extraction"
-      },
-      "word": {
-        "title": "Word",
-        "description": "Editable DOCX"
-      },
-      "cta": "Open format page"
-    },
-    "readingGoals": {
-      "eyebrow": "Reading goal presets",
-      "title": "Pick the outcome you actually want",
-      "description": "EPUBFlow is easiest to use when you think in outcomes, not file formats. Start from your reading goal and we will guide the output.",
-      "cta": "Explore this workflow",
-      "cards": {
-        "kindle": {
-          "title": "Read on Kindle",
-          "description": "Recommended: AZW3 for modern devices"
-        },
-        "pdf": {
-          "title": "Print or share",
-          "description": "Clean PDF with proper headings and layout"
-        },
-        "markdown": {
-          "title": "Use with AI notes",
-          "description": "Markdown for Obsidian, Notion, ChatGPT, Claude",
-          "badge": "Soon"
-        },
-        "docx": {
-          "title": "Edit in Word",
-          "description": "DOCX for editing, annotation, collaboration"
-        }
-      }
-    },
-    "formatGuide": {
-      "eyebrow": "Format guide",
-      "title": "Not sure which format to choose?",
-      "description": "Start from your reading goal. EPUBFlow is designed to make the format decision obvious instead of forcing users to guess.",
-      "rows": {
-        "kindle": {
-          "label": "Kindle reading",
-          "value": "AZW3",
-          "detail": "Best default for modern Kindle devices"
-        },
-        "pdf": {
-          "label": "Print / share",
-          "value": "PDF",
-          "detail": "Great for layout-preserved reading and exporting"
-        },
-        "notes": {
-          "label": "AI notes",
-          "value": "Markdown / TXT",
-          "detail": "Markdown soon, TXT available today"
-        },
-        "docx": {
-          "label": "Edit document",
-          "value": "DOCX",
-          "detail": "Best for review, comments, and collaboration"
-        }
-      }
-    },
-    "comparison": {
-      "eyebrow": "Why EPUBFlow",
-      "titleLine1": "Better for reading,",
-      "titleLine2": "not just conversion",
-      "description": "We optimize for readable output, cleaner structure, and stronger privacy defaults instead of raw file generation.",
-      "headerFeature": "Feature",
-      "headerOurs": "EPUBFlow",
-      "headerGeneric": "Generic converters",
-      "rows": {
-        "presets": {
-          "label": "Reading-optimized presets",
-          "generic": "Often missing"
-        },
-        "structure": {
-          "label": "Preserve headings, TOC & metadata",
-          "generic": "Sometimes lost"
-        },
-        "images": {
-          "label": "Images & typography preserved",
-          "generic": "Often broken"
-        },
-        "privacy": {
-          "label": "Privacy & auto-delete",
-          "generic": "Rarely guaranteed"
-        }
-      }
-    },
-    "faq": {
-      "eyebrow": "FAQ",
-      "title": "Common questions before you convert",
-      "items": {
-        "storage": {
-          "question": "How long are files stored?",
-          "answer": "Uploaded and converted files are automatically deleted after 1 hour."
-        },
-        "training": {
-          "question": "Do you use my ebooks for AI training?",
-          "answer": "No. EPUBFlow does not use uploaded ebook content for AI training."
-        },
-        "kindle": {
-          "question": "Which Kindle format should I choose?",
-          "answer": "Use AZW3 for most modern Kindle devices. Use MOBI only for older compatibility needs."
-        },
-        "drm": {
-          "question": "Can I convert DRM-protected ebooks?",
-          "answer": "No. DRM-protected ebooks are not supported."
-        },
-        "formats": {
-          "question": "Which formats work today?",
-          "answer": "PDF, Kindle (AZW3/MOBI), TXT, and DOCX are available now. Markdown is the next rollout."
-        }
-      }
-    },
-    "bottomCta": {
-      "title": "Convert your EPUB in seconds",
-      "description": "Start from the upload area at the top and choose the output that matches your reading goal.",
-      "button": "Choose EPUB File"
-    }
-  },
-  "HomeWorkbench": {
-    "formats": {
-      "pdf": {
-        "label": "PDF",
-        "description": "Best for print, sharing, and clean reading layouts.",
-        "outputLabel": "PDF"
-      },
-      "kindle": {
-        "label": "Kindle",
-        "description": "Recommended output for modern Kindle devices.",
-        "outputLabel": "Kindle (AZW3)"
-      },
-      "markdown": {
-        "label": "Markdown",
-        "description": "Structured notes for Obsidian, Notion, and AI workflows.",
-        "badge": "Soon"
-      },
-      "txt": {
-        "label": "TXT",
-        "description": "Fast plain-text extraction for lightweight use cases.",
-        "outputLabel": "TXT"
-      },
-      "docx": {
-        "label": "Word",
-        "description": "Editable DOCX for reviews, comments, and collaboration.",
-        "outputLabel": "Word (DOCX)"
-      }
-    },
-    "comingSoon": {
-      "title": "EPUB to Markdown is launching next",
-      "description": "We are polishing heading structure, cleanup quality, and note-ready output so Markdown feels genuinely useful for Obsidian, Notion, and AI workflows.",
-      "viewPage": "View Markdown page",
-      "useTxt": "Use TXT today",
-      "whyTitle": "Why we are waiting",
-      "reasons": {
-        "r1": "Preserve heading hierarchy for long ebooks.",
-        "r2": "Keep output usable for notes, research, and AI prompts.",
-        "r3": "Avoid shipping low-quality Markdown just for checkbox coverage."
-      },
-      "alternativeEyebrow": "Best current alternative",
-      "alternativeTitle": "EPUB to TXT",
-      "alternativeDescription": "Clean text extraction is already live and works well for quick AI note preparation."
-    },
-    "trust": {
-      "private": "Private by default",
-      "autoDelete": "Auto-delete in 1 hour",
-      "noAiTraining": "No AI training",
-      "drm": "DRM not supported"
-    }
-  },
-  "ConvertWorkbench": {
-    "step1": "1. Upload your EPUB",
-    "dropzone": {
-      "title": "Drag & drop your EPUB file here",
-      "browse": "or click to browse",
-      "maxSize": "Max 50MB"
-    },
-    "file": {
-      "none": "No file selected"
-    },
-    "privacy": {
-      "title": "Private by default.",
-      "description": "Files are encrypted in transit and auto-deleted after conversion. DRM-protected ebooks are not supported.",
-      "learnMore": "Learn more:",
-      "privacyPolicy": "Privacy Policy",
-      "dataRetention": "Data Retention",
-      "issues": "Having issues?",
-      "contactSupport": "Contact support"
-    },
-    "step2Prefix": "2. Convert to",
-    "outputFormat": "Output format",
-    "convertButton": "Convert EPUB",
-    "status": {
-      "title": "Conversion status",
-      "ready": "Ready to convert",
-      "uploading": "Uploading file",
-      "reading": "Reading EPUB",
-      "converting": "Converting file",
-      "preparing": "Preparing download",
-      "success": "Conversion complete",
-      "failed": "Conversion failed"
-    },
-    "download": {
-      "title": "Download",
-      "buttonPrefix": "Download",
-      "placeholder": "Your download link appears here after conversion succeeds.",
-      "footnote": "Files auto-delete after 1 hour. Download promptly. DRM not supported."
-    },
-    "errors": {
-      "invalidType": "Only .epub files are allowed.",
-      "tooLarge": "File is too large. Limit is {max}MB.",
-      "missingFile": "Please upload an EPUB file first.",
-      "createJob": "Failed to create conversion job.",
-      "statusCheck": "Failed to check conversion status.",
-      "conversionFailed": "Conversion failed.",
-      "timeout": "Conversion timed out. Please retry or contact support.",
-      "downloadFailed": "Download failed. Please retry or contact support.",
-      "errorCode": "Error code: {code}",
-      "retry": "Retry"
-    }
   }
 }

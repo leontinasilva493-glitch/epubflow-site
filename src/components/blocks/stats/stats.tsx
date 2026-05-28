@@ -2,7 +2,7 @@ import { HeaderSection } from '@/components/layout/header-section';
 import { useTranslations } from 'next-intl';
 
 export default function StatsSection() {
-  const t = useTranslations('LegacyHomePage.stats');
+  const t = useTranslations('HomePage.stats');
 
   return (
     <section id="stats" className="px-4 py-16">

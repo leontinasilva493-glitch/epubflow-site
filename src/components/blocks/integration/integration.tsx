@@ -15,7 +15,7 @@ import { useTranslations } from 'next-intl';
 import type * as React from 'react';
 
 export default function IntegrationSection() {
-  const t = useTranslations('LegacyHomePage.integration');
+  const t = useTranslations('HomePage.integration');
 
   return (
     <section id="integration" className="px-4 py-16">
@@ -87,7 +87,7 @@ const IntegrationCard = ({
   children: React.ReactNode;
   link?: string;
 }) => {
-  const t = useTranslations('LegacyHomePage.integration');
+  const t = useTranslations('HomePage.integration');
 
   return (
     <Card className="p-6 bg-transparent hover:bg-accent dark:hover:bg-card">

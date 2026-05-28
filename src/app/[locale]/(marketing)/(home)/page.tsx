@@ -175,25 +175,25 @@ export default async function HomePage({
           <span className="text-[#4b5563]">{t('liveBadgeText')}</span>
         </div>
 
-        <div className="mx-auto max-w-3xl space-y-5 text-center">
+        <div className="mx-auto w-full max-w-7xl space-y-6 text-center">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-[#ece5df] bg-white px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-[#6b7280]">
               <Flame className="h-3.5 w-3.5 text-[#ef3f0a]" />
               {t('eyebrow')}
             </div>
-            <h1 className="mt-3 text-balance text-[2.4rem] font-extrabold leading-[1.02] tracking-[-0.045em] text-[#111827] sm:text-[2.8rem] lg:text-[3.55rem]">
+            <h1 className="mx-auto mt-4 max-w-6xl text-balance text-[2.65rem] font-extrabold leading-[1.02] text-[#111827] sm:text-[3.25rem] lg:text-[4.35rem]">
               {t('titlePrefix')} <span className="text-[#ef3f0a]">{t('titleAccent')}</span>{' '}
               {t('titleSuffix')}
             </h1>
-            <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-[#6b7280]">
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-[#6b7280]">
               {t('description')}
             </p>
 
-            <div className="mt-4 flex flex-wrap justify-center gap-2">
+            <div className="mt-5 flex flex-wrap justify-center gap-2.5">
               {trustChips.map((chip) => (
                 <span
                   key={chip.label}
-                  className="inline-flex items-center gap-2 rounded-full border border-[#ece5df] bg-white px-3.5 py-2 text-xs font-medium text-[#4b5563] shadow-[0_8px_24px_rgba(17,24,39,0.04)]"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#ece5df] bg-white px-4 py-2.5 text-sm font-medium text-[#4b5563] shadow-[0_8px_24px_rgba(17,24,39,0.04)]"
                 >
                   <chip.icon className="h-3.5 w-3.5" />
                   {chip.label}

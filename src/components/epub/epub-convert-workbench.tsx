@@ -5,6 +5,12 @@ import {
   type ConversionFormat,
   getFormatConfig,
 } from '@/lib/epub-converter/format-config';
+import {
+  createDirectConversionJob,
+  fetchDirectDownload,
+  getDirectConversionJob,
+  isDirectConverterEnabled,
+} from '@/lib/epub-converter/direct-client';
 import { Check, FileText, Loader2, Upload, XCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -52,6 +58,10 @@ export function EpubConvertWorkbench({
   const [phase, setPhase] = useState<UiPhase>('idle');
   const [jobId, setJobId] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [converterBaseUrl, setConverterBaseUrl] = useState<string | null>(null);
+  const [converterAccessToken, setConverterAccessToken] = useState<string | null>(
+    null
+  );
   const [error, setError] = useState<string | null>(null);
   const [errorCode, setErrorCode] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -135,6 +145,8 @@ export function EpubConvertWorkbench({
   const resetFlow = () => {
     setPhase('idle');
     setDownloadUrl(null);
+    setConverterBaseUrl(null);
+    setConverterAccessToken(null);
     setJobId(null);
     setError(null);
     setErrorCode(null);
@@ -153,9 +165,30 @@ export function EpubConvertWorkbench({
         clearInterval(timer);
         return;
       }
-      const response = await fetch(`/api/conversions/${jobId}`, {
-        cache: 'no-store',
-      });
+      let directStatus: Awaited<ReturnType<typeof getDirectConversionJob>> | null =
+        null;
+      let response: Response | Awaited<ReturnType<typeof getDirectConversionJob>>;
+      try {
+        directStatus =
+          converterBaseUrl && converterAccessToken
+            ? await getDirectConversionJob(
+                jobId,
+                converterBaseUrl,
+                converterAccessToken
+              )
+            : null;
+        response =
+          directStatus ??
+          (await fetch(`/api/conversions/${jobId}`, {
+            cache: 'no-store',
+          }));
+      } catch {
+        setPhase('failed');
+        setErrorCode('STATUS_CHECK_FAILED');
+        setError(t('errors.statusCheck'));
+        clearInterval(timer);
+        return;
+      }
       if (!response.ok) {
         setPhase('failed');
         setErrorCode('STATUS_CHECK_FAILED');
@@ -163,7 +196,9 @@ export function EpubConvertWorkbench({
         clearInterval(timer);
         return;
       }
-      const data = (await response.json()) as JobResponse;
+      const data = directStatus
+        ? (directStatus.data as unknown as JobResponse)
+        : ((await (response as Response).json()) as JobResponse);
       setPhase(data.status);
       setDownloadUrl(data.downloadUrl);
       if (data.status === 'failed') {
@@ -176,7 +211,7 @@ export function EpubConvertWorkbench({
       }
     }, POLL_INTERVAL_MS);
     return () => clearInterval(timer);
-  }, [jobId, phase, t]);
+  }, [converterAccessToken, converterBaseUrl, jobId, phase, t]);
 
   const onChooseFile = () => fileInputRef.current?.click();
 
@@ -215,21 +250,41 @@ export function EpubConvertWorkbench({
       file_size_mb: Number((file.size / (1024 * 1024)).toFixed(2)),
     });
 
-    const formData = new FormData();
-    formData.append('file', file);
+    try {
+      let data: Record<string, unknown>;
+      if (isDirectConverterEnabled()) {
+        const direct = await createDirectConversionJob(file, format);
+        data = direct.data;
+        if (!direct.ok) {
+          setPhase('failed');
+          setErrorCode(String(data.errorCode || 'CONVERSION_FAILED'));
+          setError(String(data.errorMessage || t('errors.createJob')));
+          return;
+        }
+        setConverterBaseUrl(direct.converterBaseUrl);
+        setConverterAccessToken(direct.accessToken);
+      } else {
+        const formData = new FormData();
+        formData.append('file', file);
 
-    const response = await fetch(apiEndpoint, {
-      method: 'POST',
-      body: formData,
-    });
-    const data = (await response.json()) as Record<string, unknown>;
-    if (!response.ok) {
+        const response = await fetch(apiEndpoint, {
+          method: 'POST',
+          body: formData,
+        });
+        data = (await response.json()) as Record<string, unknown>;
+        if (!response.ok) {
+          setPhase('failed');
+          setErrorCode(String(data.errorCode || 'CONVERSION_FAILED'));
+          setError(String(data.errorMessage || t('errors.createJob')));
+          return;
+        }
+      }
+      setJobId(String(data.jobId));
+    } catch {
       setPhase('failed');
-      setErrorCode(String(data.errorCode || 'CONVERSION_FAILED'));
-      setError(String(data.errorMessage || t('errors.createJob')));
-      return;
+      setErrorCode('CONVERSION_FAILED');
+      setError(t('errors.createJob'));
     }
-    setJobId(String(data.jobId));
   };
 
   const mapDownloadErrorType = (status: number | null) => {
@@ -243,7 +298,14 @@ export function EpubConvertWorkbench({
     if (!downloadUrl) return;
     try {
       await trackEvent('download_started', { job_id: jobId });
-      const response = await fetch(downloadUrl, { cache: 'no-store' });
+      const response =
+        converterBaseUrl && converterAccessToken
+          ? await fetchDirectDownload(
+              downloadUrl,
+              converterBaseUrl,
+              converterAccessToken
+            )
+          : await fetch(downloadUrl, { cache: 'no-store' });
       if (!response.ok) {
         throw new Error(`HTTP_${response.status}`);
       }

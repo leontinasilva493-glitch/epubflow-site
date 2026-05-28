@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl';
 
 export default function LogoCloudSection() {
-  const t = useTranslations('LegacyHomePage.logocloud');
+  const t = useTranslations('HomePage.logocloud');
 
   return (
     <section id="logo-cloud" className="bg-muted/50 px-4 py-16">

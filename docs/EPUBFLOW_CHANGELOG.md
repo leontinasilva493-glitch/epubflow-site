@@ -1,5 +1,66 @@
 # EPUBFlow Website Changelog
 
+## v0.7.9-home-two-step-hero (2026-05-28)
+
+### Scope
+- Updated the homepage converter Hero to a two-step upload-first flow.
+- Widened and enlarged the Hero copy and upload workbench so the main conversion area aligns visually with the wider first-screen content container.
+
+### UX Changes
+- Removed the pre-upload format tab strip from the top of the homepage workbench.
+- Made the first Hero action a larger EPUB dropzone so the page communicates "upload first" more directly.
+- After a file is attached, the workbench now shows:
+  - selected file name and size
+  - removable file state
+  - output format selector for PDF, Kindle, TXT, and Word
+  - Markdown as a disabled "Soon" option
+  - conversion status, progress, and primary CTA
+- Kept the existing conversion implementation intact, including direct remote converter upload support and same-origin fallback.
+- Added accessibility improvements to the Lite workbench dropzone and progress bar.
+
+### Build Notes
+- `pnpm build` passes.
+- The build also required aligning legacy marketing block translation namespaces from `LegacyHomePage.*` to the existing `HomePage.*` keys and restoring missing `ConvertWorkbench` English keys.
+
+### Files
+- `src/app/[locale]/(marketing)/(home)/page.tsx`
+- `src/components/epub/epub-home-workbench.tsx`
+- `src/components/epub/epub-hero-lite-workbench.tsx`
+- `src/components/blocks/**`
+- `messages/en.json`
+- `messages/zh.json`
+- `docs/EPUBFLOW_CHANGELOG.md`
+
+## v0.7.8-p0-direct-converter-upload (2026-05-28)
+
+### Scope
+- Removed Vercel Function payload size from the core conversion path.
+
+### P0 Fixes
+- Added short-lived converter upload token issuance:
+  - `GET /api/conversions/upload-token?format={format}`
+- Added browser direct conversion client:
+  - upload directly to remote Calibre converter
+  - poll job status directly from remote Calibre converter
+  - download converted files directly from remote Calibre converter
+- Kept same-origin `/api/conversions/*` as fallback when direct converter URL is not configured.
+- Added converter service CORS handling for browser direct requests.
+- Added converter-side `x-upload-token` verification so the raw API key is not exposed to the browser.
+- Updated deployment docs and env example for:
+  - `NEXT_PUBLIC_EPUBFLOW_CONVERTER_API_URL`
+  - `EPUBFLOW_CONVERTER_UPLOAD_TOKEN_SECRET`
+  - `EPUBFLOW_ALLOWED_ORIGINS`
+
+### Files
+- `.env.example`
+- `src/app/api/conversions/upload-token/route.ts`
+- `src/lib/epub-converter/direct-client.ts`
+- `src/components/epub/epub-hero-lite-workbench.tsx`
+- `src/components/epub/epub-convert-workbench.tsx`
+- `services/calibre-converter/server.mjs`
+- `docs/CALIBRE_DEPLOYMENT_GUIDE.md`
+- `docs/EPUBFLOW_CHANGELOG.md`
+
 ## v0.7.7-p0-workbench-stability-fixes (2026-05-27)
 
 ### Scope

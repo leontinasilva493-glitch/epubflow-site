@@ -3,7 +3,7 @@ import { PricingTable } from '@/components/pricing/pricing-table';
 import { useTranslations } from 'next-intl';
 
 export default function PricingSection() {
-  const t = useTranslations('LegacyHomePage.pricing');
+  const t = useTranslations('HomePage.pricing');
 
   return (
     <section id="pricing" className="px-4 py-16">

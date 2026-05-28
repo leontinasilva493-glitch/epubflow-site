@@ -1293,6 +1293,10 @@
       "alternativeTitle": "EPUB to TXT",
       "alternativeDescription": "Clean text extraction is already live and works well for quick AI note preparation."
     },
+    "selector": {
+      "title": "Choose output format",
+      "description": "Pick the format after your EPUB is attached, then start conversion."
+    },
     "trust": {
       "private": "Private by default",
       "autoDelete": "Auto-delete in 1 hour",

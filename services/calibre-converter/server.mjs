@@ -1,5 +1,5 @@
 import http from 'node:http';
-import { randomUUID } from 'node:crypto';
+import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
 import { promises as fs } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -9,6 +9,12 @@ import Busboy from 'busboy';
 
 const PORT = Number(process.env.PORT || 4000);
 const API_KEY = process.env.EPUBFLOW_CONVERTER_API_KEY || '';
+const UPLOAD_TOKEN_SECRET =
+  process.env.EPUBFLOW_CONVERTER_UPLOAD_TOKEN_SECRET || API_KEY;
+const ALLOWED_ORIGINS = (process.env.EPUBFLOW_ALLOWED_ORIGINS || '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 const JOB_TTL_MS = 60 * 60 * 1000;
 const MAX_BYTES = 50 * 1024 * 1024;
 const CONVERSION_TIMEOUT_MS = 120 * 1000;
@@ -62,6 +68,23 @@ function checkConverter() {
 function json(res, status, data) {
   res.writeHead(status, { 'content-type': 'application/json; charset=utf-8' });
   res.end(JSON.stringify(data));
+}
+
+function applyCors(req, res) {
+  const origin = req.headers.origin;
+  const allowed =
+    origin &&
+    (ALLOWED_ORIGINS.length === 0 || ALLOWED_ORIGINS.includes(origin));
+  if (allowed) {
+    res.setHeader('access-control-allow-origin', origin);
+    res.setHeader('vary', 'Origin');
+  }
+  res.setHeader('access-control-allow-methods', 'GET,POST,OPTIONS');
+  res.setHeader(
+    'access-control-allow-headers',
+    'content-type,x-api-key,x-upload-token'
+  );
+  res.setHeader('access-control-expose-headers', 'content-disposition');
 }
 
 async function ensureRoot() {
@@ -403,9 +426,40 @@ async function processJob(id) {
   });
 }
 
-function verifyApiKey(req, res) {
+function safeEqual(a, b) {
+  const left = Buffer.from(a);
+  const right = Buffer.from(b);
+  return left.length === right.length && timingSafeEqual(left, right);
+}
+
+function verifyUploadToken(req, expectedFormat = null) {
+  if (!UPLOAD_TOKEN_SECRET) return false;
+  const token = req.headers['x-upload-token'];
+  if (!token || typeof token !== 'string') return false;
+  const [payload, signature] = token.split('.');
+  if (!payload || !signature) return false;
+
+  const expectedSignature = createHmac('sha256', UPLOAD_TOKEN_SECRET)
+    .update(payload)
+    .digest('base64url');
+  if (!safeEqual(signature, expectedSignature)) return false;
+
+  try {
+    const data = JSON.parse(Buffer.from(payload, 'base64url').toString('utf-8'));
+    if (data.aud !== 'epubflow-converter') return false;
+    if (typeof data.exp !== 'number') return false;
+    if (data.exp < Math.floor(Date.now() / 1000)) return false;
+    if (expectedFormat && data.format !== expectedFormat) return false;
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function verifyApiKey(req, res, expectedFormat = null) {
   if (!API_KEY) return true;
   if (req.headers['x-api-key'] === API_KEY) return true;
+  if (verifyUploadToken(req, expectedFormat)) return true;
   json(res, 401, { errorCode: 'UNAUTHORIZED', errorMessage: 'Invalid converter API key.' });
   return false;
 }
@@ -432,7 +486,7 @@ function parseMultipart(req) {
 }
 
 async function handleCreate(req, res, format) {
-  if (!verifyApiKey(req, res)) return;
+  if (!verifyApiKey(req, res, format)) return;
   await cleanupExpired();
   if (!FORMAT_CONFIG[format]) {
     json(res, 400, {
@@ -589,6 +643,13 @@ async function handleDownload(req, res, jobId) {
 }
 
 const server = http.createServer(async (req, res) => {
+  applyCors(req, res);
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
+
   try {
     const url = new URL(req.url || '/', `http://${req.headers.host}`);
     if (req.method === 'GET' && url.pathname === '/healthz') {

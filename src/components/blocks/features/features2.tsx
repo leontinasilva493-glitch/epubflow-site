@@ -13,7 +13,7 @@ import Image from 'next/image';
  * pnpm dlx shadcn@canary add https://nsui.irung.me/r/features-5.json
  */
 export default function Features2Section() {
-  const t = useTranslations('LegacyHomePage.features2');
+  const t = useTranslations('HomePage.features2');
 
   return (
     <section id="features2" className="px-4 py-16">
